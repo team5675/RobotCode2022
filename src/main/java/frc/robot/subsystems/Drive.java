@@ -8,7 +8,7 @@ public class Drive{
 
         if (instance == null) {
 
-            instanace = new Drive();
+            instance = new Drive();
         }
 
         return instance;
