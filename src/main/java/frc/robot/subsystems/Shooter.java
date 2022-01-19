@@ -40,6 +40,8 @@ public class Shooter {
     double hoodD;
     int RPM;
     double dist;
+    double totalHeight;
+    double cartHeight;
     boolean highTarget;
 
     DigitalInput hoodLowLimit;
@@ -63,6 +65,14 @@ public class Shooter {
         logTable = NetworkTableInstance.getDefault().getTable("log");
         currentVelocity = logTable.getEntry("currentVelocity");
         velocityGoal = logTable.getEntry("velocityGoal");
+    }
+
+    public void shootAngle()
+    {
+        shootHeight = (totalHeight - cartHeight);
+        bottomValue = tan(cameraAngle + currentVelocity);
+        shootAngle = (((shootHeight / bottomValue) * 0.8) * 0.98);
+
     }
      
     public void run()
@@ -162,7 +172,7 @@ public class Shooter {
         else return "Idle";
     }
 
-    
+
     public Shooter getInstance() {
 
         if (instance == null) {
