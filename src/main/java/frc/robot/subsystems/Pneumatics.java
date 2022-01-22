@@ -8,7 +8,7 @@ public class Pneumatics{
 
         if (instance == null) {
 
-            instanace = new Pneumatics();
+            instance = new Pneumatics();
         }
 
         return instance;

@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import com.kauailabs.navx.frc.AHRS;
+
 public class NavX{
 
     static NavX instance;
@@ -10,7 +12,7 @@ public class NavX{
 
         if (instance == null) {
 
-            instanace = new NavX();
+            instance = new NavX();
         }
 
         return instance;

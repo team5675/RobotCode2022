@@ -8,7 +8,7 @@ public class Lights{
 
         if (instance == null) {
 
-            instanace = new Lights();
+            instance = new Lights();
         }
 
         return instance;
