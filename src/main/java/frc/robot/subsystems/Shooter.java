@@ -77,9 +77,38 @@ public class Shooter {
 
     public void shootAngle()
     {
-        
+        vision = Vision.getInstance();
+
+        Networktable Table = NetworkTable.getTable("limelight");
+        double targetOffsetHorizontal = table.getNumber("tx" , 0);
+        double targetOffsetVertical = table.getNumber("ty" , 0);
+
+        float Kp = -0.1;
+        float minCommand = 0.05;
+
+
+        if(joystick = GetRawButton(9)){
+       
+        float headingError = -tx;
+        float steeringAdjust = 0.0;
+        if (tx > 1.0)
+
+        {
+
+            steeringAdjust = (Kp*headingError - minCommand);
+
+        }
+        else if (tx < 1.0){
+
+            steeringAdjust = (Kp*headingError + minCommand);
+
+        }
+        leftCommand += steeringAdjust;
+        rightCommand -= steeringAdjust;
+    }
+
         shootHeight = (totalHeight - 30) / (tan(cameraAngle + hoodVelocity));
-        shootAngle = (((shootHeight / bottomValue) * 0.8) * 0.98);
+        shootDist = (((shootHeight / bottomValue) * 0.8);
         
     }
      
