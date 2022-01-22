@@ -8,6 +8,8 @@ import frc.libs.motors.SparkMaxMotor;
 import frc.robot.Constants;
 import frc.robot.DriverController;
 import edu.wpi.first.wpilibj.DigitalInput;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel;
 
 public class Shooter {
 
@@ -46,7 +48,9 @@ public class Shooter {
 
     DigitalInput hoodLowLimit;
     DigitalInput hoodHighLimit;
-    
+
+    SparkMaxMotor Motor1;
+    CANSparkMaxlowLevel MotorType;
     
     public Shooter() {
         vision = Vision.getInstance();
@@ -65,14 +69,18 @@ public class Shooter {
         logTable = NetworkTableInstance.getDefault().getTable("log");
         currentVelocity = logTable.getEntry("currentVelocity");
         velocityGoal = logTable.getEntry("velocityGoal");
+
+        MotorType = new.CANSparkMaxLowLevel; 
+        Motor1 = new.CANSparkMax(1 , Motortype);
+
     }
 
     public void shootAngle()
     {
-        shootHeight = (totalHeight - cartHeight);
-        bottomValue = tan(cameraAngle + currentVelocity);
+        
+        shootHeight = (totalHeight - 30) / (tan(cameraAngle + hoodVelocity));
         shootAngle = (((shootHeight / bottomValue) * 0.8) * 0.98);
-
+        
     }
      
     public void run()
