@@ -8,7 +8,7 @@ public class Sucker{
 
         if (instance == null) {
 
-            instanace = new Sucker();
+            instance = new Sucker();
         }
 
         return instance;

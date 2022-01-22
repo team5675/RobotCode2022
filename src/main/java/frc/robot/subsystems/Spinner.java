@@ -8,7 +8,7 @@ public class Spinner{
 
         if (instance == null) {
 
-            instanace = new Spinner();
+            instance = new Spinner();
         }
 
         return instance;

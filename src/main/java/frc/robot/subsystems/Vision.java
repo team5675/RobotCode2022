@@ -8,7 +8,7 @@ public class Vision{
 
         if (instance == null) {
 
-            instanace = new Vision();
+            instance = new Vision();
         }
 
         return instance;
