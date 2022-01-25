@@ -75,7 +75,7 @@ public class Shooter {
 
     }
 
-    public void shootAngle()
+    public void limeLight()
     {
         vision = Vision.getInstance();
 
@@ -92,7 +92,6 @@ public class Shooter {
         float headingError = -tx;
         float steeringAdjust = 0.0;
         if (tx > 1.0)
-
         {
 
             steeringAdjust = (Kp*headingError - minCommand);
@@ -107,9 +106,16 @@ public class Shooter {
         rightCommand -= steeringAdjust;
     }
 
-        shootHeight = (totalHeight - 30) / (tan(cameraAngle + hoodVelocity));
+        shootHeight = (totalHeight - 30) / (tan(cameraAngle + hoodAngle));
         shootDist = (((shootHeight / bottomValue) * 0.8);
         
+    }
+
+    public void Calc()
+    {
+
+        
+
     }
      
     public void run()
