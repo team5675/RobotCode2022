@@ -1,12 +1,13 @@
 package frc.libs.swerve;
 
-import com.revrobotics.CANEncoder;
+
+import com.revrobotics.RelativeEncoder;//import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.AnalogInput;
 
-import frc.libs.swerve.PIDFFController;
+import frc.libs.swerve.PIDFFController;//Never used
 
 //import frc.robot.SwerveDrive.Encoder;
  
@@ -16,7 +17,7 @@ public class WheelDrive {
 private CANSparkMax angleMotor;
 private CANSparkMax speedMotor;
 
-public CANEncoder driveEncoder;
+public RelativeEncoder driveEncoder; //public CANEncoder driveEncoder;
 
 private PIDFFController anglePID;
 
