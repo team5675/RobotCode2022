@@ -55,8 +55,7 @@ public class Shooter {
     public Shooter() {
         vision = Vision.getInstance();
 
-        hoodLowLimit = new DigitalInput(0);
-        hoodHighLimit = new DigitalInput(1);
+        hoodAngle = new AnalogInput(0 , 1);
 
         flywheelOne = new SparkMaxMotor(Constants.SHOOTER_ID_1);
         flywheelTwo = new SparkMaxMotor(Constants.SHOOTER_ID_2);
@@ -75,58 +74,46 @@ public class Shooter {
 
     }
 
-    public void limeLight()
-    {
-        vision = Vision.getInstance();
+    public void Adjust() {
+        float Cst = -0.1;  //multiply by tx to adjust the shooty thing
 
-        Networktable Table = NetworkTable.getTable("limelight");
-        double targetOffsetHorizontal = table.getNumber("tx" , 0);
-        double targetOffsetVertical = table.getNumber("ty" , 0);
+        std.shared_ptr<NetworkTable> table = NetworkTable.getTable("limelight");
+        float tx = table.GetNumber("tx");
+        float tv = table.gerNumeber("tv");
+        adjust = (Cst * tx);
 
-        float Kp = -0.1;
-        float minCommand = 0.05;
+        if(joystick.GetRawButton(9))
 
-
-        if(joystick = GetRawButton(9)){
-       
-        float headingError = -tx;
-        float steeringAdjust = 0.0;
-        if (tx > 1.0)
-        {
-
-            steeringAdjust = (Kp*headingError - minCommand);
+        if(tv == 0.0) {
+            adjust = 0.3
 
         }
-        else if (tx < 1.0){
+    }
 
-            steeringAdjust = (Kp*headingError + minCommand);
+    public void pewpew() {
+        dist = vision.getDistanceFromTarget();
+
+        int thirtyPerc = (5676 * .3);
+        int fourtyPerc = (5676 * .4);
+
+        if(dist < 20) {
+            flywheelOne = setRPM fourtyPerc();
+            flywheelTwo = setRPM fourtyPerc();
 
         }
-        leftCommand += steeringAdjust;
-        rightCommand -= steeringAdjust;
-    }
 
-        shootHeight = (totalHeight - 30) / (tan(cameraAngle + hoodAngle));
-        shootDist = (((shootHeight / bottomValue) * 0.8);
-        
-    }
+        if(dist >= 20) {
+            flywheelOne = setRPM thirtyPerc();
+            flywheelTwo = setRPM fourtyPerc();
 
-    public void Calc()
-    {
-
-        
-
+        }
+        else {
+            flywheelOne = setRPM fourtyPerc();
+            flywheelTwo = setRPM fourtyPerc();
+        }
     }
      
-    public void run()
-    {
-        dist = vision.getDistanceFromTarget();
-        if(dist < 8) RPM = 3050;
-        else if(dist < 11.3) RPM = 4000;
-        else if(dist > 17.5) RPM = 2700;
-        else RPM = 2625;
-        //System.out.println("Encoder: " + hoodEncoder.getDistance());
-        //System.out.println("Distance" + vision.getDistanceFromTarget());
+    public void run() {
 
         if (shooterState == ShooterState.StartUp)
         {
