@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+/**package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
@@ -99,4 +99,4 @@ public class Sucker{
         return instance;
     }
 
-}
+}*/

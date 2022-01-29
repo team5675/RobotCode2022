@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+/**package frc.robot.subsystems;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -213,4 +213,4 @@ public class Shooter {
         return instance;
     }
 
-}
+}*/
