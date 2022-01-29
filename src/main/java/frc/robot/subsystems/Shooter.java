@@ -8,6 +8,8 @@ import frc.libs.motors.SparkMaxMotor;
 import frc.robot.Constants;
 import frc.robot.DriverController;
 import edu.wpi.first.wpilibj.DigitalInput;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel;
 
 public class Shooter {
 
@@ -46,13 +48,14 @@ public class Shooter {
 
     DigitalInput hoodLowLimit;
     DigitalInput hoodHighLimit;
-    
+
+    SparkMaxMotor Motor1;
+    CANSparkMaxlowLevel MotorType;
     
     public Shooter() {
         vision = Vision.getInstance();
 
-        hoodLowLimit = new DigitalInput(0);
-        hoodHighLimit = new DigitalInput(1);
+        hoodAngle = new AnalogInput(0 , 1);
 
         flywheelOne = new SparkMaxMotor(Constants.SHOOTER_ID_1);
         flywheelTwo = new SparkMaxMotor(Constants.SHOOTER_ID_2);
@@ -65,25 +68,52 @@ public class Shooter {
         logTable = NetworkTableInstance.getDefault().getTable("log");
         currentVelocity = logTable.getEntry("currentVelocity");
         velocityGoal = logTable.getEntry("velocityGoal");
+
+        MotorType = new.CANSparkMaxLowLevel; 
+        Motor1 = new.CANSparkMax(1 , Motortype);
+
     }
 
-    public void shootAngle()
-    {
-        shootHeight = (totalHeight - cartHeight);
-        bottomValue = tan(cameraAngle + currentVelocity);
-        shootAngle = (((shootHeight / bottomValue) * 0.8) * 0.98);
+    public void Adjust() {
+        float Cst = -0.1;  //multiply by tx to adjust the shooty thing
 
+        std.shared_ptr<NetworkTable> table = NetworkTable.getTable("limelight");
+        float tx = table.GetNumber("tx");
+        float tv = table.gerNumeber("tv");
+        adjust = (Cst * tx);
+
+        if(joystick.GetRawButton(9))
+
+        if(tv == 0.0) {
+            adjust = 0.3
+
+        }
+    }
+
+    public void pewpew() {
+        dist = vision.getDistanceFromTarget();
+
+        int thirtyPerc = (5676 * .3);
+        int fourtyPerc = (5676 * .4);
+
+        if(dist < 20) {
+            flywheelOne = setRPM fourtyPerc();
+            flywheelTwo = setRPM fourtyPerc();
+
+        }
+
+        if(dist >= 20) {
+            flywheelOne = setRPM thirtyPerc();
+            flywheelTwo = setRPM fourtyPerc();
+
+        }
+        else {
+            flywheelOne = setRPM fourtyPerc();
+            flywheelTwo = setRPM fourtyPerc();
+        }
     }
      
-    public void run()
-    {
-        dist = vision.getDistanceFromTarget();
-        if(dist < 8) RPM = 3050;
-        else if(dist < 11.3) RPM = 4000;
-        else if(dist > 17.5) RPM = 2700;
-        else RPM = 2625;
-        //System.out.println("Encoder: " + hoodEncoder.getDistance());
-        //System.out.println("Distance" + vision.getDistanceFromTarget());
+    public void run() {
 
         if (shooterState == ShooterState.StartUp)
         {
