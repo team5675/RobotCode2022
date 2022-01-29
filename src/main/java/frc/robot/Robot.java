@@ -5,6 +5,8 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import frc.robot.subsystems.*;
+import frc.robot.DriverController;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -14,12 +16,20 @@ import edu.wpi.first.wpilibj.TimedRobot;
  */
 public class Robot extends TimedRobot {
 
+  Drive drive;
+  DriverController driverController;
+  NavX navX;
+
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
    */
   @Override
   public void robotInit() {
+
+    drive = Drive.getInstance();
+    driverController = DriverController.getInstance();
+    navX = NavX.getInstance();
   }
 
   /**
@@ -60,7 +70,24 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+
+    //Reset Yaw on NavX
+    if(driverController.getResetYaw()) {
+
+      navX.resetYaw();
+    }
+
+    //Tele-op auto functions or manual drive
+    double forward = driverController.getForward(); //CHANGE THIS BACK
+    double strafe = driverController.getStrafe();
+    double rotation = driverController.getRotation();
+    double angle = navX.getAngle();
+    boolean isFieldOriented = driverController.isFieldOriented();
+
+    drive.move(forward, strafe, rotation * -1, angle - 180, isFieldOriented);
+
+  }
 
   /** This function is called once when the robot is disabled. */
   @Override
