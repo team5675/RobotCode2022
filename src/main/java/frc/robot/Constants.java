@@ -66,21 +66,12 @@ public class Constants {
     //Shooter threshold was 100 RPM
 
     //Pizza spinner constants
-<<<<<<< HEAD
     public static final int SPINNER_MOTOR_ID = 9;
     public static final int SPINNER_TICKS_PER_REV = 0;
     public static final double SPINNER_REVS_SETPOINT = 100;
     public static final double ONE_COLOR_REVS = 30;
     public static final int SPINNER_ARM_IN_CHANNEL = 6;
     public static final int SPINNER_ARM_OUT_CHANNEL = 1;
-=======
-    //public static final int SPINNER_MOTOR_ID = 9;
-    //public static final int SPINNER_TICKS_PER_REV = 0;
-    //public static final double SPINNER_REVS_SETPOINT = 100;
-    //public static final double ONE_COLOR_REVS = 30;
-    //public static final int SPINNER_ARM_IN_CHANNEL = 6;
-    //public static final int SPINNER_ARM_OUT_CHANNEL = 1;
->>>>>>> 35f1ca3fff28ffca8b446ba17dc8804d5467a7dd
 
     //Intake subsystem constants
     public static final int INTAKE_ID = 1;
@@ -93,11 +84,7 @@ public class Constants {
     public static final double VISION_CAMERA_ANGLE = 15;//25.3778;
 
     //Pneumatics constants
-<<<<<<< HEAD
     public static final int COMPRESSOR_ID = 0;
-=======
-    //public static final int COMPRESSOR_ID = 0;
->>>>>>> 35f1ca3fff28ffca8b446ba17dc8804d5467a7dd
 
     //Auto Constants
     public static final double AUTO_FORWARD_P = 0.2;
@@ -112,7 +99,6 @@ public class Constants {
     public static final double PATHFINDER_SLOWDOWN_P = 0.5;
 
     //Climb Constants
-<<<<<<< HEAD
     public static final int LOCK_SOLENOID_ID_1 = 2;
     public static final int LOCK_SOLENOID_ID_2 = 5;
     public static final int MASTER_ARM_RAISE_SOLENOID_ID = 4;
@@ -121,14 +107,4 @@ public class Constants {
     public static final int TROLLER_MOTOR_ID = 15;
 
     //62 Constants
-=======
-    //public static final int LOCK_SOLENOID_ID_1 = 2;
-    //public static final int LOCK_SOLENOID_ID_2 = 5;
-    //public static final int MASTER_ARM_RAISE_SOLENOID_ID = 4;
-    //public static final int MASTER_ARM_COLLAPSE_SOLENOID_ID = 3;
-    //public static final int WINCH_MOTOR_ID = 2;
-    //public static final int TROLLER_MOTOR_ID = 15;
-
-    //62 Constants total, 49 constants in use
->>>>>>> 35f1ca3fff28ffca8b446ba17dc8804d5467a7dd
 }

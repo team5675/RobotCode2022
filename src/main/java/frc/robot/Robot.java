@@ -4,9 +4,11 @@
 
 package frc.robot;
 
+import java.nio.file.Path;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.subsystems.*;
-import frc.robot.DriverController;
+import frc.robot.auto.Pathfinder;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -20,6 +22,8 @@ public class Robot extends TimedRobot {
   DriverController driverController;
   NavX navX;
 
+  Pathfinder pathfinder;
+
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -30,6 +34,9 @@ public class Robot extends TimedRobot {
     drive = Drive.getInstance();
     driverController = DriverController.getInstance();
     navX = NavX.getInstance();
+    pathfinder = Pathfinder.getInstance();
+
+    pathfinder.setPath("Test Path");
   }
 
   /**
@@ -54,11 +61,15 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+
+    
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
+
+    pathfinder.drivePath();
   }
 
   /** This function is called once when teleop is enabled. */
@@ -85,7 +96,7 @@ public class Robot extends TimedRobot {
     double angle = navX.getAngle();
     boolean isFieldOriented = driverController.isFieldOriented();
 
-    drive.move(forward, strafe, rotation * -1, angle - 180, isFieldOriented);
+    drive.move(forward, strafe, rotation * -1, angle, isFieldOriented);
 
   }
 
@@ -104,4 +115,16 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {}
+
+  static Robot instance;
+
+  public static Robot getInstance() {
+
+    if(instance == null) {
+
+      instance = new Robot();
+    }
+
+    return instance;
+  }
 }
