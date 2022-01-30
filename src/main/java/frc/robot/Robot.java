@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import java.nio.file.Path;
-
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.subsystems.*;
 import frc.robot.auto.Pathfinder;

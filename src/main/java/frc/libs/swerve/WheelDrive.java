@@ -9,8 +9,6 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.AnalogInput;
 
-import frc.libs.swerve.PIDFFController;//Never used
-
 //import frc.robot.SwerveDrive.Encoder;
  
 public class WheelDrive {
