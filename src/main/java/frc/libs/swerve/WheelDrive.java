@@ -5,9 +5,9 @@ import com.revrobotics.RelativeEncoder;//import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.AnalogInput;
-
-import frc.libs.swerve.PIDFFController;//Never used
 
 //import frc.robot.SwerveDrive.Encoder;
  
@@ -30,6 +30,9 @@ double D;
 double ANGLE_OFFSET;
 
 double setpoint;
+
+NetworkTableEntry m_speed = NetworkTableInstance.getDefault().getTable("PathFinder").getEntry("Speed");
+NetworkTableEntry m_angle = NetworkTableInstance.getDefault().getTable("PathFinder").getEntry("Angle");
 
 	/**
 	 * @param angleMotor The CAN ID of the azimuth controller
@@ -60,6 +63,8 @@ double setpoint;
 		this.D = D;
 
 		this.ANGLE_OFFSET = ANGLE_OFFSET;
+
+		
 	}
 
 
@@ -69,7 +74,7 @@ double setpoint;
 		if (angle > 5) {angle -= 5;}
 		if (angle < 0) {angle += 5;}
 
-		//System.out.println("Module ID: " + speedMotor.getDeviceId() + " Error" + anglePID.getPositionError());
+		System.out.println("ID: " + speedMotor.getDeviceId() + " Speed: " + speed + " angle: " + angle);
 
 		if (deadband) {
 
@@ -84,6 +89,9 @@ double setpoint;
 			speedMotor.set(speed);
 			angleMotor.set(setpoint);
 		}
+
+		m_speed.setNumber(speed);
+		m_angle.setNumber(angle);
 	}
 
 	public void setOffset() {

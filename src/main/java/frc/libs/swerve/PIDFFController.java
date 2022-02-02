@@ -80,19 +80,19 @@ public class PIDFFController {
     public double calculateFF(double error) {
 
         //Feedforward explanation code
-		double kS;
-		double kV;
-		double kA;
+		//double kS;
+		//double kV;
+		//double kA;
 
 		//kS****************************************************************************************************
         kS = 0.78; //static friction of motor. measured in volts
 
 		//kV****************************************************************************************************
-		double freeSpeedVelocity    = 5676; //from rev website, in RPM
+		//double freeSpeedVelocity    = 5676; //from rev website, in RPM
 		double wheelDiameter        = .25; //in feet
 		double azimuthGearReduction = 32; //from Colin
 
-		double maxVelocity = (freeSpeedVelocity * Math.PI * wheelDiameter) / azimuthGearReduction;
+		//double maxVelocity = (freeSpeedVelocity * Math.PI * wheelDiameter) / azimuthGearReduction;
         double maxVoltage= 12;
         double scalingFactor = 4.8;
 
@@ -131,9 +131,6 @@ public class PIDFFController {
             if (Math.abs(clUnitsAway - ccUnitsAway) < 0.3) error = clUnitsAway;
             else error = Math.min(clUnitsAway, ccUnitsAway);
 
-            /**
-             * TODO: Either keep as cl or change to cc
-             */
             if (error == ccUnitsAway) {
 
                 error *= -1;

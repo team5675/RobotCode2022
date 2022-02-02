@@ -7,10 +7,10 @@
 
 package frc.libs.motors;
 
-import com.revrobotics.CANEncoder;
-import com.revrobotics.CANPIDController;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.ControlType;
+import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 /**
@@ -19,8 +19,8 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 public class SparkMaxMotor {
 
     private CANSparkMax controller;
-    private CANPIDController pidController;
-    private CANEncoder encoder;
+    private SparkMaxPIDController pidController;
+    private RelativeEncoder encoder;
     
     public SparkMaxMotor(int motorId) {
 
@@ -43,6 +43,7 @@ public class SparkMaxMotor {
     public void setRPMVelocity(int RPM) {
 
         pidController.setReference(RPM, ControlType.kVelocity);
+        
     }
 
 
