@@ -26,7 +26,7 @@ public class Pathfinder {
     NavX navX;
     trajectoryController controller;
     
-    int maxVelocity = 1;
+    int maxVelocity = 8;
     int maxAccel = 5;
     int i = 1;
 
@@ -58,15 +58,17 @@ public class Pathfinder {
                 i++;
 
                 SwerveModuleState FL = states[0];
-                SwerveModuleState FR = states[0];
-                SwerveModuleState BL = states[0];
-                SwerveModuleState BR = states[0];
+                SwerveModuleState FR = states[1];
+                SwerveModuleState BL = states[2];
+                SwerveModuleState BR = states[3];
 
-                //magic 72 number to scale from 0-360 to 0-5v
-                drive.getFrontLeft().drive(FL.speedMetersPerSecond, FL.angle.getDegrees() / 72, false);
-                drive.getFrontRight().drive(FR.speedMetersPerSecond, FR.angle.getDegrees() / 72, false);
-                drive.getBackLeft().drive(BL.speedMetersPerSecond, BL.angle.getDegrees() / 72, false);
-                drive.getBackRight().drive(BR.speedMetersPerSecond, BR.angle.getDegrees() / 72, false);
+                //System.out.println("Speed: " + FL.speedMetersPerSecond + " Angle: " + FL.angle.getDegrees());
+
+                
+                drive.getFrontLeft().drivePathfinder(FL.speedMetersPerSecond, FL.angle.getDegrees());
+                drive.getFrontRight().drivePathfinder(FR.speedMetersPerSecond, FR.angle.getDegrees());
+                drive.getBackLeft().drivePathfinder(BL.speedMetersPerSecond, BL.angle.getDegrees());
+                drive.getBackRight().drivePathfinder(BR.speedMetersPerSecond, BR.angle.getDegrees());
                 
             } catch (Exception e) {
                 
@@ -75,6 +77,11 @@ public class Pathfinder {
 
             
         }
+
+        drive.getFrontLeft().drive(0, 0, false);
+        drive.getFrontRight().drive(0, 0, false);
+        drive.getBackLeft().drive(0, 0, false);
+        drive.getBackRight().drive(0, 0, false);
 
     }
 

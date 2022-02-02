@@ -2,9 +2,12 @@ package frc.libs.swerve;
 
 
 import com.revrobotics.RelativeEncoder;//import com.revrobotics.CANEncoder;
+import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.AnalogInput;
@@ -20,6 +23,7 @@ private CANSparkMax speedMotor;
 public RelativeEncoder driveEncoder; //public CANEncoder driveEncoder;
 
 private PIDFFController anglePID;
+private SparkMaxPIDController velocityPID;
 
 private AnalogInput azimuthEncoder;
 
@@ -31,8 +35,7 @@ double ANGLE_OFFSET;
 
 double setpoint;
 
-NetworkTableEntry m_speed = NetworkTableInstance.getDefault().getTable("PathFinder").getEntry("Speed");
-NetworkTableEntry m_angle = NetworkTableInstance.getDefault().getTable("PathFinder").getEntry("Angle");
+double velocitySetpoint;
 
 	/**
 	 * @param angleMotor The CAN ID of the azimuth controller
@@ -64,7 +67,28 @@ NetworkTableEntry m_angle = NetworkTableInstance.getDefault().getTable("PathFind
 
 		this.ANGLE_OFFSET = ANGLE_OFFSET;
 
-		
+		velocityPID = this.speedMotor.getPIDController();
+	}
+
+	public void drivePathfinder(double velocity, double angle) {
+
+		angle /= 72;
+		angle += getOffset();
+
+		if (angle > 5) {angle -= 5;}
+		if (angle < 0) {angle += 5;}
+
+		//magic number shush, m to ft
+		velocitySetpoint = 458.59873 * (velocity / 3.281);
+
+		velocityPID.setOutputRange(0, 5676);
+
+		velocityPID.setReference(velocitySetpoint, CANSparkMax.ControlType.kVelocity);
+
+		setpoint = anglePID.calculate(azimuthEncoder.getVoltage(), angle);
+
+		angleMotor.set(setpoint);
+
 	}
 
 
@@ -74,7 +98,7 @@ NetworkTableEntry m_angle = NetworkTableInstance.getDefault().getTable("PathFind
 		if (angle > 5) {angle -= 5;}
 		if (angle < 0) {angle += 5;}
 
-		System.out.println("ID: " + speedMotor.getDeviceId() + " Speed: " + speed + " angle: " + angle);
+		//System.out.println("ID: " + speedMotor.getDeviceId() + " Value: " + azimuthEncoder.getVoltage());
 
 		if (deadband) {
 
@@ -90,8 +114,6 @@ NetworkTableEntry m_angle = NetworkTableInstance.getDefault().getTable("PathFind
 			angleMotor.set(setpoint);
 		}
 
-		m_speed.setNumber(speed);
-		m_angle.setNumber(angle);
 	}
 
 	public void setOffset() {
