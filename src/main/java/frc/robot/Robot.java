@@ -34,7 +34,7 @@ public class Robot extends TimedRobot {
     navX = NavX.getInstance();
     pathfinder = Pathfinder.getInstance();
 
-    pathfinder.setPath("New Path");
+    pathfinder.setPath("PLEASE WORK");
 
   }
 

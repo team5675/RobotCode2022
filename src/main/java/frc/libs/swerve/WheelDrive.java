@@ -4,12 +4,8 @@ package frc.libs.swerve;
 import com.revrobotics.RelativeEncoder;//import com.revrobotics.CANEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.AnalogInput;
 
 //import frc.robot.SwerveDrive.Encoder;
@@ -68,9 +64,10 @@ double velocitySetpoint;
 		this.ANGLE_OFFSET = ANGLE_OFFSET;
 
 		velocityPID = this.speedMotor.getPIDController();
+		velocityPID.setOutputRange(0, 5700);
 	}
 
-	public void drivePathfinder(double velocity, double angle) {
+	public void drivePathfinder(double velocity, double angle, double maxVelocity) {
 
 		angle /= 72;
 		angle += getOffset();
@@ -79,9 +76,12 @@ double velocitySetpoint;
 		if (angle < 0) {angle += 5;}
 
 		//magic number shush, m to ft
-		velocitySetpoint = 458.59873 * (velocity / 3.281);
+		//velocitySetpoint = 458.59873 * (velocity / 3.281);
 
-		velocityPID.setOutputRange(0, 5676);
+		//velocitySetpoint = (5676 / maxVelocity) * velocity;//1621.7143 * velocity;
+
+		//maybe correct magic number? at 3.74 m/s RPM is 5676 adjusted for gear ratio
+		velocitySetpoint = 1517.6538819 * velocity;
 
 		velocityPID.setReference(velocitySetpoint, CANSparkMax.ControlType.kVelocity);
 

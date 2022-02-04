@@ -26,8 +26,8 @@ public class Pathfinder {
     NavX navX;
     trajectoryController controller;
     
-    int maxVelocity = 8;
-    int maxAccel = 5;
+    int maxVelocity = 3; //m/s
+    int maxAccel = 2;    //m/s^2
     int i = 1;
 
     SwerveModuleState[] states;
@@ -65,10 +65,10 @@ public class Pathfinder {
                 //System.out.println("Speed: " + FL.speedMetersPerSecond + " Angle: " + FL.angle.getDegrees());
 
                 
-                drive.getFrontLeft().drivePathfinder(FL.speedMetersPerSecond, FL.angle.getDegrees());
-                drive.getFrontRight().drivePathfinder(FR.speedMetersPerSecond, FR.angle.getDegrees());
-                drive.getBackLeft().drivePathfinder(BL.speedMetersPerSecond, BL.angle.getDegrees());
-                drive.getBackRight().drivePathfinder(BR.speedMetersPerSecond, BR.angle.getDegrees());
+                drive.getFrontLeft().drivePathfinder(FL.speedMetersPerSecond, FL.angle.getDegrees(), maxVelocity);
+                drive.getFrontRight().drivePathfinder(FR.speedMetersPerSecond, FR.angle.getDegrees(), maxVelocity);
+                drive.getBackLeft().drivePathfinder(BL.speedMetersPerSecond, BL.angle.getDegrees(), maxVelocity);
+                drive.getBackRight().drivePathfinder(BR.speedMetersPerSecond, BR.angle.getDegrees(), maxVelocity);
                 
             } catch (Exception e) {
                 
