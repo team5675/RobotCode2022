@@ -6,7 +6,10 @@ import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 //import frc.robot.SwerveDrive.Encoder;
  
@@ -64,7 +67,11 @@ double velocitySetpoint;
 		this.ANGLE_OFFSET = ANGLE_OFFSET;
 
 		velocityPID = this.speedMotor.getPIDController();
-		velocityPID.setOutputRange(0, 5700);
+		velocityPID.setP(5e-5);
+		velocityPID.setI(0);
+		velocityPID.setD(0);
+		velocityPID.setFF(0.000156);
+		velocityPID.setOutputRange(-1, 1);
 	}
 
 	public void drivePathfinder(double velocity, double angle, double maxVelocity) {
@@ -81,7 +88,7 @@ double velocitySetpoint;
 		//velocitySetpoint = (5676 / maxVelocity) * velocity;//1621.7143 * velocity;
 
 		//maybe correct magic number? at 3.74 m/s RPM is 5676 adjusted for gear ratio
-		velocitySetpoint = 1517.6538819 * velocity;
+		velocitySetpoint = Math.abs(1517.6538819 * velocity);
 
 		velocityPID.setReference(velocitySetpoint, CANSparkMax.ControlType.kVelocity);
 
@@ -89,6 +96,9 @@ double velocitySetpoint;
 
 		angleMotor.set(setpoint);
 
+		//System.out.println("ANGLE SETPOINT: " + setpoint + " ANGLE: " + angleMotor.getAppliedOutput());
+
+		//System.out.println("Motor " + angleMotor.getDeviceId() + " Angle: " + getAzimuth());
 	}
 
 
@@ -148,6 +158,11 @@ double velocitySetpoint;
 	public double getDrivePosition() {
 
 		return driveEncoder.getPosition();
+	}
+
+	public SwerveModuleState getState() {
+
+		return new SwerveModuleState(getDrivePosition(), new Rotation2d(getAzimuth() * 72));
 	}
 
 	public void stop() {
