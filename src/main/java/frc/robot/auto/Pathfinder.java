@@ -62,8 +62,7 @@ public class Pathfinder {
 
             try {
 
-                states = controller.updateVelocities(pathToRun, elapsedTime);  
-                i++;
+                states = controller.updateVelocities(pathToRun, elapsedTime);
 
                 SwerveModuleState FL = states[0];
                 SwerveModuleState FR = states[1];
@@ -86,10 +85,10 @@ public class Pathfinder {
             elapsedTime = (System.currentTimeMillis() - startTime) / 1000;
         }
 
-        drive.getFrontLeft().drive(0,  drive.getFrontLeft().getAzimuth(),  false);
-        drive.getFrontRight().drive(0, drive.getFrontRight().getAzimuth(), false);
-        drive.getBackLeft().drive(0,   drive.getBackLeft().getAzimuth(),   false);
-        drive.getBackRight().drive(0,  drive.getBackRight().getAzimuth(),  false);
+        drive.getFrontLeft().stop();
+        drive.getFrontRight().stop();
+        drive.getBackLeft().stop();
+        drive.getBackRight().stop();
 
     }
 
