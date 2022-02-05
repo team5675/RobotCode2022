@@ -32,6 +32,10 @@ public class Pathfinder {
 
     SwerveModuleState[] states;
 
+    double endTime;
+    double elapsedTime = 0;
+    double startTime;
+
     public Pathfinder() {
 
         drive = Drive.getInstance();
@@ -50,11 +54,15 @@ public class Pathfinder {
 
     public void drivePath() {
 
-        while(pState == pathState.running) {
+        endTime = pathToRun.getEndState().timeSeconds;
+
+        startTime = System.currentTimeMillis();
+
+        while(elapsedTime <= endTime) {
 
             try {
 
-                states = controller.updateVelocities(pathToRun, i);  
+                states = controller.updateVelocities(pathToRun, elapsedTime);  
                 i++;
 
                 SwerveModuleState FL = states[0];
@@ -75,13 +83,13 @@ public class Pathfinder {
                 pState = pathState.end;
             }
 
-            
+            elapsedTime = (System.currentTimeMillis() - startTime) / 1000;
         }
 
-        drive.getFrontLeft().drive(0, 0, false);
-        drive.getFrontRight().drive(0, 0, false);
-        drive.getBackLeft().drive(0, 0, false);
-        drive.getBackRight().drive(0, 0, false);
+        drive.getFrontLeft().drive(0,  drive.getFrontLeft().getAzimuth(),  false);
+        drive.getFrontRight().drive(0, drive.getFrontRight().getAzimuth(), false);
+        drive.getBackLeft().drive(0,   drive.getBackLeft().getAzimuth(),   false);
+        drive.getBackRight().drive(0,  drive.getBackRight().getAzimuth(),  false);
 
     }
 
