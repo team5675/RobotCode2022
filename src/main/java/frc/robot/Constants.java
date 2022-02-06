@@ -32,7 +32,7 @@ public class Constants {
     public static final double FR_I = 0;
     public static final double FR_D = 0.003;
     public static final int FR_AZIMUTH_ENCODER_ID = 2;
-	public static double FR_ANGLE_OFFSET =  2.89; //41;
+	public static double FR_ANGLE_OFFSET =  0.117;//2.89; //41;
 
     public static final int DRIVE_BACK_LEFT_SPEED_ID = 11;//1;
     public static final int DRIVE_BACK_LEFT_AZIMUTH_ID = 10;//2;
@@ -99,12 +99,12 @@ public class Constants {
     public static final double PATHFINDER_SLOWDOWN_P = 0.5;
 
     //Climb Constants
-    public static final int LOCK_SOLENOID_ID_1 = 2;
-    public static final int LOCK_SOLENOID_ID_2 = 5;
-    public static final int MASTER_ARM_RAISE_SOLENOID_ID = 4;
-    public static final int MASTER_ARM_COLLAPSE_SOLENOID_ID = 3;
-    public static final int WINCH_MOTOR_ID = 2;
-    public static final int TROLLER_MOTOR_ID = 15;
+    //public static final int LOCK_SOLENOID_ID_1 = 2;
+    //public static final int LOCK_SOLENOID_ID_2 = 5;
+    //public static final int MASTER_ARM_RAISE_SOLENOID_ID = 4;
+    //public static final int MASTER_ARM_COLLAPSE_SOLENOID_ID = 3;
+    //public static final int WINCH_MOTOR_ID = 2;
+    //public static final int TROLLER_MOTOR_ID = 15;
 
-    //62 Constants
+    //62 Constants total, 49 constants in use
 }

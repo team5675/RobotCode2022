@@ -32,11 +32,15 @@ public class Pathfinder {
     NavX navX;
     trajectoryController controller;
     
-    int maxVelocity = 1;
-    int maxAccel = 5;
+    int maxVelocity = 3; //m/s
+    int maxAccel = 2;    //m/s^2
     int i = 1;
 
     SwerveModuleState[] states;
+
+    double endTime;
+    double elapsedTime = 0;
+    double startTime;
 
     public Pathfinder() {
 
@@ -58,23 +62,28 @@ public class Pathfinder {
 
     public void drivePath() {
 
-        while(pState == pathState.running) {
+        endTime = pathToRun.getEndState().timeSeconds;
+
+        startTime = System.currentTimeMillis();
+
+        while(elapsedTime <= endTime) {
 
             try {
 
-                states = controller.updateVelocities(pathToRun, i);  
-                i++;
+                states = controller.updateVelocities(pathToRun, elapsedTime);
 
                 SwerveModuleState FL = states[0];
-                SwerveModuleState FR = states[0];
-                SwerveModuleState BL = states[0];
-                SwerveModuleState BR = states[0];
+                SwerveModuleState FR = states[1];
+                SwerveModuleState BL = states[2];
+                SwerveModuleState BR = states[3];
 
-                //magic 72 number to scale from 0-360 to 0-5v
-                drive.getFrontLeft().drive(FL.speedMetersPerSecond, FL.angle.getDegrees() / 72, false);
-                drive.getFrontRight().drive(FR.speedMetersPerSecond, FR.angle.getDegrees() / 72, false);
-                drive.getBackLeft().drive(BL.speedMetersPerSecond, BL.angle.getDegrees() / 72, false);
-                drive.getBackRight().drive(BR.speedMetersPerSecond, BR.angle.getDegrees() / 72, false);
+                //System.out.println("Speed: " + FL.speedMetersPerSecond + " Angle: " + FL.angle.getDegrees());
+
+                
+                drive.getFrontLeft().drivePathfinder(FL.speedMetersPerSecond, FL.angle.getDegrees(), maxVelocity);
+                drive.getFrontRight().drivePathfinder(FR.speedMetersPerSecond, FR.angle.getDegrees(), maxVelocity);
+                drive.getBackLeft().drivePathfinder(BL.speedMetersPerSecond, BL.angle.getDegrees(), maxVelocity);
+                drive.getBackRight().drivePathfinder(BR.speedMetersPerSecond, BR.angle.getDegrees(), maxVelocity);
 
                 dash.getPathfinderTab().add("Front Left Speed", FL.speedMetersPerSecond).withWidget(BuiltInWidgets.kTextView).getEntry();
                 dash.getPathfinderTab().add("Front Right Speed", FR.speedMetersPerSecond).withWidget(BuiltInWidgets.kTextView).getEntry();
@@ -91,8 +100,13 @@ public class Pathfinder {
                 pState = pathState.end;
             }
 
-            
+            elapsedTime = (System.currentTimeMillis() - startTime) / 1000;
         }
+
+        drive.getFrontLeft().stop();
+        drive.getFrontRight().stop();
+        drive.getBackLeft().stop();
+        drive.getBackRight().stop();
 
     }
 

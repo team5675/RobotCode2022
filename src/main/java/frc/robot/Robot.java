@@ -37,7 +37,8 @@ public class Robot extends TimedRobot {
     pathfinder = Pathfinder.getInstance();
     dash = Dashboard.getInstance();
 
-    pathfinder.setPath("Test Path");
+    pathfinder.setPath("PLEASE WORK");
+
   }
 
   /**
