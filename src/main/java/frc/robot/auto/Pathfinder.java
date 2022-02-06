@@ -3,9 +3,13 @@ package frc.robot.auto;
 import com.pathplanner.lib.PathPlannerTrajectory;
 
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 
 import com.pathplanner.lib.PathPlanner;
 
+import frc.robot.Dashboard;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.NavX;
 
@@ -20,6 +24,8 @@ public class Pathfinder {
     }
 
     pathState pState;
+
+    Dashboard dash;
 
     PathPlannerTrajectory pathToRun;
     Drive drive;
@@ -39,6 +45,8 @@ public class Pathfinder {
         navX = NavX.getInstance();
 
         controller = new trajectoryController();
+
+        dash = Dashboard.getInstance();
     }
 
     public void setPath(String path) {
@@ -67,6 +75,16 @@ public class Pathfinder {
                 drive.getFrontRight().drive(FR.speedMetersPerSecond, FR.angle.getDegrees() / 72, false);
                 drive.getBackLeft().drive(BL.speedMetersPerSecond, BL.angle.getDegrees() / 72, false);
                 drive.getBackRight().drive(BR.speedMetersPerSecond, BR.angle.getDegrees() / 72, false);
+
+                dash.getPathfinderTab().add("Front Left Speed", FL.speedMetersPerSecond).withWidget(BuiltInWidgets.kTextView).getEntry();
+                dash.getPathfinderTab().add("Front Right Speed", FR.speedMetersPerSecond).withWidget(BuiltInWidgets.kTextView).getEntry();
+                dash.getPathfinderTab().add("Back Left Speed", BL.speedMetersPerSecond).withWidget(BuiltInWidgets.kTextView).getEntry();
+                dash.getPathfinderTab().add("Back Right Speed", BR.speedMetersPerSecond).withWidget(BuiltInWidgets.kTextView).getEntry();
+
+                dash.getPathfinderTab().add("Front Left Angle", FL.angle.getDegrees()).withWidget(BuiltInWidgets.kTextView).getEntry();
+                dash.getPathfinderTab().add("Front Right Angle", FR.angle.getDegrees()).withWidget(BuiltInWidgets.kTextView).getEntry();
+                dash.getPathfinderTab().add("Back Left Angle", BL.angle.getDegrees()).withWidget(BuiltInWidgets.kTextView).getEntry();
+                dash.getPathfinderTab().add("Back Right Angle", BR.angle.getDegrees()).withWidget(BuiltInWidgets.kTextView).getEntry();
                 
             } catch (Exception e) {
                 
