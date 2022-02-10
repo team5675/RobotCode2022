@@ -47,12 +47,12 @@ public class trajectoryController {
         drive = Drive.getInstance();
 
         //First PID for forward, second for strafe, third for rotation
-        controller = new HolonomicDriveController(new PIDController(1, 0, 0), 
-        new PIDController(1, 0, 0), new ProfiledPIDController(1, 0, 0, new TrapezoidProfile.Constraints(3, 2)));
+        controller = new HolonomicDriveController(new PIDController(0.09, 0, 0), 
+        new PIDController(0.09, 0, 0), new ProfiledPIDController(0.5, 0, 0, new TrapezoidProfile.Constraints(6.28, 3.14)));
         
         kinematics = new SwerveDriveKinematics(frontL, frontR, rearL, rearR);
 
-        odom = new SwerveDriveOdometry(kinematics, new Rotation2d(Math.toRadians(navx.getAngle())));
+        odom = new SwerveDriveOdometry(kinematics, new Rotation2d(Math.toRadians(-navx.getAngle())));
     }
 
     public SwerveModuleState[] updateVelocities(PathPlannerTrajectory traj, double time) {

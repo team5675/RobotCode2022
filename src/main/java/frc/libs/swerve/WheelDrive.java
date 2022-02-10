@@ -1,7 +1,7 @@
 package frc.libs.swerve;
 
 
-import com.revrobotics.RelativeEncoder;//import com.revrobotics.CANEncoder;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -9,7 +9,6 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.AnalogInput;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 //import frc.robot.SwerveDrive.Encoder;
  
@@ -35,6 +34,7 @@ double ANGLE_OFFSET;
 double setpoint;
 
 double velocitySetpoint;
+double velocityRPMConversion = 1517.6538819;
 
 	/**
 	 * @param angleMotor The CAN ID of the azimuth controller
@@ -67,7 +67,7 @@ double velocitySetpoint;
 		this.ANGLE_OFFSET = ANGLE_OFFSET;
 
 		velocityPID = this.speedMotor.getPIDController();
-		velocityPID.setP(5e-5);
+		velocityPID.setP(5e-4);
 		velocityPID.setI(0);
 		velocityPID.setD(0);
 		velocityPID.setFF(0.000156);
@@ -82,13 +82,8 @@ double velocitySetpoint;
 		if (angle > 5) {angle -= 5;}
 		if (angle < 0) {angle += 5;}
 
-		//magic number shush, m to ft
-		//velocitySetpoint = 458.59873 * (velocity / 3.281);
-
-		//velocitySetpoint = (5676 / maxVelocity) * velocity;//1621.7143 * velocity;
-
 		//maybe correct magic number? at 3.74 m/s RPM is 5676 adjusted for gear ratio
-		velocitySetpoint = Math.abs(1517.6538819 * velocity);
+		velocitySetpoint = Math.abs(velocityRPMConversion * velocity);
 
 		velocityPID.setReference(velocitySetpoint, CANSparkMax.ControlType.kVelocity);
 
@@ -96,7 +91,7 @@ double velocitySetpoint;
 
 		angleMotor.set(setpoint);
 
-		//System.out.println("ANGLE SETPOINT: " + setpoint + " ANGLE: " + angleMotor.getAppliedOutput());
+		System.out.println("ANGLE SETPOINT: " + setpoint);
 
 		//System.out.println("Motor " + angleMotor.getDeviceId() + " Angle: " + getAzimuth());
 	}
@@ -162,7 +157,7 @@ double velocitySetpoint;
 
 	public SwerveModuleState getState() {
 
-		return new SwerveModuleState(getDrivePosition(), new Rotation2d(getAzimuth() * 72));
+		return new SwerveModuleState(driveEncoder.getVelocity() / velocityRPMConversion, new Rotation2d(getAzimuth() * 72));
 	}
 
 	public void stop() {

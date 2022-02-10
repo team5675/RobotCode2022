@@ -3,9 +3,13 @@ package frc.robot.auto;
 import com.pathplanner.lib.PathPlannerTrajectory;
 
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 
 import com.pathplanner.lib.PathPlanner;
 
+import frc.robot.Dashboard;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.NavX;
 
@@ -20,6 +24,8 @@ public class Pathfinder {
     }
 
     pathState pState;
+
+    Dashboard dash;
 
     PathPlannerTrajectory pathToRun;
     Drive drive;
@@ -43,6 +49,8 @@ public class Pathfinder {
         navX = NavX.getInstance();
 
         controller = new trajectoryController();
+
+        dash = Dashboard.getInstance();
     }
 
     public void setPath(String path) {
@@ -62,8 +70,7 @@ public class Pathfinder {
 
             try {
 
-                states = controller.updateVelocities(pathToRun, elapsedTime);  
-                i++;
+                states = controller.updateVelocities(pathToRun, elapsedTime);
 
                 SwerveModuleState FL = states[0];
                 SwerveModuleState FR = states[1];
@@ -77,6 +84,16 @@ public class Pathfinder {
                 drive.getFrontRight().drivePathfinder(FR.speedMetersPerSecond, FR.angle.getDegrees(), maxVelocity);
                 drive.getBackLeft().drivePathfinder(BL.speedMetersPerSecond, BL.angle.getDegrees(), maxVelocity);
                 drive.getBackRight().drivePathfinder(BR.speedMetersPerSecond, BR.angle.getDegrees(), maxVelocity);
+
+                dash.getPathfinderTab().add("Front Left Speed", FL.speedMetersPerSecond).withWidget(BuiltInWidgets.kTextView).getEntry();
+                dash.getPathfinderTab().add("Front Right Speed", FR.speedMetersPerSecond).withWidget(BuiltInWidgets.kTextView).getEntry();
+                dash.getPathfinderTab().add("Back Left Speed", BL.speedMetersPerSecond).withWidget(BuiltInWidgets.kTextView).getEntry();
+                dash.getPathfinderTab().add("Back Right Speed", BR.speedMetersPerSecond).withWidget(BuiltInWidgets.kTextView).getEntry();
+
+                dash.getPathfinderTab().add("Front Left Angle", FL.angle.getDegrees()).withWidget(BuiltInWidgets.kTextView).getEntry();
+                dash.getPathfinderTab().add("Front Right Angle", FR.angle.getDegrees()).withWidget(BuiltInWidgets.kTextView).getEntry();
+                dash.getPathfinderTab().add("Back Left Angle", BL.angle.getDegrees()).withWidget(BuiltInWidgets.kTextView).getEntry();
+                dash.getPathfinderTab().add("Back Right Angle", BR.angle.getDegrees()).withWidget(BuiltInWidgets.kTextView).getEntry();
                 
             } catch (Exception e) {
                 
@@ -86,10 +103,10 @@ public class Pathfinder {
             elapsedTime = (System.currentTimeMillis() - startTime) / 1000;
         }
 
-        drive.getFrontLeft().drive(0,  drive.getFrontLeft().getAzimuth(),  false);
-        drive.getFrontRight().drive(0, drive.getFrontRight().getAzimuth(), false);
-        drive.getBackLeft().drive(0,   drive.getBackLeft().getAzimuth(),   false);
-        drive.getBackRight().drive(0,  drive.getBackRight().getAzimuth(),  false);
+        drive.getFrontLeft().stop();
+        drive.getFrontRight().stop();
+        drive.getBackLeft().stop();
+        drive.getBackRight().stop();
 
     }
 

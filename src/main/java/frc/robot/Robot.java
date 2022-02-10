@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import frc.robot.subsystems.*;
 import frc.robot.auto.Pathfinder;
 
@@ -19,6 +20,7 @@ public class Robot extends TimedRobot {
   Drive drive;
   DriverController driverController;
   NavX navX;
+  Dashboard dash;
 
   Pathfinder pathfinder;
 
@@ -33,6 +35,7 @@ public class Robot extends TimedRobot {
     driverController = DriverController.getInstance();
     navX = NavX.getInstance();
     pathfinder = Pathfinder.getInstance();
+    dash = Dashboard.getInstance();
 
     pathfinder.setPath("PLEASE WORK");
 
@@ -46,7 +49,13 @@ public class Robot extends TimedRobot {
    * SmartDashboard integrated updating.
    */
   @Override
-  public void robotPeriodic() {}
+  public void robotPeriodic() {
+
+    dash.getDriveTab().add("FL Azimuth", drive.getFrontLeft().getAzimuth()).withWidget(BuiltInWidgets.kVoltageView);
+    dash.getDriveTab().add("FR Azimuth", drive.getFrontRight().getAzimuth()).withWidget(BuiltInWidgets.kVoltageView);
+    dash.getDriveTab().add("BL Azimuth", drive.getBackLeft().getAzimuth()).withWidget(BuiltInWidgets.kVoltageView);
+    dash.getDriveTab().add("BR Azimuth", drive.getBackRight().getAzimuth()).withWidget(BuiltInWidgets.kVoltageView);
+  }
 
   /**
    * This autonomous (along with the chooser code above) shows how to select between different
@@ -96,6 +105,8 @@ public class Robot extends TimedRobot {
     boolean isFieldOriented = driverController.isFieldOriented();
 
     drive.move(forward, strafe, rotation * -1, angle, isFieldOriented);
+
+    dash.getPathfinderTab().add("Gyro Angle", angle).withWidget(BuiltInWidgets.kGyro).getEntry();
 
   }
 
