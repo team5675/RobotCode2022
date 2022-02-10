@@ -10,6 +10,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+
 public class Constants {
    
     //Drive subsystem constants
@@ -97,6 +99,12 @@ public class Constants {
     public static final double PATHFINDER_SLOWDOWN = 0;
     public static final double PATHFINDER_SLOWDOWN_END = 0.1;
     public static final double PATHFINDER_SLOWDOWN_P = 0.5;
+
+    public static final PneumaticsModuleType LOCK_SOLENOID_ID_1 = null;
+
+    public static final int LOCK_SOLENOID_ID_2 = 0;
+
+    public static final int WINCH_MOTOR_ID = 0;
 
     //Climb Constants
     //public static final int LOCK_SOLENOID_ID_1 = 2;
