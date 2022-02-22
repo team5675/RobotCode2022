@@ -5,8 +5,9 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+//import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets; Might be the cause of a run-time error
 import frc.robot.subsystems.*;
+import frc.libs.swerve.SwerveDrive;
 import frc.robot.auto.Pathfinder;
 
 /**
@@ -51,10 +52,12 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
 
+    /* Might be the cause of a run-time error
     dash.getDriveTab().add("FL Azimuth", drive.getFrontLeft().getAzimuth()).withWidget(BuiltInWidgets.kVoltageView);
     dash.getDriveTab().add("FR Azimuth", drive.getFrontRight().getAzimuth()).withWidget(BuiltInWidgets.kVoltageView);
     dash.getDriveTab().add("BL Azimuth", drive.getBackLeft().getAzimuth()).withWidget(BuiltInWidgets.kVoltageView);
     dash.getDriveTab().add("BR Azimuth", drive.getBackRight().getAzimuth()).withWidget(BuiltInWidgets.kVoltageView);
+    */
   }
 
   /**
@@ -70,7 +73,6 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
 
-    
   }
 
   /** This function is called periodically during autonomous. */
@@ -105,8 +107,8 @@ public class Robot extends TimedRobot {
     boolean isFieldOriented = driverController.isFieldOriented();
 
     drive.move(forward, strafe, rotation * -1, angle, isFieldOriented);
-
-    dash.getPathfinderTab().add("Gyro Angle", angle).withWidget(BuiltInWidgets.kGyro).getEntry();
+    
+    //dash.getPathfinderTab().add("Gyro Angle", angle).withWidget(BuiltInWidgets.kGyro).getEntry(); Might be the cause of a run-time error
 
   }
 

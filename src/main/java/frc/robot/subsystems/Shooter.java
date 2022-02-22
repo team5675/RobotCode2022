@@ -1,17 +1,23 @@
-/**package frc.robot.subsystems;
+package frc.robot.subsystems;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Spark;
+import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import edu.wpi.first.wpilibj.util.Color8Bit;
 import frc.libs.motors.SparkMaxMotor;
 import frc.robot.Constants;
 import frc.robot.DriverController;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Joystick;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
+import com.revrobotics.ColorMatch;
+import com.revrobotics.ColorSensorV3;
 
-public class Shooter {
+public class Shooter<Spark> {
 
     static Shooter instance;
 
@@ -19,7 +25,7 @@ public class Shooter {
 
         StartUp,
         Shooting,
-        Idle
+        Idle,
     }
 
     static ShooterState shooterState;
@@ -49,13 +55,10 @@ public class Shooter {
     DigitalInput hoodLowLimit;
     DigitalInput hoodHighLimit;
 
-    SparkMaxMotor Motor1;
-    CANSparkMaxlowLevel MotorType;
+    
     
     public Shooter() {
-        vision = Vision.getInstance();
-
-        hoodAngle = new AnalogInput(0 , 1);
+        vision = vision.getInstance();
 
         flywheelOne = new SparkMaxMotor(Constants.SHOOTER_ID_1);
         flywheelTwo = new SparkMaxMotor(Constants.SHOOTER_ID_2);
@@ -69,50 +72,74 @@ public class Shooter {
         currentVelocity = logTable.getEntry("currentVelocity");
         velocityGoal = logTable.getEntry("velocityGoal");
 
-        MotorType = new.CANSparkMaxLowLevel; 
-        Motor1 = new.CANSparkMax(1 , Motortype);
-
     }
 
     public void Adjust() {
-        float Cst = -0.1;  //multiply by tx to adjust the shooty thing
+        double K = -0.1;  //multiply by tx to adjust the shooty thing
 
         std.shared_ptr<NetworkTable> table = NetworkTable.getTable("limelight");
         float tx = table.GetNumber("tx");
         float tv = table.gerNumeber("tv");
-        adjust = (Cst * tx);
+        double adjust = (K * tx);
 
-        if(joystick.GetRawButton(9))
+        if(JoystickButton());
 
         if(tv == 0.0) {
-            adjust = 0.3
+            double spinAdjust = 0.3;
+        }
+    }
 
+    public void balls() {
+        int ballColor = hardwareMap.get(ColorSensorV3.class, "ballColor");
+        int flop = (int) (5676 * .1);
+        boolean teamBlue = true;
+        
+        if(teamBlue == true){
+            if(ballColor == color.red) {
+                flywheelOne.setRPMVelocity(flop);
+                flywheelTwo.setRPMVelocity(flop);
+            }
+    
+            if(ballColor == color.blue) {
+                pewpew();
+            }
+        }
+        if(teamBlue = false){
+            if(ballColor == color.red) {
+                pewpew();
+            }
+    
+            if(ballColor == color.blue) {
+                flywheelOne.setRPMVelocity(flop);
+                flywheelTwo.setRPMVelocity(flop);
+            }
         }
     }
 
     public void pewpew() {
-        dist = vision.getDistanceFromTarget();
+        dowhile(Joystick.getRawButton(9)); {
+            dist = vision.getDistanceFromTarget();
 
-        int thirtyPerc = (5676 * .3);
-        int fourtyPerc = (5676 * .4);
-
-        if(dist < 20) {
-            flywheelOne = setRPM fourtyPerc();
-            flywheelTwo = setRPM fourtyPerc();
-
+            int thirtyPerc = (int) (5676 * .3);
+            int fourtyPerc = (int) (5676 * .4);
+    
+            if(dist < 20) {
+                flywheelOne.setRPMVelocity(fourtyPerc);
+                flywheelTwo.setRPMVelocity(fourtyPerc);
+            }
+    
+            if(dist >= 20) {
+                flywheelOne.setRPMVelocity(thirtyPerc);
+                flywheelTwo.setRPMVelocity(fourtyPerc);
+            }
+    
+            else {
+                flywheelOne.setRPMVelocity((int) ((fourtyPerc) + .1));
+                flywheelTwo.setRPMVelocity((int) ((fourtyPerc) + .1));
+            }
+        }
         }
 
-        if(dist >= 20) {
-            flywheelOne = setRPM thirtyPerc();
-            flywheelTwo = setRPM fourtyPerc();
-
-        }
-        else {
-            flywheelOne = setRPM fourtyPerc();
-            flywheelTwo = setRPM fourtyPerc();
-        }
-    }
-     
     public void run() {
 
         if (shooterState == ShooterState.StartUp)
@@ -203,7 +230,7 @@ public class Shooter {
     }
 
 
-    public Shooter getInstance() {
+    public int getInstance() {
 
         if (instance == null) {
 
@@ -213,4 +240,4 @@ public class Shooter {
         return instance;
     }
 
-}*/
+}
