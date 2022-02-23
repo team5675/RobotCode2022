@@ -12,6 +12,7 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import frc.robot.subsystems.*;
+import frc.libs.swerve.SwerveDrive;
 import frc.robot.auto.Pathfinder;
 
 /**
@@ -110,10 +111,12 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
 
-    //dash.getDriveTab().add("FL Azimuth", drive.getFrontLeft().getAzimuth()).withWidget(BuiltInWidgets.kVoltageView);
-    //dash.getDriveTab().add("FR Azimuth", drive.getFrontRight().getAzimuth()).withWidget(BuiltInWidgets.kVoltageView);
-    //dash.getDriveTab().add("BL Azimuth", drive.getBackLeft().getAzimuth()).withWidget(BuiltInWidgets.kVoltageView);
-    //dash.getDriveTab().add("BR Azimuth", drive.getBackRight().getAzimuth()).withWidget(BuiltInWidgets.kVoltageView);
+    /* Might be the cause of a run-time error
+    dash.getDriveTab().add("FL Azimuth", drive.getFrontLeft().getAzimuth()).withWidget(BuiltInWidgets.kVoltageView);
+    dash.getDriveTab().add("FR Azimuth", drive.getFrontRight().getAzimuth()).withWidget(BuiltInWidgets.kVoltageView);
+    dash.getDriveTab().add("BL Azimuth", drive.getBackLeft().getAzimuth()).withWidget(BuiltInWidgets.kVoltageView);
+    dash.getDriveTab().add("BR Azimuth", drive.getBackRight().getAzimuth()).withWidget(BuiltInWidgets.kVoltageView);
+    */
   }
 
   /**
@@ -129,7 +132,6 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
 
-    
   }
 
   /** This function is called periodically during autonomous. */

@@ -14,4 +14,8 @@ public class Vision{
         return instance;
     }
 
+    public double getDistanceFromTarget() {
+        return 0;
+    }
+
 }

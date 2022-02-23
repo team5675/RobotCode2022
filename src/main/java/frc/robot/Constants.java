@@ -106,6 +106,9 @@ public class Constants {
 
     public static final int WINCH_MOTOR_ID = 0;
 
+    public class LOCK_SOLENOID_ID_1 {
+    }
+
     //Climb Constants
     //public static final int LOCK_SOLENOID_ID_1 = 2;
     //public static final int LOCK_SOLENOID_ID_2 = 5;
