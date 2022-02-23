@@ -34,6 +34,8 @@ double ANGLE_OFFSET;
 double setpoint;
 
 double velocitySetpoint;
+
+//convert m/s to rpm AT MOTOR and vice versa
 double velocityRPMConversion = 1517.6538819;
 
 	/**
@@ -74,13 +76,13 @@ double velocityRPMConversion = 1517.6538819;
 		velocityPID.setOutputRange(-1, 1);
 	}
 
-	public void drivePathfinder(double velocity, double angle, double maxVelocity) {
+	public void drivePathfinder(double velocity, double angle) {
 
 		angle /= 72;
 		angle += getOffset();
 
-		if (angle > 5) {angle -= 5;}
-		if (angle < 0) {angle += 5;}
+		if (angle > 5) angle -= 5;
+		if (angle < 0) angle += 5;
 
 		//maybe correct magic number? at 3.74 m/s RPM is 5676 adjusted for gear ratio
 		velocitySetpoint = Math.abs(velocityRPMConversion * velocity);
@@ -100,8 +102,8 @@ double velocityRPMConversion = 1517.6538819;
 	public void drive(double speed, double angle, boolean deadband) {
 		
 		//normalizes the encoder angle in case offsets caused it to go above 5
-		if (angle > 5) {angle -= 5;}
-		if (angle < 0) {angle += 5;}
+		if (angle > 5) angle -= 5;
+		if (angle < 0) angle += 5;
 
 		//System.out.println("ID: " + speedMotor.getDeviceId() + " Value: " + azimuthEncoder.getVoltage());
 
@@ -121,9 +123,9 @@ double velocityRPMConversion = 1517.6538819;
 
 	}
 
-	public void setOffset() {
+	public void setOffset(double offset) {
 
-		//Once we get reed switches installed, auto calibration
+		ANGLE_OFFSET = offset;
 
 	}
 	

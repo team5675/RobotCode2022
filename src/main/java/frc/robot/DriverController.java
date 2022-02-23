@@ -67,6 +67,11 @@ public class DriverController {
         return mainController.getRawButton(1);
     }
 
+    public boolean getResetSwerveOffset() {
+
+        return mainController.getBButton();
+    }
+
     public boolean getShoot() {
 
         return mainController.getXButton();

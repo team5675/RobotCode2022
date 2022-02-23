@@ -13,8 +13,9 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
+import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-
+import edu.wpi.first.math.trajectory.Trajectory.State;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.NavX;
 
@@ -36,7 +37,7 @@ public class trajectoryController {
     Pose2d currPose;
     Pose2d robotPose;
 
-    PathPlannerState currState;
+    State currState;
 
     SwerveDriveOdometry odom;
 
@@ -47,24 +48,25 @@ public class trajectoryController {
         drive = Drive.getInstance();
 
         //First PID for forward, second for strafe, third for rotation
-        controller = new HolonomicDriveController(new PIDController(0.09, 0, 0), 
-        new PIDController(0.09, 0, 0), new ProfiledPIDController(0.5, 0, 0, new TrapezoidProfile.Constraints(6.28, 3.14)));
+        controller = new HolonomicDriveController(new PIDController(0.06, 0, 0), 
+        new PIDController(0.06, 0, 0), new ProfiledPIDController(0.25, 0, 0, new TrapezoidProfile.Constraints(3, 1.5)));
         
         kinematics = new SwerveDriveKinematics(frontL, frontR, rearL, rearR);
 
-        odom = new SwerveDriveOdometry(kinematics, new Rotation2d(Math.toRadians(-navx.getAngle())));
+        //may need to negate angle if gyro increases when robot turns *left*
+        odom = new SwerveDriveOdometry(kinematics, Rotation2d.fromDegrees(navx.getAngle()));//navx.getAngle())));
     }
 
-    public SwerveModuleState[] updateVelocities(PathPlannerTrajectory traj, double time) {
+    public SwerveModuleState[] updateVelocities(Trajectory traj, double time) {
 
-        currState = (PathPlannerState) traj.sample(time);
+        currState = traj.sample(time);
 
         currPose = currState.poseMeters;
 
-        robotPose = odom.update(Rotation2d.fromDegrees(-navx.getAngle()), drive.getFrontLeft().getState(), drive.getFrontRight().getState(), 
+        robotPose = odom.update(Rotation2d.fromDegrees(navx.getAngle()), drive.getFrontLeft().getState(), drive.getFrontRight().getState(), 
         drive.getBackLeft().getState(), drive.getBackRight().getState());
 
-        ChassisSpeeds adjSpeeds = controller.calculate(robotPose, currState, Rotation2d.fromDegrees(currState.holonomicRotation.getDegrees()));
+        ChassisSpeeds adjSpeeds = controller.calculate(robotPose, currState, Rotation2d.fromDegrees(0));
 
         return kinematics.toSwerveModuleStates(adjSpeeds);
     }
