@@ -82,10 +82,11 @@ public class Shooter<Spark> {
         float tv = table.gerNumeber("tv");
         double adjust = (K * tx);
 
-        if(JoystickButton());
-
         if(tv == 0.0) {
             double spinAdjust = 0.3;
+        }
+        if(tv >= 0.1) {
+
         }
     }
 
@@ -117,7 +118,13 @@ public class Shooter<Spark> {
     }
 
     public void pewpew() {
-        dowhile(Joystick.getRawButton(9)); {
+        if(shooterState == ShooterState.StartUp) {
+            ((CANSparkMax) hoodMotor).set(0.400001);
+            flywheelOne.setRPMVelocity(null);
+            flywheelTwo.setRPMVelocity(null);
+        }
+        
+        else if(shooterState == ShooterState.Shooting) {
             dist = vision.getDistanceFromTarget();
 
             int thirtyPerc = (int) (5676 * .3);
