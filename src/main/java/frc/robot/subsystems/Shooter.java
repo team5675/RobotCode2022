@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.ColorMatch;
-import com.revrobotics.ColorSensorV3;
+import com.revrobotics.ColorSensorV3; 
 
 public class Shooter<Spark> {
 
@@ -85,7 +85,7 @@ public class Shooter<Spark> {
         if(tv == 0.0) {
             double spinAdjust = 0.3;
         }
-        if(tv >= 0.1) {
+        if(tv == 1.0) {
 
         }
     }
@@ -106,13 +106,13 @@ public class Shooter<Spark> {
             }
         }
         if(teamBlue = false){
-            if(ballColor == color.red) {
-                pewpew();
-            }
-    
             if(ballColor == color.blue) {
                 flywheelOne.setRPMVelocity(flop);
                 flywheelTwo.setRPMVelocity(flop);
+            }
+    
+            if(ballColor == color.red) {
+                pewpew();
             }
         }
     }
@@ -120,8 +120,11 @@ public class Shooter<Spark> {
     public void pewpew() {
         if(shooterState == ShooterState.StartUp) {
             ((CANSparkMax) hoodMotor).set(0.400001);
-            flywheelOne.setRPMVelocity(null);
-            flywheelTwo.setRPMVelocity(null);
+
+            int sexballs = (Integer) null;
+
+            flywheelOne.setRPMVelocity(sexballs);
+            flywheelTwo.setRPMVelocity(sexballs);
         }
         
         else if(shooterState == ShooterState.Shooting) {
@@ -162,8 +165,7 @@ public class Shooter<Spark> {
                 hoodMotor.set(0);
             }
         }
-        else if (shooterState == ShooterState.Shooting)
-        {
+        else if (shooterState == ShooterState.Shooting) {
             alignHood(); //hightarget is CLOSER
 
             if(driverController.getGate()) {
