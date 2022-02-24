@@ -4,13 +4,11 @@ import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.SPI;
 
-
 public class NavX {
 
     static NavX instance;
     
     AHRS gyro;
-
 
     public NavX() {
 
@@ -27,7 +25,7 @@ public class NavX {
 
     public double getAngle() {
 
-        return gyro.getAngle() % 360 - 180;
+        return gyro.getAngle() % 360 + 180;
     }
 
     public void resetYaw() {

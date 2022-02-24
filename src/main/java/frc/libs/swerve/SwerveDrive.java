@@ -28,7 +28,7 @@ public class SwerveDrive {
 			deadband = true;
 		}
 
-		else{ deadband = false; }
+		else deadband = false;
 
 		double temp;
 		double strafe;
@@ -91,9 +91,9 @@ public class SwerveDrive {
 		//normalize wheel speeds
         double max = backRightSpeed;
 
-        if (backLeftSpeed > max)   { max = backLeftSpeed;}
-        if (frontLeftSpeed > max)  { max = frontLeftSpeed;}
-        if (frontRightSpeed > max) { max = frontRightSpeed;}
+        if (backLeftSpeed > max)    max = backLeftSpeed;
+        if (frontLeftSpeed > max)   max = frontLeftSpeed;
+        if (frontRightSpeed > max)  max = frontRightSpeed;
 
         if (max > 1) {
 
