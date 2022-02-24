@@ -1,15 +1,14 @@
 package frc.robot.auto;
 
-import com.pathplanner.lib.PathPlannerTrajectory;
-
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-/* Might be the cause of a run-time error
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-*/
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryUtil;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Filesystem;
 
-import com.pathplanner.lib.PathPlanner;
+
+import java.io.IOException;
+import java.nio.file.Path;
 
 import frc.robot.Dashboard;
 import frc.robot.subsystems.Drive;
@@ -29,7 +28,7 @@ public class Pathfinder {
 
     Dashboard dash;
 
-    PathPlannerTrajectory pathToRun;
+    Trajectory pathToRun;
     Drive drive;
     NavX navX;
     trajectoryController controller;
@@ -41,8 +40,10 @@ public class Pathfinder {
     SwerveModuleState[] states;
 
     double endTime;
-    double elapsedTime = 0;
+    double elapsedTime = 0.001;
     double startTime;
+
+    Trajectory traj = new Trajectory();
 
     public Pathfinder() {
 
@@ -53,26 +54,38 @@ public class Pathfinder {
         controller = new trajectoryController();
 
         dash = Dashboard.getInstance();
+
+        
     }
 
     public void setPath(String path) {
 
-        pathToRun = PathPlanner.loadPath(path, maxVelocity, maxAccel);
+        String trajJson = "paths/"+ path +".wpilib.json";
 
-        pState = pathState.running;
+        Path trajPath = Filesystem.getDeployDirectory().toPath().resolve(trajJson);
+
+        try {
+            traj = TrajectoryUtil.fromPathweaverJson(trajPath);
+        } catch (IOException e) {
+            e.printStackTrace();
+            DriverStation.reportError("Unable to open trajectory: " + trajJson, e.getStackTrace());
+        }
     }
 
     public void drivePath() {
 
-        endTime = pathToRun.getEndState().timeSeconds;
+        endTime = traj.getTotalTimeSeconds();
 
         startTime = System.currentTimeMillis();
 
+        //List<State> stateList = traj.getStates();
+
+        //for(pathToRun : stateList){
         while(elapsedTime <= endTime) {
 
             try {
 
-                states = controller.updateVelocities(pathToRun, elapsedTime);
+                states = controller.updateVelocities(traj, elapsedTime);
 
                 SwerveModuleState FL = states[0];
                 SwerveModuleState FR = states[1];
@@ -82,26 +95,15 @@ public class Pathfinder {
                 //System.out.println("Speed: " + FL.speedMetersPerSecond + " Angle: " + FL.angle.getDegrees());
 
                 
-                drive.getFrontLeft().drivePathfinder(FL.speedMetersPerSecond, FL.angle.getDegrees(), maxVelocity);
-                drive.getFrontRight().drivePathfinder(FR.speedMetersPerSecond, FR.angle.getDegrees(), maxVelocity);
-                drive.getBackLeft().drivePathfinder(BL.speedMetersPerSecond, BL.angle.getDegrees(), maxVelocity);
-                drive.getBackRight().drivePathfinder(BR.speedMetersPerSecond, BR.angle.getDegrees(), maxVelocity);
-
-                /* Might be the cause of a run-time error
-                dash.getPathfinderTab().add("Front Left Speed", FL.speedMetersPerSecond).withWidget(BuiltInWidgets.kTextView).getEntry();
-                dash.getPathfinderTab().add("Front Right Speed", FR.speedMetersPerSecond).withWidget(BuiltInWidgets.kTextView).getEntry();
-                dash.getPathfinderTab().add("Back Left Speed", BL.speedMetersPerSecond).withWidget(BuiltInWidgets.kTextView).getEntry();
-                dash.getPathfinderTab().add("Back Right Speed", BR.speedMetersPerSecond).withWidget(BuiltInWidgets.kTextView).getEntry();
-
-                dash.getPathfinderTab().add("Front Left Angle", FL.angle.getDegrees()).withWidget(BuiltInWidgets.kTextView).getEntry();
-                dash.getPathfinderTab().add("Front Right Angle", FR.angle.getDegrees()).withWidget(BuiltInWidgets.kTextView).getEntry();
-                dash.getPathfinderTab().add("Back Left Angle", BL.angle.getDegrees()).withWidget(BuiltInWidgets.kTextView).getEntry();
-                dash.getPathfinderTab().add("Back Right Angle", BR.angle.getDegrees()).withWidget(BuiltInWidgets.kTextView).getEntry();
-                */
+                drive.getFrontLeft().drivePathfinder(FL.speedMetersPerSecond, FL.angle.getDegrees());
+                drive.getFrontRight().drivePathfinder(FR.speedMetersPerSecond, FR.angle.getDegrees());
+                drive.getBackLeft().drivePathfinder(BL.speedMetersPerSecond, BL.angle.getDegrees());
+                drive.getBackRight().drivePathfinder(BR.speedMetersPerSecond, BR.angle.getDegrees());
                 
             } catch (Exception e) {
                 
                 pState = pathState.end;
+                DriverStation.reportError("Can't Drive", e.getStackTrace());
             }
 
             elapsedTime = (System.currentTimeMillis() - startTime) / 1000;

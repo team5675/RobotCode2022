@@ -5,9 +5,10 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
-//import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets; Might be the cause of a run-time error
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import frc.robot.subsystems.*;
-import frc.libs.swerve.SwerveDrive;
 import frc.robot.auto.Pathfinder;
 
 /**
@@ -25,6 +26,21 @@ public class Robot extends TimedRobot {
 
   Pathfinder pathfinder;
 
+  enum Paths {
+
+    StraightLineFor,
+    StraightLineBack,
+    Diag,
+    Curve
+
+  }
+
+  SendableChooser<Paths> modeSelector;
+    NetworkTable autoTable;
+    NetworkTableEntry waitTime;
+    NetworkTableEntry startOffset;
+
+
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -38,7 +54,46 @@ public class Robot extends TimedRobot {
     pathfinder = Pathfinder.getInstance();
     dash = Dashboard.getInstance();
 
-    pathfinder.setPath("PLEASE WORK");
+    navX.resetYaw();
+
+    pathfinder.setPath("FirstTry");
+
+    /*modeSelector = new SendableChooser<Paths>();
+        autoTable = NetworkTableInstance.getDefault().getTable("auto");
+        waitTime = autoTable.getEntry("waitTime");
+        startOffset = autoTable.getEntry("startOffset");
+        modeSelector.addOption("Straight Line Forward", Paths.StraightLineFor);
+        modeSelector.addOption("Straight Line Backwards", Paths.StraightLineBack);
+        modeSelector.addOption("Back Left Diagonal", Paths.Diag);
+        modeSelector.addOption("Big Turn Time", Paths.Curve);
+        SmartDashboard.putData(modeSelector);
+
+    Paths toReturn = modeSelector.getSelected();
+
+    switch (toReturn) {
+      case StraightLineFor:
+
+        pathfinder.setPath("PLEASE WORK");
+        break;
+      
+      case StraightLineBack:
+      
+        pathfinder.setPath("Straight Back");
+        break;
+
+      case Diag:
+
+        pathfinder.setPath("Diag");
+        break;
+      
+      case Curve:
+      
+        pathfinder.setPath("Curve");
+        break;
+    
+      default:
+        break;
+    }*/
 
   }
 
@@ -93,6 +148,16 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
 
+    //Auto Set Offset Encoders
+    // **MUST ALIGN STRAIGHT BEFOREHAND**
+    if(driverController.getResetSwerveOffset()) {
+
+      drive.getBackRight().setOffset(drive.getBackRight().getAzimuth());
+      drive.getBackLeft().setOffset(drive.getBackLeft().getAzimuth());
+      drive.getFrontRight().setOffset(drive.getFrontRight().getAzimuth());
+      drive.getFrontRight().setOffset(drive.getFrontLeft().getAzimuth());
+    }
+
     //Reset Yaw on NavX
     if(driverController.getResetYaw()) {
 
@@ -107,8 +172,8 @@ public class Robot extends TimedRobot {
     boolean isFieldOriented = driverController.isFieldOriented();
 
     drive.move(forward, strafe, rotation * -1, angle, isFieldOriented);
-    
-    //dash.getPathfinderTab().add("Gyro Angle", angle).withWidget(BuiltInWidgets.kGyro).getEntry(); Might be the cause of a run-time error
+
+    //dash.getPathfinderTab().add("Gyro Angle", angle).withWidget(BuiltInWidgets.kGyro).getEntry();
 
   }
 

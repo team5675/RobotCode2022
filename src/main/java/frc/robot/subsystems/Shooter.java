@@ -3,7 +3,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.Spark;
+import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import frc.libs.motors.SparkMaxMotor;
@@ -17,7 +17,7 @@ import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorSensorV3; 
 
-public class Shooter<Spark> {
+public class Shooter {
 
     static Shooter instance;
 
@@ -239,11 +239,11 @@ public class Shooter<Spark> {
     }
 
 
-    public int getInstance() {
+    public Shooter getInstance() {
 
         if (instance == null) {
 
-            instanace = new Shooter();
+            instance = new Shooter();
         }
 
         return instance;
