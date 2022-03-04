@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+/*package frc.robot.subsystems;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -111,7 +111,7 @@ public class Shooter {
 
     double distanceFromLimelightToGoalInches = (goalHeightInches - limelightHeightInches)/Math.tan(angleToGoalRadians);
 
-    if (/**joysrtick input*/)
+    if (/**joysrtick input*//*)
 {
         float heading_error = -tx;
         float distance_error = -ty;
@@ -134,10 +134,10 @@ public class Shooter {
     }
 
     public void teamColor() {
-        if(/**ButtonPress*/) {
-            teamBlue = true;
+        if(/**ButtonPress*///) {
+/*           teamBlue = true;
         }
-        else if(/**ButtonPress*/) {
+        else if(/**ButtonPress*//*) {
             teamBlue = false;
         }
 
@@ -178,7 +178,7 @@ public class Shooter {
     public void limitSwitchTwo() {
         if(limitTwo = true) {
             greenWheel.setRPMVelocity(0);
-            if(/**ButtonPress*/) {
+            if(/**ButtonPress*//*) {
                 if(teamBlue = true) {
                     if(blue = true) {
                         pewpew();
@@ -298,4 +298,4 @@ public class Shooter {
         return instance;
     }
 
-}
+}*/

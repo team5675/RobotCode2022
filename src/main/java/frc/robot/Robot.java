@@ -54,8 +54,6 @@ public class Robot extends TimedRobot {
     pathfinder = Pathfinder.getInstance();
     dash = Dashboard.getInstance();
 
-    navX.resetYaw();
-
     pathfinder.setPath("FirstTry");
 
     /*modeSelector = new SendableChooser<Paths>();
@@ -150,13 +148,6 @@ public class Robot extends TimedRobot {
 
     //Auto Set Offset Encoders
     // **MUST ALIGN STRAIGHT BEFOREHAND**
-    if(driverController.getResetSwerveOffset()) {
-
-      drive.getBackRight().setOffset(drive.getBackRight().getAzimuth());
-      drive.getBackLeft().setOffset(drive.getBackLeft().getAzimuth());
-      drive.getFrontRight().setOffset(drive.getFrontRight().getAzimuth());
-      drive.getFrontRight().setOffset(drive.getFrontLeft().getAzimuth());
-    }
 
     //Reset Yaw on NavX
     if(driverController.getResetYaw()) {
@@ -165,15 +156,13 @@ public class Robot extends TimedRobot {
     }
 
     //Tele-op auto functions or manual drive
-    double forward = driverController.getForward(); //CHANGE THIS BACK
+    double forward = driverController.getForward();
     double strafe = driverController.getStrafe();
     double rotation = driverController.getRotation();
     double angle = navX.getAngle();
     boolean isFieldOriented = driverController.isFieldOriented();
 
-    drive.move(forward, strafe, rotation * -1, angle, isFieldOriented);
-
-    //dash.getPathfinderTab().add("Gyro Angle", angle).withWidget(BuiltInWidgets.kGyro).getEntry();
+    drive.move(forward, strafe, rotation, angle, isFieldOriented);
 
   }
 
