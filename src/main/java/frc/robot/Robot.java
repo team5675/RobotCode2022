@@ -4,7 +4,9 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -23,6 +25,8 @@ public class Robot extends TimedRobot {
   DriverController driverController;
   NavX navX;
   Dashboard dash;
+  Shooter shoot;
+  Vision vision;
 
   Pathfinder pathfinder;
 
@@ -53,6 +57,10 @@ public class Robot extends TimedRobot {
     navX = NavX.getInstance();
     pathfinder = Pathfinder.getInstance();
     dash = Dashboard.getInstance();
+    shoot = Shooter.getInstance();
+    vision = Vision.getInstance();
+
+    shoot.setcolor(DriverStation.getAlliance().toString());
 
     pathfinder.setPath("FirstTry");
 

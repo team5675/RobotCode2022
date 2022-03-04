@@ -5,18 +5,21 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
-import edu.wpi.first.wpilibj.command.WaitCommand;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import frc.libs.motors.SparkMaxMotor;
 import frc.robot.Constants;
 import frc.robot.DriverController;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;
 
 import com.revrobotics.SparkMaxLimitSwitch;
 
 import java.sql.Time;
+
+import java.util.Queue;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
@@ -71,13 +74,23 @@ public class Shooter {
     DigitalInput hoodLowLimit;
     DigitalInput hoodHighLimit;
 
+    String allianceColor;
+    Queue<Integer> ballQueue;
+
+    ColorSensorV3 colorSensor = new ColorSensorV3(I2C.Port.kMXP);
+    Color bColor;
+    DigitalInput ballInTopPos;
+    int ballsin = 0;
+
+    
+    
     DigitalInput limitSwitchOne = new DigitalInput(1);
     DigitalInput limitSwitchTwo = new DigitalInput(2);
     boolean limitOne = limitSwitchOne.get();
     boolean limitTwo = limitSwitchTwo.get();
 
     public Shooter() {
-        vision = vision.getInstance();
+        vision = Vision.getInstance();
 
         flywheelOne = new SparkMaxMotor(Constants.SHOOTER_ID_1);
         flywheelTwo = new SparkMaxMotor(Constants.SHOOTER_ID_2);
@@ -91,7 +104,30 @@ public class Shooter {
         currentVelocity = logTable.getEntry("currentVelocity");
         velocityGoal = logTable.getEntry("velocityGoal");
 
+        ballInTopPos = new DigitalInput(Constants.INDEX_PROX);
 
+    }
+
+    public void setcolor(String aColor) {
+
+        allianceColor = aColor;
+    }
+
+    public void loop() {
+
+        //if we have a ball in the gate
+        if(colorSensor.getProximity() < Constants.MIN_PROX_VALUE) {
+            //add it to the queue
+            ballQueue.add(colorSensor.getIR());
+
+            ballsin++;
+        }
+
+        //while the gate is empty
+        if(!ballInTopPos.get() && ballsin < 1) {
+
+            gate.set(0.5);
+        }
     }
     
     public void limeLight() {
@@ -143,25 +179,24 @@ public class Shooter {
 
     }
 
-    public void ballColor() {
-        int ballColor = ColorSensorV3.get(ColorSensorV3.class, "ballColor");
-
-        if(color.blue) {
-            blue = true;
-        }
-        else if(color.red) {
-            red = true;
-        }
-
-    }
+    public void shoot() {
+        int flop = (int) (5676 * .1);
+        boolean teamBlue = true;
+        
+        if(allianceColor == "Blue"){
+            if(ballColor == color.red) {
+                flywheelOne.setRPMVelocity(flop);
+                flywheelTwo.setRPMVelocity(flop);
+            }
     
-    public void flop() {
-        double flop = (5676 * .1);
-
-        flywheelOne.setRPMVelocity((int) flop);
-        flywheelTwo.setRPMVelocity((int) flop);
-
-    }
+            if(ballColor == color.blue) {
+                pewpew();
+            }
+        }
+        if(allianceColor == "Red"){
+            if(ballColor == color.red) {
+                pewpew();
+            }
     
     public void limitSwitchOne() {
         if(limitOne = true) {
@@ -208,6 +243,7 @@ public class Shooter {
     }
 
     public void pewpew() {
+        do  {
         if(shooterState == ShooterState.StartUp) {
             flywheelOne.setRPMVelocity(0);
             flywheelTwo.setRPMVelocity(0);
@@ -232,9 +268,7 @@ public class Shooter {
                 flywheelOne.setRPMVelocity((int) ((fourtyPerc) + .1));
                 flywheelTwo.setRPMVelocity((int) ((fourtyPerc) + .1));
             }
-
-        }
-
+        } while(driverController.getShoot());
     }
 
     public void run() {
@@ -288,7 +322,7 @@ public class Shooter {
     }
 
 
-    public Shooter getInstance() {
+    public static Shooter getInstance() {
 
         if (instance == null) {
 
