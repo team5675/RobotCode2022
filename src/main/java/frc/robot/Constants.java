@@ -65,15 +65,9 @@ public class Constants {
     public static final double SHOOTER_KP = 0.00007;
     public static final double SHOOTER_KD = 0.00002;
     public static final double SHOOTER_KF = 0.00021; //0.00019
+    //TODO: Update Gate Prox Channel
+    public static final int INDEX_PROX = 0;
     //Shooter threshold was 100 RPM
-
-    //Pizza spinner constants
-    public static final int SPINNER_MOTOR_ID = 9;
-    public static final int SPINNER_TICKS_PER_REV = 0;
-    public static final double SPINNER_REVS_SETPOINT = 100;
-    public static final double ONE_COLOR_REVS = 30;
-    public static final int SPINNER_ARM_IN_CHANNEL = 6;
-    public static final int SPINNER_ARM_OUT_CHANNEL = 1;
 
     //Intake subsystem constants
     public static final int INTAKE_ID = 1;
@@ -106,8 +100,13 @@ public class Constants {
 
     public static final int WINCH_MOTOR_ID = 0;
 
-    public class LOCK_SOLENOID_ID_1 {
-    }
+    //Color Sensor Constants
+    //TODO: Update Color Constants
+    public static final double MIN_PROX_VALUE = 0;
+    public static final double BLUE_MIN_COLOR = 0;
+    public static final double BLUE_MAC_COLOR = 0;
+    public static final double RED_MIN_COLOR = 0;
+    public static final double RED_MAX_COLOR = 0;
 
     //Climb Constants
     //public static final int LOCK_SOLENOID_ID_1 = 2;

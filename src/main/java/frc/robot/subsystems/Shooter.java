@@ -5,12 +5,16 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import frc.libs.motors.SparkMaxMotor;
 import frc.robot.Constants;
 import frc.robot.DriverController;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Joystick;
+
+import java.util.Queue;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
@@ -55,10 +59,18 @@ public class Shooter {
     DigitalInput hoodLowLimit;
     DigitalInput hoodHighLimit;
 
+    String allianceColor;
+    Queue<Integer> ballQueue;
+
+    ColorSensorV3 colorSensor = new ColorSensorV3(I2C.Port.kMXP);
+    Color bColor;
+    DigitalInput ballInTopPos;
+    int ballsin = 0;
+
     
     
     public Shooter() {
-        vision = vision.getInstance();
+        vision = Vision.getInstance();
 
         flywheelOne = new SparkMaxMotor(Constants.SHOOTER_ID_1);
         flywheelTwo = new SparkMaxMotor(Constants.SHOOTER_ID_2);
@@ -72,29 +84,47 @@ public class Shooter {
         currentVelocity = logTable.getEntry("currentVelocity");
         velocityGoal = logTable.getEntry("velocityGoal");
 
+        ballInTopPos = new DigitalInput(Constants.INDEX_PROX);
+
+    }
+
+    public void setcolor(String aColor) {
+
+        allianceColor = aColor;
+    }
+
+    public void loop() {
+
+        //if we have a ball in the gate
+        if(colorSensor.getProximity() < Constants.MIN_PROX_VALUE) {
+            //add it to the queue
+            ballQueue.add(colorSensor.getIR());
+
+            ballsin++;
+        }
+
+        //while the gate is empty
+        if(!ballInTopPos.get() && ballsin < 1) {
+
+            gate.set(0.5);
+        }
     }
 
     public void Adjust() {
         double K = -0.1;  //multiply by tx to adjust the shooty thing
 
-        std.shared_ptr<NetworkTable> table = NetworkTable.getTable("limelight");
-        float tx = table.GetNumber("tx");
-        float tv = table.gerNumeber("tv");
-        double adjust = (K * tx);
+        double adjust = (K * vision.getHorizontalOffset());
 
-        if(JoystickButton());
-
-        if(tv == 0.0) {
+        if(!vision.isTargeted()) {
             double spinAdjust = 0.3;
         }
     }
 
-    public void balls() {
-        int ballColor = hardwareMap.get(ColorSensorV3.class, "ballColor");
+    public void shoot() {
         int flop = (int) (5676 * .1);
         boolean teamBlue = true;
         
-        if(teamBlue == true){
+        if(allianceColor == "Blue"){
             if(ballColor == color.red) {
                 flywheelOne.setRPMVelocity(flop);
                 flywheelTwo.setRPMVelocity(flop);
@@ -104,7 +134,7 @@ public class Shooter {
                 pewpew();
             }
         }
-        if(teamBlue = false){
+        if(allianceColor == "Red"){
             if(ballColor == color.red) {
                 pewpew();
             }
@@ -117,7 +147,7 @@ public class Shooter {
     }
 
     public void pewpew() {
-        dowhile(Joystick.getRawButton(9)); {
+        do  {
             dist = vision.getDistanceFromTarget();
 
             int thirtyPerc = (int) (5676 * .3);
@@ -137,8 +167,8 @@ public class Shooter {
                 flywheelOne.setRPMVelocity((int) ((fourtyPerc) + .1));
                 flywheelTwo.setRPMVelocity((int) ((fourtyPerc) + .1));
             }
-        }
-        }
+        } while(driverController.getShoot());
+    }
 
     public void run() {
 
@@ -205,15 +235,6 @@ public class Shooter {
         }
     }
 
-    public void shoot() {
-
-        if (shooterState != ShooterState.StartUp)
-        {
-
-            shooterState = ShooterState.Shooting;
-        }
-    }
-
     public void stop() {
         shooterState = ShooterState.Idle;
     }
@@ -230,7 +251,7 @@ public class Shooter {
     }
 
 
-    public Shooter getInstance() {
+    public static Shooter getInstance() {
 
         if (instance == null) {
 
