@@ -74,6 +74,15 @@ public class Pathfinder {
 
     public void drivePath() {
 
+        /**
+         * Steps for tuning 
+         * 1. Have Robot drive 1M forward, compare to odometry and make adjustments to conversion factor as needed
+         * 2. Figure out if NavX being a poopcock, or relative to azimuth degrees
+         * 3. Have Robot turn 360 degrees, compare to odometry
+         * 4. Run Diag path and tweak Holonomic P gain for X, Y, and Theta (assuming odom accurate enough)
+         * 
+         */
+
         endTime = traj.getTotalTimeSeconds();
 
         startTime = System.currentTimeMillis();

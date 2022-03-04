@@ -13,13 +13,18 @@ import frc.robot.DriverController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Timer;
+
+import com.revrobotics.SparkMaxLimitSwitch;
+
+import java.sql.Time;
 
 import java.util.Queue;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.ColorMatch;
-import com.revrobotics.ColorSensorV3;
+import com.revrobotics.ColorSensorV3; 
 
 public class Shooter {
 
@@ -32,11 +37,20 @@ public class Shooter {
         Idle,
     }
 
+    //Motors for the shooters
     static ShooterState shooterState;
-    SparkMaxMotor flywheelOne;
+    SparkMaxMotor flywheelOne; 
     SparkMaxMotor flywheelTwo;
     Spark hoodMotor;
-    Spark gate;
+    SparkMaxMotor greenWheel;
+
+    //Color Stuffs
+    boolean teamBlue;
+    boolean ballOne;
+    boolean ballTwo;
+    boolean blue;
+    boolean red;
+
 
     Vision vision;
     DriverController driverController = DriverController.getInstance();
@@ -51,6 +65,7 @@ public class Shooter {
     double hoodP;
     double hoodD;
     int RPM;
+    double flop;
     double dist;
     double totalHeight;
     double cartHeight;
@@ -69,13 +84,18 @@ public class Shooter {
 
     
     
+    DigitalInput limitSwitchOne = new DigitalInput(1);
+    DigitalInput limitSwitchTwo = new DigitalInput(2);
+    boolean limitOne = limitSwitchOne.get();
+    boolean limitTwo = limitSwitchTwo.get();
+
     public Shooter() {
         vision = Vision.getInstance();
 
         flywheelOne = new SparkMaxMotor(Constants.SHOOTER_ID_1);
         flywheelTwo = new SparkMaxMotor(Constants.SHOOTER_ID_2);
         hoodMotor = new Spark(Constants.HOOD_ID);
-        gate = new Spark(Constants.SHOOTER_GATE_ID);
+        greenWheel = new SparkMaxMotor(Constants.SHOOTER_GATE_ID);
 
         flywheelOne.configurePID(Constants.SHOOTER_KP, 0, Constants.SHOOTER_KD, Constants.SHOOTER_KF);
         flywheelTwo.configurePID(Constants.SHOOTER_KP, 0, Constants.SHOOTER_KD, Constants.SHOOTER_KF);
@@ -109,15 +129,54 @@ public class Shooter {
             gate.set(0.5);
         }
     }
+    
+    public void limeLight() {
+    NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+    NetworkTableEntry ty = table.getEntry("ty");
+    NetworkTableEntry tx = table.getEntry("tx");
 
-    public void Adjust() {
-        double K = -0.1;  //multiply by tx to adjust the shooty thing
+    double targetOffsetAngle_Vertical = ty.getDouble(0.0);
+    double limelightMountAngleDegrees = 20.0;
+    double limelightLensHeightInches = 37.5;
+    double goalHeightInches = 104.5;
+    double angleToGoalDegrees = limelightMountAngleDegrees + targetOffsetAngle_Vertical;
+    double angleToGoalRadians = angleToGoalDegrees * (3.14159 / 180.0);
+    float KpAim = -0.1f;
+    float KpDistance = -0.1f;
+    float minAimCommand = 0.05f;
 
-        double adjust = (K * vision.getHorizontalOffset());
+    double distanceFromLimelightToGoalInches = (goalHeightInches - limelightHeightInches)/Math.tan(angleToGoalRadians);
 
-        if(!vision.isTargeted()) {
-            double spinAdjust = 0.3;
+    if (/**joysrtick input*/)
+{
+        float heading_error = -tx;
+        float distance_error = -ty;
+        float steering_adjust = 0.0f;
+
+        if (tx > 1.0) {
+                steering_adjust = KpAim*heading_error - minAimCommand;
         }
+        else if (tx < -1.0) {
+                steering_adjust = KpAim*heading_error + minAimCommand;
+        }
+
+        float distance_adjust = KpDistance * distance_error;
+
+        left_command += steering_adjust + distance_adjust;
+        right_command -= steering_adjust + distance_adjust;
+}
+
+
+    }
+
+    public void teamColor() {
+        if(/**ButtonPress*/) {
+            teamBlue = true;
+        }
+        else if(/**ButtonPress*/) {
+            teamBlue = false;
+        }
+
     }
 
     public void shoot() {
@@ -139,15 +198,59 @@ public class Shooter {
                 pewpew();
             }
     
-            if(ballColor == color.blue) {
-                flywheelOne.setRPMVelocity(flop);
-                flywheelTwo.setRPMVelocity(flop);
-            }
+    public void limitSwitchOne() {
+        if(limitOne = true) {
+            do {
+                greenWheel.setRPMVelocity(1000);
+            } while (limitOne = true); 
+            
+            ballColor();
+
         }
+
+    }
+
+    public void limitSwitchTwo() {
+        if(limitTwo = true) {
+            greenWheel.setRPMVelocity(0);
+            if(/**ButtonPress*/) {
+                if(teamBlue = true) {
+                    if(blue = true) {
+                        pewpew();
+                    }
+                }
+                if(teamBlue = true) {
+                    if(red = true) {
+                        flop();
+                    }
+                }
+                if(teamBlue = false) {
+                    if(blue = true) {
+                        flop();
+                    }
+                }
+                if(teamBlue = false) {
+                    if(red = true) {
+                        pewpew();
+                    }
+
+                }
+
+            }
+
+        }
+
     }
 
     public void pewpew() {
         do  {
+        if(shooterState == ShooterState.StartUp) {
+            flywheelOne.setRPMVelocity(0);
+            flywheelTwo.setRPMVelocity(0);
+
+        }
+        
+        else if(shooterState == ShooterState.Shooting) {
             dist = vision.getDistanceFromTarget();
 
             int thirtyPerc = (int) (5676 * .3);
@@ -157,12 +260,10 @@ public class Shooter {
                 flywheelOne.setRPMVelocity(fourtyPerc);
                 flywheelTwo.setRPMVelocity(fourtyPerc);
             }
-    
             if(dist >= 20) {
                 flywheelOne.setRPMVelocity(thirtyPerc);
                 flywheelTwo.setRPMVelocity(fourtyPerc);
             }
-    
             else {
                 flywheelOne.setRPMVelocity((int) ((fourtyPerc) + .1));
                 flywheelTwo.setRPMVelocity((int) ((fourtyPerc) + .1));
@@ -185,14 +286,13 @@ public class Shooter {
                 hoodMotor.set(0);
             }
         }
-        else if (shooterState == ShooterState.Shooting)
-        {
+        else if (shooterState == ShooterState.Shooting) {
             alignHood(); //hightarget is CLOSER
 
             if(driverController.getGate()) {
-                gate.set(1);
+                greenWheel.set(1);
             }
-            else gate.set(0);
+            else greenWheel.set(0);
 
             if(driverController.getStopFlywheel()) {
                 flywheelOne.setRPMVelocity(0);
@@ -209,7 +309,7 @@ public class Shooter {
         else
         {
 
-            gate.set(0);
+            greenWheel.set(0);
             hoodMotor.set(0);
             if(driverController.getStopFlywheel()) {
                 flywheelOne.setRPMVelocity(0);
@@ -219,35 +319,6 @@ public class Shooter {
                 flywheelTwo.setRPMVelocity((int)(0.75 * RPM));
             }
         }
-    }
-
-    public void alignHood() {
-        if(vision.getDistanceFromTarget() < 9.5) highTarget = true;
-        else highTarget = false;
-            
-        if(!highTarget) {
-            if(!hoodHighLimit.get()) hoodMotor.set(0);
-            else hoodMotor.set(-0.6);
-        }
-        else {
-            if(!hoodLowLimit.get()) hoodMotor.set(0);
-            else hoodMotor.set(0.6);
-        }
-    }
-
-    public void stop() {
-        shooterState = ShooterState.Idle;
-    }
-
-
-    public double getVelocity() {
-        return (flywheelOne.getVelocity() + flywheelTwo.getVelocity()) / 2;
-    }
-
-    public String getState() {
-        if(shooterState == ShooterState.StartUp) return "StartUp";
-        else if(shooterState == ShooterState.Shooting) return "Shooting";
-        else return "Idle";
     }
 
 

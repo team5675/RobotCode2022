@@ -66,4 +66,8 @@ public class SparkMaxMotor {
 
         controller.burnFlash();
     }
+
+
+    public void SetRPMVelocity(int flop) {
+    }
 }
