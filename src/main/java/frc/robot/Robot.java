@@ -174,7 +174,13 @@ public class Robot extends TimedRobot {
     drive.move(forward, strafe, rotation * -1, angle, isFieldOriented);
 
     //dash.getPathfinderTab().add("Gyro Angle", angle).withWidget(BuiltInWidgets.kGyro).getEntry();
-
+    
+    /*System.out.println("Azimuth values (FL, FR, RL, RR): ");
+    System.out.println(drive.getFrontLeft().getAzimuth());
+    System.out.println(drive.getFrontRight().getAzimuth());
+    System.out.println(drive.getBackLeft().getAzimuth());
+    System.out.println(drive.getBackRight().getAzimuth());
+    System.out.println();*/
   }
 
   /** This function is called once when the robot is disabled. */

@@ -109,10 +109,10 @@ public class Shooter {
     float KpDistance = -0.1f;
     float minAimCommand = 0.05f;
 
-    double distanceFromLimelightToGoalInches = (goalHeightInches - limelightHeightInches)/Math.tan(angleToGoalRadians);
+    double distanceFromLimelightToGoalInches = (goalHeightInches - limelightHeightInches)/Math.tan(angleToGoalRadians);*/
 
     if (/**joysrtick input*/)
-{
+/*{
         float heading_error = -tx;
         float distance_error = -ty;
         float steering_adjust = 0.0f;
@@ -128,7 +128,7 @@ public class Shooter {
 
         left_command += steering_adjust + distance_adjust;
         right_command -= steering_adjust + distance_adjust;
-}
+}*/
 
 
     }
@@ -177,8 +177,8 @@ public class Shooter {
 
     public void limitSwitchTwo() {
         if(limitTwo = true) {
-            greenWheel.setRPMVelocity(0);
-            if(/**ButtonPress*/) {
+            greenWheel.setRPMVelocity(0);*/
+            //if(/**ButtonPress*/) {
                 if(teamBlue = true) {
                     if(blue = true) {
                         pewpew();
