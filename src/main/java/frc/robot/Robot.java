@@ -4,7 +4,9 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -23,6 +25,8 @@ public class Robot extends TimedRobot {
   DriverController driverController;
   NavX navX;
   Dashboard dash;
+  Shooter shoot;
+  Vision vision;
 
   Pathfinder pathfinder;
 
@@ -53,8 +57,10 @@ public class Robot extends TimedRobot {
     navX = NavX.getInstance();
     pathfinder = Pathfinder.getInstance();
     dash = Dashboard.getInstance();
+    shoot = Shooter.getInstance();
+    vision = Vision.getInstance();
 
-    navX.resetYaw();
+    //shoot.setcolor(DriverStation.getAlliance().toString());
 
     pathfinder.setPath("FirstTry");
 
@@ -150,13 +156,6 @@ public class Robot extends TimedRobot {
 
     //Auto Set Offset Encoders
     // **MUST ALIGN STRAIGHT BEFOREHAND**
-    if(driverController.getResetSwerveOffset()) {
-
-      drive.getBackRight().setOffset(drive.getBackRight().getAzimuth());
-      drive.getBackLeft().setOffset(drive.getBackLeft().getAzimuth());
-      drive.getFrontRight().setOffset(drive.getFrontRight().getAzimuth());
-      drive.getFrontRight().setOffset(drive.getFrontLeft().getAzimuth());
-    }
 
     //Reset Yaw on NavX
     if(driverController.getResetYaw()) {
@@ -165,13 +164,24 @@ public class Robot extends TimedRobot {
     }
 
     //Tele-op auto functions or manual drive
-    double forward = driverController.getForward(); //CHANGE THIS BACK
+    double forward = driverController.getForward();
     double strafe = driverController.getStrafe();
     double rotation = driverController.getRotation();
     double angle = navX.getAngle();
     boolean isFieldOriented = driverController.isFieldOriented();
 
     drive.move(forward, strafe, rotation * -1, angle, isFieldOriented);
+    if(driverController.getShoot()) {
+      shoot.pewpew();
+    }
+
+    if(driverController.getColor()) {
+      shoot.blueTeamTrue();
+    }
+
+    if(driverController.getColor()) {
+      shoot.blueTeamFalse();
+    }
 
     //dash.getPathfinderTab().add("Gyro Angle", angle).withWidget(BuiltInWidgets.kGyro).getEntry();
     
