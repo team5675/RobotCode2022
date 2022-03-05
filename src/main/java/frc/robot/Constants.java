@@ -59,8 +59,8 @@ public class Constants {
     //Shooter subsystem constants
     public static final double SHOOTER_HOOD_P = 0.01;
     public static final int SHOOTER_GATE_ID = 0;
-    public static final int SHOOTER_ID_1 = 12;
-    public static final int SHOOTER_ID_2 = 32;
+    public static final int SHOOTER_ID_BLACK = 16;
+    public static final int SHOOTER_ID_BLUE = 12;
     public static final int HOOD_ID = 3;
     public static final double SHOOTER_KP = 0.00007;
     public static final double SHOOTER_KD = 0.00002;
@@ -70,9 +70,10 @@ public class Constants {
     //Shooter threshold was 100 RPM
 
     //Intake subsystem constants
-    public static final int INTAKE_ID = 1;
-    public static final int DEPLOY_ID_1 = 7;
-    public static final int DEPLOY_ID_2 = 0;
+    public static final int INTAKE_ID = 15;
+    //TODO: Find Intake Deploy Pneu Channels
+    public static final int DEPLOY_ID_1 = 8;
+    public static final int DEPLOY_ID_2 = 9;
 
     //Vision subsystem constants
     public static final double VISION_TARGET_HEIGHT = 8.1875;
@@ -80,7 +81,7 @@ public class Constants {
     public static final double VISION_CAMERA_ANGLE = 15;//25.3778;
 
     //Pneumatics constants
-    public static final int COMPRESSOR_ID = 0;
+    public static final int COMPRESSOR_ID = 40;
 
     //Auto Constants
     public static final double AUTO_FORWARD_P = 0.2;

@@ -25,8 +25,10 @@ public class Robot extends TimedRobot {
   DriverController driverController;
   NavX navX;
   Dashboard dash;
-  Shooter shoot;
+  //Shooter shoot;
   Vision vision;
+  Pneumatics pneumatics;
+  Sucker suck;
 
   Pathfinder pathfinder;
 
@@ -57,49 +59,14 @@ public class Robot extends TimedRobot {
     navX = NavX.getInstance();
     pathfinder = Pathfinder.getInstance();
     dash = Dashboard.getInstance();
-    shoot = Shooter.getInstance();
+    //shoot = Shooter.getInstance();
     vision = Vision.getInstance();
+    pneumatics = Pneumatics.getInstance();
+    suck = Sucker.getInstance();
 
-    shoot.setcolor(DriverStation.getAlliance().toString());
+    //shoot.setcolor(DriverStation.getAlliance().toString());
 
     pathfinder.setPath("FirstTry");
-
-    /*modeSelector = new SendableChooser<Paths>();
-        autoTable = NetworkTableInstance.getDefault().getTable("auto");
-        waitTime = autoTable.getEntry("waitTime");
-        startOffset = autoTable.getEntry("startOffset");
-        modeSelector.addOption("Straight Line Forward", Paths.StraightLineFor);
-        modeSelector.addOption("Straight Line Backwards", Paths.StraightLineBack);
-        modeSelector.addOption("Back Left Diagonal", Paths.Diag);
-        modeSelector.addOption("Big Turn Time", Paths.Curve);
-        SmartDashboard.putData(modeSelector);
-
-    Paths toReturn = modeSelector.getSelected();
-
-    switch (toReturn) {
-      case StraightLineFor:
-
-        pathfinder.setPath("PLEASE WORK");
-        break;
-      
-      case StraightLineBack:
-      
-        pathfinder.setPath("Straight Back");
-        break;
-
-      case Diag:
-
-        pathfinder.setPath("Diag");
-        break;
-      
-      case Curve:
-      
-        pathfinder.setPath("Curve");
-        break;
-    
-      default:
-        break;
-    }*/
 
   }
 
@@ -112,6 +79,11 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
+
+    //if(pneumatics.getPressureSwitch()) {
+
+      //pneumatics.runCompressor();
+    pneumatics.stopCompressor();
 
     /* Might be the cause of a run-time error
     dash.getDriveTab().add("FL Azimuth", drive.getFrontLeft().getAzimuth()).withWidget(BuiltInWidgets.kVoltageView);
@@ -171,6 +143,17 @@ public class Robot extends TimedRobot {
     boolean isFieldOriented = driverController.isFieldOriented();
 
     drive.move(forward, strafe, rotation, angle, isFieldOriented);
+
+    suck.suckOrBlow(driverController.getIntake() - driverController.getOuttake());
+
+    //Sucker Release Deploy
+    if (driverController.getIntakeDeploy()) {
+
+      suck.deploy();
+    } else if (driverController.getIntakeRetract()) {
+
+      suck.retract();
+    }
 
   }
 
