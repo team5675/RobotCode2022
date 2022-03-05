@@ -4,21 +4,46 @@ import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.util.Color;
 import frc.libs.motors.SparkMaxMotor;
 import frc.robot.Constants;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.I2C;
 
 import java.util.Queue;
 
-import com.revrobotics.ColorSensorV3; 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.ColorSensorV3;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.SparkMaxRelativeEncoder;
+import com.revrobotics.CANSparkMax.ControlType;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType; 
 
 public class Shooter {
 
     static Shooter instance;
 
-    SparkMaxMotor flywheelBlack; 
-    SparkMaxMotor flywheelBlue;
+    CANSparkMax flywheelBlack; 
+    CANSparkMax flywheelBlue;
     Spark hoodMotor;
     Spark greenWheel;
+
+    SparkMaxPIDController blackPID;
+    SparkMaxPIDController bluePID;
+
+    RelativeEncoder blackEnc;
+    RelativeEncoder blueEnc;
+
+    NetworkTable dashboardTable;
+    NetworkTableEntry blackRPM;
+    NetworkTableEntry blueRPM;
+
+    NetworkTableEntry blackSetpoint;
+    NetworkTableEntry blueSetpoint;
+
+    double blackRPMSetpoint;
+    double blueRPMSetpoint;
 
 
     Vision vision;
@@ -41,19 +66,42 @@ public class Shooter {
     public Shooter() {
         vision = Vision.getInstance();
 
-        flywheelBlack = new SparkMaxMotor(Constants.SHOOTER_ID_1);
-        flywheelBlue = new SparkMaxMotor(Constants.SHOOTER_ID_2);
+        flywheelBlack = new CANSparkMax(Constants.SHOOTER_ID_1, MotorType.kBrushless);
+        flywheelBlue = new CANSparkMax(Constants.SHOOTER_ID_2, MotorType.kBrushless);
         hoodMotor = new Spark(Constants.HOOD_ID);
         greenWheel = new Spark(Constants.SHOOTER_GATE_ID);
 
         ballInTopPos = new DigitalInput(Constants.INDEX_PROX);
         colorSensor = new ColorSensorV3(I2C.Port.kMXP);
 
+        blackPID = flywheelBlack.getPIDController();
+        bluePID = flywheelBlue.getPIDController();
+
+        bluePID.setFF(0.00019);
+        bluePID.setP(0.0001);
+        blackPID.setFF(0.00019);
+        blackPID.setP(0.0001);
+
+        blackEnc = flywheelBlack.getEncoder();
+        blueEnc = flywheelBlue.getEncoder();
+
+        dashboardTable = NetworkTableInstance.getDefault().getTable("dashboard");
+
+        blackRPM = dashboardTable.getEntry("blackRPM");
+        blueRPM = dashboardTable.getEntry("blueRPM");
+
+        blackSetpoint = dashboardTable.getEntry("blackSetpoint");
+        blueSetpoint = dashboardTable.getEntry("blueSetpoint");
+
+        blackSetpoint.setDouble(0);
+        blueSetpoint.setDouble(0);
+
     }
 
     public void setcolor(String aColor) {
 
         allianceColor = aColor;
+        System.out.println(allianceColor);
     }
 
     public void loop() {
@@ -74,20 +122,32 @@ public class Shooter {
     }
 
     public void pewpew() {
-        
-        if(vision.isTargeted()) {
 
-            //TODO: Update Regression Model for Shooter
+        blueRPMSetpoint = 26.186 * Math.pow(vision.getDistanceFromTarget(), 2) - 449.39 * vision.getDistanceFromTarget() + 3756.4;
+        blackRPMSetpoint = 80.016 * vision.getDistanceFromTarget() + 1171.4;
 
-            flywheelBlack.setRPMVelocity(2500 * (int)vision.getDistanceFromTarget());
-            flywheelBlue.setRPMVelocity(2500 * (int)vision.getDistanceFromTarget());
-        }
+        //TODO: Update Regression Model for Shooter
+        //Low goal, 1000 on black, -1500 on blue
+
+        //flywheelBlack.setRPMVelocity();
+        //flywheelBlue.setRPMVelocity(2500 * (int)vision.getDistanceFromTarget());
+
+        //blackPID.setReference(blackSetpoint.getDouble(0), ControlType.kVelocity);
+        //bluePID.setReference(blueSetpoint.getDouble(0), ControlType.kVelocity);
+
+        blackPID.setReference(blueRPMSetpoint, ControlType.kVelocity);
+        bluePID.setReference(blackRPMSetpoint, ControlType.kVelocity);
+
+        greenWheel.set(1);
+
+        blackRPM.setDouble(blackEnc.getVelocity());
+        blueRPM.setDouble(blueEnc.getVelocity());
     }
 
     public void idle() {
 
-        flywheelBlack.setRPMVelocity(250);
-        flywheelBlue.setRPMVelocity(250);
+        blackPID.setReference(500, ControlType.kVelocity);
+        bluePID.setReference(-500, ControlType.kVelocity);
     }
 
     public static Shooter getInstance() {

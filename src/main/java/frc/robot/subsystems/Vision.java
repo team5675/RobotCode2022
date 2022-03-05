@@ -76,8 +76,7 @@ public class Vision {
     public double getHorizontalOffset() {
         double raw = horizontalOffset.getDouble(0);
 
-        if(getDistanceFromTarget() < 7.5) return raw - 1; //On the green gaffer tape markers
-        return raw + 1 + (getDistanceFromTarget() - 7.5) * 0.235;
+        return raw - 1;
     }
     
 
@@ -90,7 +89,7 @@ public class Vision {
     public void loop() {
         
         if (lightOn) {
-            distance = (Constants.VISION_TARGET_HEIGHT - Constants.VISION_CAMERA_HEIGHT) / Math.tan(Math.toRadians(Constants.VISION_CAMERA_ANGLE + getVerticalOffset())) * 0.8;
+            distance = ((Constants.VISION_TARGET_HEIGHT - Constants.VISION_CAMERA_HEIGHT) / Math.tan(Math.toRadians(Constants.VISION_CAMERA_ANGLE + getVerticalOffset()))) / 12;
             distanceFromTarget.setDouble(distance);
         }
     }

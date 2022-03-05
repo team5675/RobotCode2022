@@ -76,9 +76,9 @@ public class Constants {
     public static final int DEPLOY_ID_2 = 9;
 
     //Vision subsystem constants
-    public static final double VISION_TARGET_HEIGHT = 8.1875;
-    public static final double VISION_CAMERA_HEIGHT = 1.8958333;//1.7493;
-    public static final double VISION_CAMERA_ANGLE = 15;//25.3778;
+    public static final double VISION_TARGET_HEIGHT = 104.5;
+    public static final double VISION_CAMERA_HEIGHT = 37.5;//1.7493;
+    public static final double VISION_CAMERA_ANGLE = 20;//25.3778;
 
     //Pneumatics constants
     public static final int COMPRESSOR_ID = 40;

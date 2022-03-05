@@ -71,6 +71,8 @@ public class Robot extends TimedRobot {
 
     pathfinder.setPath("FirstTry");
 
+    vision.lightOff();
+
   }
 
  
@@ -123,21 +125,30 @@ public class Robot extends TimedRobot {
     double angle = navX.getAngle();
     boolean isFieldOriented = driverController.isFieldOriented();
 
-    drive.move(forward, strafe, rotation * -1, angle, isFieldOriented);
+    
+    if (driverController.getShootPressed()) {
 
+      lineUpTowardsTargetWithDriver.start();
+    } else if (driverController.getShootReleased()) {
+
+      lineUpTowardsTargetWithDriver.stop();
+    }
 
     if(driverController.getShoot()) {
 
       lineUpTowardsTargetWithDriver.loop();
       shoot.pewpew();
-    } else shoot.idle();
+    } else {
+      drive.move(forward, strafe, rotation, angle, isFieldOriented);
+      shoot.idle();
+    }
 
 
-    suck.suckOrBlow(driverController.getIntake() - driverController.getOuttake());
+    suck.suckOrBlow((driverController.getIntakeSuck() - driverController.getOuttake()) * .75);
 
-    if (driverController.getIntakeDeploy()) 
+    if (driverController.getIntakeDeploy())
       suck.deploy();
-    else if (driverController.getIntakeRetract())
+    else
       suck.retract();
 
   }

@@ -54,12 +54,13 @@ public class DriverController {
         return mainController.getRawButton(4);
     }
 
-    public boolean getGate(){
-        return (0 > mainController.getRawAxis(3));
+    public double getIntakeSuck() {
+        return (mainController.getRawAxis(3));
     }
 
-    public boolean getStopFlywheel(){
-        return (0 < mainController.getRawAxis(3));
+    public boolean getIntakeDeploy() {
+
+        return mainController.getRawAxis(3) > 0.6;
     }
 
     public boolean getStayStraight() {
@@ -102,44 +103,9 @@ public class DriverController {
         return mainController.getRawButtonReleased(2);
     }
 
-    public double getIntake() {
-
-        return mainController.getRawAxis(3);
-    }
-
     public double getOuttake() {
         
         return mainController.getRawAxis(2);
-    }
-
-    public boolean getIntakeDeploy() {
-
-        return mainController.getRawButton(5);
-    }
-
-    public boolean getIntakeRetract() {
-
-        return mainController.getRawButton(6);
-    }
-
-    public boolean getSpinnerDeploy() {
-
-        return auxController.getRawButton(1);
-    }
-
-    public boolean getColor() {
-
-        return auxController.getRawButton(3);
-    }
-
-    public boolean getSpin() {
-
-        return auxController.getRawButton(2);
-    }
-
-    public double getColorManual() {
-
-        return auxController.getRawAxis(0);
     }
 
     public boolean getRunCompressor() {
