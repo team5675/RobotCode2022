@@ -104,22 +104,22 @@ public class DriverController {
 
     public double getIntake() {
 
-        return auxController.getRawAxis(3);
+        return mainController.getRawAxis(3);
     }
 
     public double getOuttake() {
         
-        return auxController.getRawAxis(2);
+        return mainController.getRawAxis(2);
     }
 
     public boolean getIntakeDeploy() {
 
-        return auxController.getRawButton(5);
+        return mainController.getRawButton(5);
     }
 
     public boolean getIntakeRetract() {
 
-        return auxController.getRawButton(6);
+        return mainController.getRawButton(6);
     }
 
     public boolean getSpinnerDeploy() {

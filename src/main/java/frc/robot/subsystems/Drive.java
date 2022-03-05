@@ -49,7 +49,7 @@ public class Drive {
 
     public void move(double forward, double strafe, double rotation, double angle, boolean isFieldOriented) {
         
-        chassis.drive(forward, strafe, rotation, angle - 90, isFieldOriented);
+        chassis.drive(forward, strafe, rotation * -1, angle, isFieldOriented);
     }
 
     public SwerveDrive getSwerve() {

@@ -122,12 +122,6 @@ double velocityRPMConversion = 1517.6538819;
 		}
 
 	}
-
-	public void setOffset(double offset) {
-
-		ANGLE_OFFSET = offset;
-
-	}
 	
 	public double getAzimuth() {
 
