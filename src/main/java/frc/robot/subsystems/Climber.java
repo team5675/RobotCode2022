@@ -1,15 +1,19 @@
 package frc.robot.subsystems;
 
-import java.lang.ModuleLayer.Controller;
 
+import java.lang.ModuleLayer.Controller;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import frc.robot.subsystems.Pneumatics;
+
+
+
 
 public class Climber{
 
@@ -51,9 +55,8 @@ public class Climber{
     DigitalInput LimitSwitch2 = new DigitalInput(2);
     DigitalInput LimitSwitch3 = new DigitalInput(3);
 
-static Climber somethinginstance;
+static Climber firstinstance;
 
-DoubleSolenoid lock;
 Solenoid climberSolenoid1;
 Solenoid climberSolenoid2;
 Solenoid thirdvalve;
@@ -63,7 +66,6 @@ boolean locked = true;
 
 public Climber(){
 
-lock = new DoubleSolenoid(Constants.LOCK_SOLENOID_ID_1, Constants.LOCK_SOLENOID_ID_2, 0);
 winch = new Spark(Constants.WINCH_MOTOR_ID);
 
 
@@ -97,13 +99,13 @@ public void deploy(){
     if(forwardOne = true) {
         
         solenoid1.set(Value.kForward);
-        winch = setWinchSpeed(69);
+        winch = setWinchSpeed(800);
         
         }
     if(forwardTwo = true) {
 
         solenoid2.set(Value.kForward);
-        winch = setWinchSpeed(69);
+        winch = setWinchSpeed(800);
 
     }
     if(forwardThree = true) {
@@ -115,7 +117,9 @@ public void deploy(){
 
 }
 
-     
+    
+
+
 
     public void retract(){
     
