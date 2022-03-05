@@ -142,7 +142,14 @@ public class Robot extends TimedRobot {
     double angle = navX.getAngle();
     boolean isFieldOriented = driverController.isFieldOriented();
 
-    drive.move(forward, strafe, rotation, angle, isFieldOriented);
+    drive.move(forward, strafe, rotation * -1, angle, isFieldOriented);
+    if(driverController.getShoot()) {
+      shoot.pewpew();
+    }
+
+    if(driverController.getColor()) {
+      shoot.blueTeamTrue();
+    }
 
     suck.suckOrBlow(driverController.getIntake() - driverController.getOuttake());
 

@@ -1,25 +1,22 @@
-/*package frc.robot.subsystems;
+package frc.robot.subsystems;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
-import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj.command.WaitCommand;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import frc.libs.motors.SparkMaxMotor;
 import frc.robot.Constants;
 import frc.robot.DriverController;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;
 
 import com.revrobotics.SparkMaxLimitSwitch;
 
 import java.sql.Time;
-
-import java.util.Queue;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
@@ -42,7 +39,7 @@ public class Shooter {
     SparkMaxMotor flywheelOne; 
     SparkMaxMotor flywheelTwo;
     Spark hoodMotor;
-    SparkMaxMotor greenWheel;
+    Spark greenWheel;
 
     //Color Stuffs
     boolean teamBlue;
@@ -74,16 +71,6 @@ public class Shooter {
     DigitalInput hoodLowLimit;
     DigitalInput hoodHighLimit;
 
-    String allianceColor;
-    Queue<Integer> ballQueue;
-
-    ColorSensorV3 colorSensor = new ColorSensorV3(I2C.Port.kMXP);
-    Color bColor;
-    DigitalInput ballInTopPos;
-    int ballsin = 0;
-
-    
-    
     DigitalInput limitSwitchOne = new DigitalInput(1);
     DigitalInput limitSwitchTwo = new DigitalInput(2);
     boolean limitOne = limitSwitchOne.get();
@@ -95,7 +82,7 @@ public class Shooter {
         flywheelOne = new SparkMaxMotor(Constants.SHOOTER_ID_1);
         flywheelTwo = new SparkMaxMotor(Constants.SHOOTER_ID_2);
         hoodMotor = new Spark(Constants.HOOD_ID);
-        greenWheel = new SparkMaxMotor(Constants.SHOOTER_GATE_ID);
+        greenWheel = new Spark(Constants.SHOOTER_GATE_ID);
 
         flywheelOne.configurePID(Constants.SHOOTER_KP, 0, Constants.SHOOTER_KD, Constants.SHOOTER_KF);
         flywheelTwo.configurePID(Constants.SHOOTER_KP, 0, Constants.SHOOTER_KD, Constants.SHOOTER_KF);
@@ -104,30 +91,7 @@ public class Shooter {
         currentVelocity = logTable.getEntry("currentVelocity");
         velocityGoal = logTable.getEntry("velocityGoal");
 
-        ballInTopPos = new DigitalInput(Constants.INDEX_PROX);
 
-    }
-
-    public void setcolor(String aColor) {
-
-        allianceColor = aColor;
-    }
-
-    public void loop() {
-
-        //if we have a ball in the gate
-        if(colorSensor.getProximity() < Constants.MIN_PROX_VALUE) {
-            //add it to the queue
-            ballQueue.add(colorSensor.getIR());
-
-            ballsin++;
-        }
-
-        //while the gate is empty
-        if(!ballInTopPos.get() && ballsin < 1) {
-
-            gate.set(0.5);
-        }
     }
     
     public void limeLight() {
@@ -145,10 +109,10 @@ public class Shooter {
     float KpDistance = -0.1f;
     float minAimCommand = 0.05f;
 
-    double distanceFromLimelightToGoalInches = (goalHeightInches - limelightHeightInches)/Math.tan(angleToGoalRadians);
+    //double distanceFromLimelightToGoalInches = (goalHeightInches - limelightHeightInches)/Math.tan(angleToGoalRadians);*/
 
-    if (/**joysrtick input*//*)
-{
+    //if (/**joysrtick input*/)
+/*{
         float heading_error = -tx;
         float distance_error = -ty;
         float steering_adjust = 0.0f;
@@ -164,47 +128,46 @@ public class Shooter {
 
         left_command += steering_adjust + distance_adjust;
         right_command -= steering_adjust + distance_adjust;
-}
+}*/
 
 
     }
 
-    public void teamColor() {
-        if(/**ButtonPress*///) {
-/*           teamBlue = true;
-        }
-        else if(/**ButtonPress*//*) {
-            teamBlue = false;
-        }
-
+    public void blueTeamTrue() {
+        teamBlue = true;
+    }
+    public void blueTeamFalse() {
+        teamBlue = false;
     }
 
-    public void shoot() {
-        int flop = (int) (5676 * .1);
-        boolean teamBlue = true;
-        
-        if(allianceColor == "Blue"){
-            if(ballColor == color.red) {
-                flywheelOne.setRPMVelocity(flop);
-                flywheelTwo.setRPMVelocity(flop);
-            }
+
+   /* public void ballColor() {
+        int ballColor = ColorSensorV3.get(ColorSensorV3.class, "ballColor");
+
+        if(color.blue) {
+            blue = true;
+        }
+        else if(color.red) {
+            red = true;
+        }
+
+    }*/
     
-            if(ballColor == color.blue) {
-                pewpew();
-            }
-        }
-        if(allianceColor == "Red"){
-            if(ballColor == color.red) {
-                pewpew();
-            }
+    public void flop() {
+        double flop = (5676 * .1);
+
+        flywheelOne.setRPMVelocity((int) flop);
+        flywheelTwo.setRPMVelocity((int) flop);
+
+    }
     
     public void limitSwitchOne() {
         if(limitOne = true) {
             do {
-                greenWheel.setRPMVelocity(1000);
+                greenWheel.set(1);
             } while (limitOne = true); 
             
-            ballColor();
+           // ballColor();
 
         }
 
@@ -212,63 +175,61 @@ public class Shooter {
 
     public void limitSwitchTwo() {
         if(limitTwo = true) {
-            greenWheel.setRPMVelocity(0);
-            if(/**ButtonPress*//*) {
-                if(teamBlue = true) {
-                    if(blue = true) {
-                        pewpew();
-                    }
-                }
-                if(teamBlue = true) {
-                    if(red = true) {
-                        flop();
-                    }
-                }
-                if(teamBlue = false) {
-                    if(blue = true) {
-                        flop();
-                    }
-                }
-                if(teamBlue = false) {
-                    if(red = true) {
-                        pewpew();
-                    }
-
-                }
-
-            }
+            greenWheel.set(0);
 
         }
 
     }
 
-    public void pewpew() {
-        do  {
-        if(shooterState == ShooterState.StartUp) {
-            flywheelOne.setRPMVelocity(0);
-            flywheelTwo.setRPMVelocity(0);
+    public void hold() {
+        if(teamBlue = true) {
+            if(blue = true) {
+                pewpew();
+            }
+        }
+        if(teamBlue = true) {
+            if(red = true) {
+                flop();
+            }
+        }
+        if(teamBlue = false) {
+            if(blue = true) {
+                flop();
+            }
+        }
+        if(teamBlue = false) {
+            if(red = true) {
+                pewpew();
+            }
 
         }
-        
-        else if(shooterState == ShooterState.Shooting) {
-            dist = vision.getDistanceFromTarget();
 
-            int thirtyPerc = (int) (5676 * .3);
-            int fourtyPerc = (int) (5676 * .4);
+    }
     
-            if(dist < 20) {
-                flywheelOne.setRPMVelocity(fourtyPerc);
-                flywheelTwo.setRPMVelocity(fourtyPerc);
-            }
-            if(dist >= 20) {
-                flywheelOne.setRPMVelocity(thirtyPerc);
-                flywheelTwo.setRPMVelocity(fourtyPerc);
-            }
-            else {
-                flywheelOne.setRPMVelocity((int) ((fourtyPerc) + .1));
-                flywheelTwo.setRPMVelocity((int) ((fourtyPerc) + .1));
-            }
-        } while(driverController.getShoot());
+
+    public void pewpew() {
+        dist = vision.getDistanceFromTarget();
+
+        int thirtyPerc = (int) (5676 * .3);
+        int fourtyPerc = (int) (5676 * .4);
+    
+        if(dist < 20) {
+            flywheelOne.setRPMVelocity(fourtyPerc);
+            flywheelTwo.setRPMVelocity(fourtyPerc);
+        }
+        if(dist >= 20) {
+            flywheelOne.setRPMVelocity(thirtyPerc);
+            flywheelTwo.setRPMVelocity(fourtyPerc);
+        }
+        else {
+            flywheelOne.setRPMVelocity((int) ((fourtyPerc) + .1));
+            flywheelTwo.setRPMVelocity((int) ((fourtyPerc) + .1));
+        }
+
+        greenWheel.set(1);
+
+        
+
     }
 
     public void run() {
@@ -287,7 +248,7 @@ public class Shooter {
             }
         }
         else if (shooterState == ShooterState.Shooting) {
-            alignHood(); //hightarget is CLOSER
+           // alignHood(); //hightarget is CLOSER
 
             if(driverController.getGate()) {
                 greenWheel.set(1);
@@ -332,4 +293,4 @@ public class Shooter {
         return instance;
     }
 
-}*/
+}

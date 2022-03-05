@@ -59,8 +59,8 @@ public class Constants {
     //Shooter subsystem constants
     public static final double SHOOTER_HOOD_P = 0.01;
     public static final int SHOOTER_GATE_ID = 0;
-    public static final int SHOOTER_ID_BLACK = 16;
-    public static final int SHOOTER_ID_BLUE = 12;
+    public static final int SHOOTER_ID_1 = 16;
+    public static final int SHOOTER_ID_2 = 12;
     public static final int HOOD_ID = 3;
     public static final double SHOOTER_KP = 0.00007;
     public static final double SHOOTER_KD = 0.00002;
