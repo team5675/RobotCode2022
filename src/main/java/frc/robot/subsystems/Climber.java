@@ -1,137 +1,90 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
-import frc.robot.subsystems.Pneumatics;
 
 
 
 
 public class Climber{
+    
+    DigitalInput leftLimitSwitch;
+    DigitalInput rightLimitSwitch;
+    DigitalInput climberLockLimitSwitch;
 
-    public static void updateShuffleboard(){
+    DoubleSolenoid solenoidErect = new DoubleSolenoid(PneumaticsModuleType.REVPH, 14, 15);
+    DoubleSolenoid solenoid1 = new DoubleSolenoid(PneumaticsModuleType.REVPH, 12, 13);
+    DoubleSolenoid solenoid2 = new DoubleSolenoid(PneumaticsModuleType.REVPH, 11, 10);
 
-        Shuffleboard.getTab("Climber")
-        .add("Limit Switch1", 1)
-        .withWidget(BuiltInWidgets.kBooleanBox)
-        .getEntry();
+    static Climber instance;
 
-        Shuffleboard.getTab("Climber")
-        .add("Limit Switch2", 1)
-        .withWidget(BuiltInWidgets.kBooleanBox)
-        .getEntry();
+    Spark winch;
 
-        Shuffleboard.getTab("Climber")
-        .add("LimitSwitch3", 1)
-        .withWidget(BuiltInWidgets.kBooleanBox)
-        .getEntry();
+    public Climber() {
 
-        Shuffleboard.getTab("Climber")
-        .add("Cylinder1", 1)
-        .withWidget(BuiltInWidgets.kRelay)
-        .getEntry();
+        winch = new Spark(Constants.WINCH_MOTOR_ID);
 
-        Shuffleboard.getTab("Climber")
-        .add("Cylinder2", 1)
-        .withWidget(BuiltInWidgets.kRelay)
-        .getEntry();
-
-        Shuffleboard.getTab("Climber")
-        .add("Cylinder3", 1)
-        .withWidget(BuiltInWidgets.kRelay)
-        .getEntry();
+        leftLimitSwitch = new DigitalInput(1);
+        rightLimitSwitch = new DigitalInput(0);
+        climberLockLimitSwitch = new DigitalInput(2);
     }
 
-    
-    DigitalInput LimitSwitch1 = new DigitalInput(1);
-    DigitalInput LimitSwitch2 = new DigitalInput(2);
-    DigitalInput LimitSwitch3 = new DigitalInput(3);
+    public void startPos() {
 
-static Climber firstinstance;
+        solenoidErect.set(Value.kForward);
+        solenoid1.set(Value.kForward);
+        solenoid2.set(Value.kForward);
+    }
 
-Solenoid climberSolenoid1;
-Solenoid climberSolenoid2;
-Solenoid thirdvalve;
-Spark winch;
+    public void stop() {
 
-boolean locked = true;
-
-public Climber(){
-
-winch = new Spark(Constants.WINCH_MOTOR_ID);
-
-
-}
-
-
-   
-public Spark setWinchSpeed(int speed) {
-
-    winch.set(Math.abs(speed));
-    return winch;
-}
-
-DoubleSolenoid solenoidErect = new DoubleSolenoid(null, Constants.DEPLOY_ID_1, Constants.DEPLOY_ID_2);
-DoubleSolenoid solenoid1 = new DoubleSolenoid(null, Constants.DEPLOY_ID_1, Constants.DEPLOY_ID_2);
-DoubleSolenoid solenoid2 = new DoubleSolenoid(null, Constants.DEPLOY_ID_2, Constants.DEPLOY_ID_2);
-DigitalInput forwardLimitSwitch = new DigitalInput(1);
-DigitalInput reverseLimitSwitch = new DigitalInput(2);
-boolean forwardOne = forwardLimitSwitch.get();
-boolean forwardTwo = forwardLimitSwitch.get();
-boolean forwardThree = forwardLimitSwitch.get();
-boolean reverseOne = reverseLimitSwitch.get();
-
+        winch.set(0);
+    }
 
 
 public void deploy(){
  
-    solenoidErect.set(Value.kForward);
+    solenoidErect.set(Value.kReverse);
     
 
-    if(forwardOne = true) {
-        
-        solenoid1.set(Value.kForward);
-        winch = setWinchSpeed(800);
-        
-        }
-    if(forwardTwo = true) {
-
-        solenoid2.set(Value.kForward);
-        winch = setWinchSpeed(800);
-
+    if(!leftLimitSwitch.get()) {
+        //winch.set(0.1); 
     }
-    if(forwardThree = true) {
 
+    if(leftLimitSwitch.get()) {
+
+        System.out.println("Got Left Limit!");
+
+        winch.set(0);
         solenoid1.set(Value.kReverse);
-        winch = setWinchSpeed(0);
+    }
 
+    if(!rightLimitSwitch.get() && leftLimitSwitch.get()) {
+        //winch.set(0.1);
+    }
+
+    if(rightLimitSwitch.get()) {
+
+        System.out.println("Got Right Limit!");
+
+        winch.set(0);
+        solenoid2.set(Value.kReverse);
+    }
+
+    if(!climberLockLimitSwitch.get()) {
+
+        System.out.println("Got Climb Lock Limit!");
+
+        solenoid1.set(Value.kForward);
     }
 
 }
 
-    
-
-
-
-    public void retract(){
-    
-     
-    }
-
-    
-    
-
-
-
-    static Climber instance;
-
-    public Climber getInstance(){
+    public static Climber getInstance(){
 
         if (instance == null) {
 

@@ -2,7 +2,6 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.util.Color;
-import frc.libs.motors.SparkMaxMotor;
 import frc.robot.Constants;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -16,7 +15,6 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.ColorSensorV3;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
-import com.revrobotics.SparkMaxRelativeEncoder;
 import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType; 
 
@@ -58,10 +56,6 @@ public class Shooter {
     DigitalInput ballInTopPos;
     int ballsin = 0;
     
-    DigitalInput limitSwitchOne = new DigitalInput(1);
-    DigitalInput limitSwitchTwo = new DigitalInput(2);
-    boolean limitOne = limitSwitchOne.get();
-    boolean limitTwo = limitSwitchTwo.get();
 
     public Shooter() {
         vision = Vision.getInstance();
@@ -126,7 +120,6 @@ public class Shooter {
         blueRPMSetpoint = 26.186 * Math.pow(vision.getDistanceFromTarget(), 2) - 449.39 * vision.getDistanceFromTarget() + 3756.4;
         blackRPMSetpoint = 80.016 * vision.getDistanceFromTarget() + 1171.4;
 
-        //TODO: Update Regression Model for Shooter
         //Low goal, 1000 on black, -1500 on blue
 
         //flywheelBlack.setRPMVelocity();

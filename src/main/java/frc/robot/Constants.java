@@ -66,12 +66,11 @@ public class Constants {
     public static final double SHOOTER_KD = 0.00002;
     public static final double SHOOTER_KF = 0.00021; //0.00019
     //TODO: Update Gate Prox Channel
-    public static final int INDEX_PROX = 0;
+    public static final int INDEX_PROX = 7;
     //Shooter threshold was 100 RPM
 
     //Intake subsystem constants
     public static final int INTAKE_ID = 15;
-    //TODO: Find Intake Deploy Pneu Channels
     public static final int DEPLOY_ID_1 = 8;
     public static final int DEPLOY_ID_2 = 9;
 
@@ -99,7 +98,7 @@ public class Constants {
 
     public static final int LOCK_SOLENOID_ID_2 = 0;
 
-    public static final int WINCH_MOTOR_ID = 40;
+    public static final int WINCH_MOTOR_ID = 5;
 
     //Color Sensor Constants
     //TODO: Update Color Constants
@@ -108,14 +107,6 @@ public class Constants {
     public static final double BLUE_MAC_COLOR = 0;
     public static final double RED_MIN_COLOR = 0;
     public static final double RED_MAX_COLOR = 0;
-
-    //Climb Constants
-    //public static final int LOCK_SOLENOID_ID_1 = 2;
-    //public static final int LOCK_SOLENOID_ID_2 = 5;
-    //public static final int MASTER_ARM_RAISE_SOLENOID_ID = 4;
-    //public static final int MASTER_ARM_COLLAPSE_SOLENOID_ID = 3;
-    //public static final int WINCH_MOTOR_ID = 2;
-    //public static final int TROLLER_MOTOR_ID = 15;
 
     //62 Constants total, 49 constants in use
 }

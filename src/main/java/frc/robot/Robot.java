@@ -29,6 +29,7 @@ public class Robot extends TimedRobot {
   Vision vision;
   Pneumatics pneumatics;
   Sucker suck;
+  Climber climber;
 
   Pathfinder pathfinder;
   LineUpTowardsTargetWithDriver lineUpTowardsTargetWithDriver;
@@ -64,6 +65,7 @@ public class Robot extends TimedRobot {
     vision = Vision.getInstance();
     pneumatics = Pneumatics.getInstance();
     suck = Sucker.getInstance();
+    climber = Climber.getInstance();
 
     lineUpTowardsTargetWithDriver = new LineUpTowardsTargetWithDriver();
 
@@ -79,10 +81,10 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
 
-    //if(pneumatics.getPressureSwitch()) {
-
-      //pneumatics.runCompressor();
-    pneumatics.stopCompressor();
+    if(pneumatics.getPressureSwitch())
+      pneumatics.runCompressor();
+    else
+      pneumatics.stopCompressor();
 
   }
 
@@ -103,7 +105,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
 
-    
+    //climber.startPos();
   }
 
   /** This function is called periodically during operator control. */
@@ -147,9 +149,14 @@ public class Robot extends TimedRobot {
     suck.suckOrBlow((driverController.getIntakeSuck() - driverController.getOuttake()) * .75);
 
     if (driverController.getIntakeDeploy())
-      suck.deploy();
-    else
       suck.retract();
+    else
+      suck.deploy();
+
+    if(driverController.getUnlockClimb()) {
+
+      climber.deploy();
+    } else climber.stop();
 
   }
 
