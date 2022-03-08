@@ -105,7 +105,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
 
-    //climber.startPos();
+    climber.startPos();
   }
 
   /** This function is called periodically during operator control. */

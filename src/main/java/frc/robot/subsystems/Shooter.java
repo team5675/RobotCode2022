@@ -71,10 +71,10 @@ public class Shooter {
         blackPID = flywheelBlack.getPIDController();
         bluePID = flywheelBlue.getPIDController();
 
-        bluePID.setFF(0.00019);
-        bluePID.setP(0.0001);
-        blackPID.setFF(0.00019);
-        blackPID.setP(0.0001);
+        bluePID.setFF(0.0002);
+        bluePID.setP(0.0002);
+        blackPID.setFF(0.0002);
+        blackPID.setP(0.0002);
 
         blackEnc = flywheelBlack.getEncoder();
         blueEnc = flywheelBlue.getEncoder();
@@ -117,8 +117,11 @@ public class Shooter {
 
     public void pewpew() {
 
-        blueRPMSetpoint = 26.186 * Math.pow(vision.getDistanceFromTarget(), 2) - 449.39 * vision.getDistanceFromTarget() + 3756.4;
+        blueRPMSetpoint = -1 * (26.186 * Math.pow(vision.getDistanceFromTarget(), 2) - 449.39 * vision.getDistanceFromTarget() + 3756.4);
         blackRPMSetpoint = 80.016 * vision.getDistanceFromTarget() + 1171.4;
+
+        //blackRPMSetpoint = 0.3214 * Math.pow(vision.getDistanceFromTarget(), 5) - 18.482 * Math.pow(vision.getDistanceFromTarget(), 4) 
+        //+ 415.11 * Math.pow(vision.getDistanceFromTarget(), 3) - 4537.3 * Math.pow(vision.getDistanceFromTarget(), 2) + 24138 * vision.getDistanceFromTarget() -48202;
 
         //Low goal, 1000 on black, -1500 on blue
 
@@ -128,19 +131,30 @@ public class Shooter {
         //blackPID.setReference(blackSetpoint.getDouble(0), ControlType.kVelocity);
         //bluePID.setReference(blueSetpoint.getDouble(0), ControlType.kVelocity);
 
-        blackPID.setReference(blueRPMSetpoint, ControlType.kVelocity);
-        bluePID.setReference(blackRPMSetpoint, ControlType.kVelocity);
+        blackPID.setReference(blackRPMSetpoint, ControlType.kVelocity);
+        bluePID.setReference(blueRPMSetpoint, ControlType.kVelocity);
 
-        greenWheel.set(1);
+        if(blackEnc.getVelocity() >= blackRPMSetpoint && blueEnc.getVelocity() <= blueRPMSetpoint
+        ) {
+
+            greenWheel.set(1);
+        }
+
+        
 
         blackRPM.setDouble(blackEnc.getVelocity());
         blueRPM.setDouble(blueEnc.getVelocity());
+
+        blackSetpoint.setDouble(blackRPMSetpoint);
+        blueSetpoint.setDouble(blueRPMSetpoint);
     }
 
     public void idle() {
 
         blackPID.setReference(500, ControlType.kVelocity);
         bluePID.setReference(-500, ControlType.kVelocity);
+
+        greenWheel.set(0);
     }
 
     public static Shooter getInstance() {

@@ -115,7 +115,7 @@ public class DriverController {
 
     public boolean getUnlockClimb() {
 
-        return mainController.getBButton();
+        return auxController.getBButton();
     }
 
     public boolean getRaiseMasterArm() {

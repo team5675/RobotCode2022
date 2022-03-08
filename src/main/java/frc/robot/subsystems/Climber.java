@@ -16,9 +16,9 @@ public class Climber{
     DigitalInput rightLimitSwitch;
     DigitalInput climberLockLimitSwitch;
 
-    DoubleSolenoid solenoidErect = new DoubleSolenoid(PneumaticsModuleType.REVPH, 14, 15);
-    DoubleSolenoid solenoid1 = new DoubleSolenoid(PneumaticsModuleType.REVPH, 12, 13);
-    DoubleSolenoid solenoid2 = new DoubleSolenoid(PneumaticsModuleType.REVPH, 11, 10);
+    DoubleSolenoid solenoidErect = new DoubleSolenoid(Constants.COMPRESSOR_ID, PneumaticsModuleType.REVPH, 14, 15);
+    DoubleSolenoid solenoid1 = new DoubleSolenoid(Constants.COMPRESSOR_ID, PneumaticsModuleType.REVPH, 12, 13);
+    DoubleSolenoid solenoid2 = new DoubleSolenoid(Constants.COMPRESSOR_ID, PneumaticsModuleType.REVPH, 11, 10);
 
     static Climber instance;
 
@@ -36,8 +36,8 @@ public class Climber{
     public void startPos() {
 
         solenoidErect.set(Value.kForward);
-        solenoid1.set(Value.kForward);
-        solenoid2.set(Value.kForward);
+        solenoid1.set(Value.kReverse);
+        solenoid2.set(Value.kReverse);
     }
 
     public void stop() {
@@ -51,35 +51,27 @@ public void deploy(){
     solenoidErect.set(Value.kReverse);
     
 
-    if(!leftLimitSwitch.get()) {
-        //winch.set(0.1); 
-    }
-
     if(leftLimitSwitch.get()) {
 
-        System.out.println("Got Left Limit!");
-
-        winch.set(0);
-        solenoid1.set(Value.kReverse);
+        winch.set(-0.9);
+        solenoid1.set(Value.kForward);
     }
 
     if(!rightLimitSwitch.get() && leftLimitSwitch.get()) {
-        //winch.set(0.1);
+        winch.set(-0.9);
     }
 
     if(rightLimitSwitch.get()) {
 
-        System.out.println("Got Right Limit!");
-
         winch.set(0);
-        solenoid2.set(Value.kReverse);
-    }
+        solenoid2.set(Value.kForward);
 
-    if(!climberLockLimitSwitch.get()) {
+        if(!climberLockLimitSwitch.get()) {
+    
+            solenoid1.set(Value.kReverse);
+        }
 
-        System.out.println("Got Climb Lock Limit!");
-
-        solenoid1.set(Value.kForward);
+        //solenoid1.set(Value.kReverse);
     }
 
 }
