@@ -10,6 +10,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import frc.robot.subsystems.*;
+import frc.robot.auto.ActionRunner;
+import frc.robot.auto.ModeRunner;
 import frc.robot.auto.Pathfinder;
 import frc.robot.auto.actions.LineUpTowardsTargetWithDriver;
 
@@ -33,6 +35,9 @@ public class Robot extends TimedRobot {
 
   Pathfinder pathfinder;
   LineUpTowardsTargetWithDriver lineUpTowardsTargetWithDriver;
+  ActionRunner actionRunner;
+  ModeRunner modeRunner;
+  AutoChooser autoChooser;
 
   enum Paths {
 
@@ -59,19 +64,18 @@ public class Robot extends TimedRobot {
     drive = Drive.getInstance();
     driverController = DriverController.getInstance();
     navX = NavX.getInstance();
-    pathfinder = Pathfinder.getInstance();
     dash = Dashboard.getInstance();
     shoot = Shooter.getInstance();
     vision = Vision.getInstance();
     pneumatics = Pneumatics.getInstance();
     suck = Sucker.getInstance();
     climber = Climber.getInstance();
+    actionRunner = ActionRunner.getInstance();
+    autoChooser = AutoChooser.getInstance();
 
     lineUpTowardsTargetWithDriver = new LineUpTowardsTargetWithDriver();
 
     shoot.setcolor(DriverStation.getAlliance().toString());
-
-    pathfinder.setPath("FirstTry");
 
     vision.lightOff();
 
@@ -92,13 +96,19 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
 
+    modeRunner = new ModeRunner(autoChooser.getMode());
+
+    actionRunner.start();
+    modeRunner.start();
+
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
 
-    pathfinder.drivePath();
+    vision.loop();
+    actionRunner.loop();
   }
 
   /** This function is called once when teleop is enabled. */
@@ -106,6 +116,7 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
 
     climber.startPos();
+    actionRunner.forceStop();
   }
 
   /** This function is called periodically during operator control. */
@@ -136,6 +147,8 @@ public class Robot extends TimedRobot {
       lineUpTowardsTargetWithDriver.stop();
     }
 
+    shoot.loop();
+
     if(driverController.getShoot()) {
 
       lineUpTowardsTargetWithDriver.loop();
@@ -149,9 +162,9 @@ public class Robot extends TimedRobot {
     suck.suckOrBlow((driverController.getIntakeSuck() - driverController.getOuttake()) * .75);
 
     if (driverController.getIntakeDeploy())
-      suck.retract();
-    else
       suck.deploy();
+    else
+      suck.retract();
 
     if(driverController.getUnlockClimb()) {
 

@@ -101,7 +101,7 @@ public class Shooter {
     public void loop() {
 
         //if we have a ball in the gate
-        if(colorSensor.getProximity() < Constants.MIN_PROX_VALUE) {
+        /*if(colorSensor.getProximity() < Constants.MIN_PROX_VALUE) {
             //add it to the queue
             ballQueue.add(colorSensor.getIR());
 
@@ -112,7 +112,12 @@ public class Shooter {
         if(!ballInTopPos.get() && ballsin < 1) {
 
             greenWheel.set(0.5);
-        }
+        }*/
+
+        if(!ballInTopPos.get()) {
+
+            greenWheel.set(1);
+        } else greenWheel.set(0);
     }
 
     public void pewpew() {
@@ -134,8 +139,7 @@ public class Shooter {
         blackPID.setReference(blackRPMSetpoint, ControlType.kVelocity);
         bluePID.setReference(blueRPMSetpoint, ControlType.kVelocity);
 
-        if(blackEnc.getVelocity() >= blackRPMSetpoint && blueEnc.getVelocity() <= blueRPMSetpoint
-        ) {
+        if(blackEnc.getVelocity() >= blackRPMSetpoint && blueEnc.getVelocity() <= blueRPMSetpoint) {
 
             greenWheel.set(1);
         }
@@ -155,6 +159,16 @@ public class Shooter {
         bluePID.setReference(-500, ControlType.kVelocity);
 
         greenWheel.set(0);
+    }
+
+    public double getBlackRPM() {
+
+        return blackEnc.getVelocity();
+    }
+
+    public double getBlackRPMSetpoint() {
+
+        return blackRPMSetpoint;
     }
 
     public static Shooter getInstance() {

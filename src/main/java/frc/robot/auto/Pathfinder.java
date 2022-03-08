@@ -45,7 +45,7 @@ public class Pathfinder {
 
     Trajectory traj = new Trajectory();
 
-    public Pathfinder() {
+    public Pathfinder(String path) {
 
         drive = Drive.getInstance();
 
@@ -54,11 +54,6 @@ public class Pathfinder {
         controller = new trajectoryController();
 
         dash = Dashboard.getInstance();
-
-        
-    }
-
-    public void setPath(String path) {
 
         String trajJson = "paths/"+ path +".wpilib.json";
 
@@ -123,16 +118,6 @@ public class Pathfinder {
         drive.getBackLeft().stop();
         drive.getBackRight().stop();
 
-    }
-
-    public static Pathfinder getInstance() {
-
-        if(instance == null) {
-
-            instance = new Pathfinder();
-        }
-
-        return instance;
     }
 
 
