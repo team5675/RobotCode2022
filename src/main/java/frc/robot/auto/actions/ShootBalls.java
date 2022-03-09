@@ -1,6 +1,5 @@
 package frc.robot.auto.actions;
 
-import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import frc.robot.Constants;
@@ -19,11 +18,14 @@ public class ShootBalls implements Action {
     int amount;
     int ballsShot = 0;
     boolean debounce = false;
+    boolean lineup;
     double lastError = 0;
 
     NetworkTableEntry ballsShotEntry;
 
-    public ShootBalls(int newAmount) {
+    public ShootBalls(int newAmount, boolean useVision) {
+
+        lineup = useVision;
 
         ballsShotEntry = NetworkTableInstance.getDefault().getTable("dashboard").getEntry("balls shot");
 
@@ -42,14 +44,14 @@ public class ShootBalls implements Action {
 
     @Override
     public boolean loop() {
-        double error = vision.getHorizontalOffset();
-        double d = (error - lastError) / 0.04;
 
-        drive.move(0, 0, vision.getHorizontalOffset() * Constants.AUTO_ROTATE_P + d * Constants.AUTO_ROTATE_D, 0, true);
+        if(lineup) {
+            drive.move(0, 0, vision.getHorizontalOffset() * Constants.AUTO_ROTATE_P, 0, true);
+        }
 
         shooter.pewpew();
 
-        if(shooter.getBlackRPMSetpoint() > shooter.getBlackRPM() && debounce) {
+        if(shooter.getBlackRPMSetpoint() > shooter.getBlackRPM() + 50 && debounce) {
 
             ballsShot++;
 
@@ -61,8 +63,6 @@ public class ShootBalls implements Action {
         if(shooter.getBlackRPM() >= shooter.getBlackRPMSetpoint() && !debounce) {
             debounce =true;
         }
-
-        lastError = error;
 
         if(amount == ballsShot) {
             return false;

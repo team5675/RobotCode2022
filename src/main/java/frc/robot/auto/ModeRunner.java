@@ -18,5 +18,7 @@ public class ModeRunner extends Thread {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+        mode.run();
     }
 }

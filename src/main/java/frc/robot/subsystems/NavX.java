@@ -10,6 +10,8 @@ public class NavX {
     
     AHRS gyro;
 
+    double offset = 0;
+
     public NavX() {
 
         try {
@@ -23,6 +25,10 @@ public class NavX {
         gyro.reset();
     }
 
+    /**
+     * 
+     * @return gyro angle w/ offset
+     */
     public double getAngle() {
 
         return gyro.getAngle() % 360 + 90;
@@ -34,8 +40,9 @@ public class NavX {
     }
 
 
-    public void loop() {
+    public void setOffset(double offset) {
 
+        this.offset = offset;
     }
 
 

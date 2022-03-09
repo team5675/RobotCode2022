@@ -1,5 +1,144 @@
 package frc.robot.auto;
 
+import frc.robot.Constants;
+import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.NavX;
+
+/**
+ * Basic pathfinder made for our swerve
+ */
+public class Pathfinder {
+
+    static Pathfinder instance;
+    
+    static Drive drive = Drive.getInstance();
+    static NavX navX = NavX.getInstance();
+
+    static double xFeetGoal;
+    static double yFeetGoal;
+    static double rotationGoal;
+    static double hypDistance;
+    static boolean run = false;
+    static double totalDistance;
+    static double xSpeed;
+    static double ySpeed;
+    static double zSpeed;
+    static double speedMultiplier;
+    static double distanceTraveled;
+
+
+    public Pathfinder() {
+        drive.getFrontLeft().resetSpeedDistance();
+        drive.getFrontRight().resetSpeedDistance();
+        drive.getBackLeft().resetSpeedDistance();
+        drive.getBackRight().resetSpeedDistance();
+    }
+
+
+    public void translate(double xFeet, double yFeet, double angle, double newSpeedMultiplier) {
+
+        xFeetGoal = xFeet;
+        yFeetGoal = yFeet;
+        rotationGoal = angle;
+        hypDistance = Math.hypot(xFeetGoal, yFeetGoal);
+        speedMultiplier = newSpeedMultiplier;
+
+        double distanceFrontLeft = drive.getFrontLeft().getSpeedPosition();
+        double distanceFrontRight = drive.getFrontRight().getSpeedPosition();
+        double distanceBackLeft = drive.getBackLeft().getSpeedPosition();
+        double distanceBackRight = drive.getBackRight().getSpeedPosition();
+        totalDistance = (distanceFrontLeft + distanceFrontRight + distanceBackLeft + distanceBackRight) / 4;
+
+        run = true;
+
+        drive.getFrontRight().resetSpeedDistance();
+        drive.getFrontLeft().resetSpeedDistance();
+        drive.getBackLeft().resetSpeedDistance();
+        drive.getBackRight().resetSpeedDistance();
+
+        System.out.println("Running path");
+        while (run) {
+
+            try {
+                loop();
+                Thread.sleep(50);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        System.out.println("Stopping path");
+    }
+
+    
+    public void loop() {
+
+
+        if (run) {
+
+            double distanceFrontLeft = drive.getFrontLeft().getSpeedPosition();
+            double distanceFrontRight = drive.getFrontRight().getSpeedPosition();
+            double distanceBackLeft = drive.getBackLeft().getSpeedPosition();
+            double distanceBackRight = drive.getBackRight().getSpeedPosition();
+            double averageDistance = (distanceFrontLeft + distanceFrontRight + distanceBackLeft + distanceBackRight) / 4;
+            distanceTraveled = averageDistance / 7.643; 
+            
+            double rotationOffset = (8.9 * (rotationGoal % 360) / 360) / 4;
+            System.out.println(distanceTraveled + " " + hypDistance);
+            //distanceTraveled -= rotationOffset;
+
+            xSpeed = xFeetGoal / hypDistance;
+            ySpeed = yFeetGoal / hypDistance;
+            zSpeed = (rotationGoal - navX.getAngle()) * 0.005;
+
+            drive.move(xSpeed * speedMultiplier, ySpeed * speedMultiplier, zSpeed, navX.getAngle(), false);
+
+            if(distanceTraveled >= hypDistance) {
+                run = false;
+            }
+        }
+    }
+
+    public static Pathfinder getInstance() {
+
+        if (instance == null) {
+
+            instance = new Pathfinder();
+        }
+
+        return instance;
+    }
+}
+
+    /*public void runPath() {
+        double[][] points = pathWeezer.getTrajectory();
+
+        int currentPoint = 1; 
+        double pastX = points[0][3];
+        double pastY = points[0][4];
+
+        while(currentPoint < points.length) {
+            if(!run) {
+                currentPoint++;
+                translate(points[currentPoint][3] - pastX, points[currentPoint][4] - pastY, points[currentPoint][5], 0.5);
+            }
+        }
+    }
+
+    public double getFtMoved() {
+        return distanceTraveled;
+    }
+    
+    public boolean getRun() {
+        return run;
+    }
+
+    
+}
+
+
+
+/*package frc.robot.auto;
+
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryUtil;
@@ -78,7 +217,7 @@ public class Pathfinder {
          * 
          */
 
-        endTime = traj.getTotalTimeSeconds();
+ /*       endTime = traj.getTotalTimeSeconds();
 
         startTime = System.currentTimeMillis();
 
@@ -96,7 +235,7 @@ public class Pathfinder {
                 SwerveModuleState BL = states[2];
                 SwerveModuleState BR = states[3];
 
-                //System.out.println("Speed: " + FL.speedMetersPerSecond + " Angle: " + FL.angle.getDegrees());
+                System.out.println("Speed: " + FL.speedMetersPerSecond + " Angle: " + FL.angle.getDegrees());
 
                 
                 drive.getFrontLeft().drivePathfinder(FL.speedMetersPerSecond, FL.angle.getDegrees());
@@ -121,4 +260,4 @@ public class Pathfinder {
     }
 
 
-}
+}*/

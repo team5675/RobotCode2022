@@ -1,9 +1,10 @@
 {
   "lengthUnit": "Meter",
-  "exportUnit": "Always Meters",
+  "timeStep": 0.06,
   "maxVelocity": 3.0,
   "maxAcceleration": 2.0,
-  "trackWidth": 0.66,
-  "gameName": "Infinite Recharge 2021",
+  "maxJerk": 2.0,
+  "wheelBase": 0.635,
+  "gameName": "Rapid React",
   "outputDir": ".."
 }

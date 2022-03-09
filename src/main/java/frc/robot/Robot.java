@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import frc.robot.subsystems.*;
 import frc.robot.auto.ActionRunner;
 import frc.robot.auto.ModeRunner;
@@ -49,9 +50,10 @@ public class Robot extends TimedRobot {
   }
 
   SendableChooser<Paths> modeSelector;
-    NetworkTable autoTable;
+    NetworkTable dashboardTable;
     NetworkTableEntry waitTime;
     NetworkTableEntry startOffset;
+    NetworkTableEntry navXAngle;
 
 
   /**
@@ -79,6 +81,9 @@ public class Robot extends TimedRobot {
 
     vision.lightOff();
 
+    dashboardTable = NetworkTableInstance.getDefault().getTable("dashboard");
+    navXAngle = dashboardTable.getEntry("gyroAngle");
+
   }
 
  
@@ -90,17 +95,20 @@ public class Robot extends TimedRobot {
     else
       pneumatics.stopCompressor();
 
+    navXAngle.setDouble(navX.getAngle());
+    
   }
 
   
   @Override
   public void autonomousInit() {
 
+    navX.resetYaw();
+
     modeRunner = new ModeRunner(autoChooser.getMode());
 
     actionRunner.start();
     modeRunner.start();
-
   }
 
   /** This function is called periodically during autonomous. */
@@ -124,6 +132,7 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
 
     vision.loop();
+    shoot.loop();
 
     //Reset Yaw on NavX
     if(driverController.getResetYaw()) {

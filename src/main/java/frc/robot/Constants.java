@@ -65,8 +65,7 @@ public class Constants {
     public static final double SHOOTER_KP = 0.00007;
     public static final double SHOOTER_KD = 0.00002;
     public static final double SHOOTER_KF = 0.00021; //0.00019
-    //TODO: Update Gate Prox Channel
-    public static final int INDEX_PROX = 7;
+    public static final int INDEX_PROX = 9;
     //Shooter threshold was 100 RPM
 
     //Intake subsystem constants
