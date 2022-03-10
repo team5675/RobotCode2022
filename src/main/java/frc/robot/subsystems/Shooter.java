@@ -55,7 +55,9 @@ public class Shooter {
     Color bColor;
     DigitalInput ballInTopPos;
     int ballsin = 0;
-    
+
+    boolean first = true;
+    double startTime;
 
     public Shooter() {
         vision = Vision.getInstance();
@@ -139,7 +141,9 @@ public class Shooter {
         blackPID.setReference(blackRPMSetpoint, ControlType.kVelocity);
         bluePID.setReference(blueRPMSetpoint, ControlType.kVelocity);
 
-        if(blackEnc.getVelocity() >= blackRPMSetpoint && blueEnc.getVelocity() <= blueRPMSetpoint) {
+        
+
+        if(blackEnc.getVelocity() >= blackRPMSetpoint + 10 && blueEnc.getVelocity() <= blueRPMSetpoint + 10) {
 
             greenWheel.set(1);
         }

@@ -18,14 +18,16 @@ public class ShootThreeBalls extends Mode {
         System.out.println("Running three ball");
         sucker.deploy();
         sucker.suckOrBlow(0.75);
-        pathfinder.translate(0, 4, 180, 0.2);
+        pathfinder.translate(0, 4.2, 180, 0.21);
         sucker.retract();
-        actionrunner.run(new ShootBalls(1, true));
+        pathfinder.translate(0, -1, 170, 0.2);
+        actionrunner.run(new ShootBalls(1, false));
         sucker.deploy();
         sucker.suckOrBlow(0.75);
-        pathfinder.translate(7, -3.5, 270, 0.5);
+        pathfinder.translate(7, -2, 270, 0.5);
         sucker.retract();
-        pathfinder.translate(-7, 2, 210, 0.5);
+        sucker.suckOrBlow(0);
+        pathfinder.translate(-6, 3.8, 200, 0.5);
         actionrunner.run(new ShootBalls(2, true));
     }
 }

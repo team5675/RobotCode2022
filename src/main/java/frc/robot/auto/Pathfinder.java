@@ -1,5 +1,8 @@
 package frc.robot.auto;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import frc.robot.Constants;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.NavX;
@@ -26,12 +29,18 @@ public class Pathfinder {
     static double speedMultiplier;
     static double distanceTraveled;
 
+    NetworkTable dashboardTable;
+    NetworkTableEntry distanceTraveledFt;
+
 
     public Pathfinder() {
-        drive.getFrontLeft().resetSpeedDistance();
+       /* drive.getFrontLeft().resetSpeedDistance();
         drive.getFrontRight().resetSpeedDistance();
         drive.getBackLeft().resetSpeedDistance();
-        drive.getBackRight().resetSpeedDistance();
+        drive.getBackRight().resetSpeedDistance();*/
+        dashboardTable = NetworkTableInstance.getDefault().getTable("dashboard");
+
+        distanceTraveledFt = dashboardTable.getEntry("distanceTraveled");
     }
 
 
@@ -48,13 +57,9 @@ public class Pathfinder {
         double distanceBackLeft = drive.getBackLeft().getSpeedPosition();
         double distanceBackRight = drive.getBackRight().getSpeedPosition();
         totalDistance = (distanceFrontLeft + distanceFrontRight + distanceBackLeft + distanceBackRight) / 4;
-
+        totalDistance /= 7.643;
+        
         run = true;
-
-        drive.getFrontRight().resetSpeedDistance();
-        drive.getFrontLeft().resetSpeedDistance();
-        drive.getBackLeft().resetSpeedDistance();
-        drive.getBackRight().resetSpeedDistance();
 
         System.out.println("Running path");
         while (run) {
@@ -83,16 +88,18 @@ public class Pathfinder {
             distanceTraveled = averageDistance / 7.643; 
             
             double rotationOffset = (8.9 * (rotationGoal % 360) / 360) / 4;
-            System.out.println(distanceTraveled + " " + hypDistance);
+            System.out.println(distanceTraveled + " " + (totalDistance + hypDistance) + " " + hypDistance);
             //distanceTraveled -= rotationOffset;
 
             xSpeed = xFeetGoal / hypDistance;
             ySpeed = yFeetGoal / hypDistance;
             zSpeed = (rotationGoal - navX.getAngle()) * 0.005;
 
+            distanceTraveledFt.setDouble(totalDistance);
+
             drive.move(xSpeed * speedMultiplier, ySpeed * speedMultiplier, zSpeed, navX.getAngle(), false);
 
-            if(distanceTraveled >= hypDistance) {
+            if(distanceTraveled >= (hypDistance + totalDistance)) {
                 run = false;
             }
         }

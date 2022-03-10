@@ -132,7 +132,7 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
 
     vision.loop();
-    shoot.loop();
+    //shoot.loop();
 
     //Reset Yaw on NavX
     if(driverController.getResetYaw()) {

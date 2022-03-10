@@ -60,7 +60,7 @@ public class DriverController {
 
     public boolean getIntakeDeploy() {
 
-        return mainController.getRawAxis(3) > 0.6;
+        return (mainController.getRawAxis(3) > 0.6) || (auxController.getRawAxis(3) > 0.6);
     }
 
     public boolean getStayStraight() {
@@ -75,7 +75,7 @@ public class DriverController {
 
     public boolean getShoot() {
 
-        return mainController.getXButton();
+        return auxController.getXButton();
     }
 
     public boolean getShootPressed() {

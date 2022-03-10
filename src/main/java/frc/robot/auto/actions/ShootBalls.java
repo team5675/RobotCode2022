@@ -45,13 +45,11 @@ public class ShootBalls implements Action {
     @Override
     public boolean loop() {
 
-        if(lineup) {
-            drive.move(0, 0, vision.getHorizontalOffset() * Constants.AUTO_ROTATE_P, 0, true);
-        }
+        drive.move(0, 0, vision.getHorizontalOffset() * Constants.AUTO_ROTATE_P, 0, true);
 
         shooter.pewpew();
 
-        if(shooter.getBlackRPMSetpoint() > shooter.getBlackRPM() + 50 && debounce) {
+        if(shooter.getBlackRPMSetpoint() > shooter.getBlackRPM() + 100 && debounce) {
 
             ballsShot++;
 
@@ -64,7 +62,7 @@ public class ShootBalls implements Action {
             debounce =true;
         }
 
-        if(amount == ballsShot) {
+        if(amount == ballsShot && lineup == false) {
             return false;
         } else {
             return true;
@@ -75,7 +73,7 @@ public class ShootBalls implements Action {
 
     @Override
     public void stop() {
-        vision.lightOff();
+        vision.lightOn();
         shooter.idle();
     }
 
