@@ -20,6 +20,9 @@ public class DriverController {
     XboxController mainController;
     XboxController auxController;
 
+    boolean aIsPressed;
+    boolean yIsPressed;
+
     public DriverController() {
         mainController = new XboxController(0);
         auxController = new XboxController(1);
@@ -113,9 +116,65 @@ public class DriverController {
         return mainController.getRawButtonPressed(8);
     }
 
+    public boolean getSubtractRevs() {
+
+        boolean returnABool = false;
+        if ((aIsPressed) && auxController.getAButton())
+        {
+            aIsPressed = true;
+            returnABool = false;
+        }
+        if ((!aIsPressed) && auxController.getAButton())
+        {
+            aIsPressed = true;
+            returnABool = true;
+        }
+        else if (aIsPressed && (!auxController.getAButton()))
+        {
+            aIsPressed = false;
+            returnABool = false;
+        }
+        else if ((!aIsPressed) && (!auxController.getAButton()))
+        {
+            aIsPressed = false;
+            returnABool = false;
+        }
+        return returnABool;
+    }
+
     public boolean getUnlockClimb() {
 
         return auxController.getBButton();
+    }
+
+    public boolean getResetRevs() {
+
+        return auxController.getXButton();
+    }
+    public boolean getAddRevs() {
+
+        boolean returnYBool = false;
+        if ((yIsPressed) && auxController.getYButton())
+        {
+            yIsPressed = true;
+            returnYBool = false;
+        }
+        if ((!yIsPressed) && auxController.getYButton())
+        {
+            yIsPressed = true;
+            returnYBool = true;
+        }
+        else if (yIsPressed && (!auxController.getYButton()))
+        {
+            yIsPressed = false;
+            returnYBool = false;
+        }
+        else if ((!yIsPressed) && (!auxController.getYButton()))
+        {
+            yIsPressed = false;
+            returnYBool = false;
+        }
+        return returnYBool;
     }
 
     public boolean getRaiseMasterArm() {
@@ -128,24 +187,20 @@ public class DriverController {
         return auxController.getRawButtonReleased(8);
     }
 
-
     public double getTroller() {
 
         return auxController.getRawAxis(4);
     }
-
 
     public boolean getWinchSafety() {
 
         return auxController.getRawButton(9);
     }
 
-
     public double getWinchSpeed() {
 
         return auxController.getRawAxis(1);
     }
-
 
     public static DriverController getInstance() {
 
