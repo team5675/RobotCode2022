@@ -20,6 +20,10 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 public class Shooter {
 
+    static final int rpmChangeConst = 20;
+
+    static final double maxRPM = 5676;
+
     static Shooter instance;
 
     CANSparkMax flywheelBlack; 
@@ -43,6 +47,7 @@ public class Shooter {
     double blackRPMSetpoint;
     double blueRPMSetpoint;
 
+    int rpmChange;
 
     Vision vision;
     Drive drive = Drive.getInstance();
@@ -128,12 +133,32 @@ public class Shooter {
 
     public void pewpew() {
 
-        blueRPMSetpoint = -1 * (26.186 * Math.pow(vision.getDistanceFromTarget(), 2) - 449.39 * vision.getDistanceFromTarget() + 3766.4);
-        //blackRPMSetpoint = 80.016 * vision.getDistanceFromTarget() + 1171.4;
+        blueRPMSetpoint = -1 * (26.186 * Math.pow(vision.getDistanceFromTarget(), 2) - 449.39 * vision.getDistanceFromTarget() + 3756.4 + (rpmChange * rpmChangeConst));
+        //blackRPMSetpoint = 80.016 * vision.getDistanceFromTarget() + 1171.4 + (rpmChange * rpmChangeConst);
 
         blackRPMSetpoint = (0.3214 * Math.pow(vision.getDistanceFromTarget(), 5) - 18.482 * Math.pow(vision.getDistanceFromTarget(), 4) 
         + 415.11 * Math.pow(vision.getDistanceFromTarget(), 3) - 4537.3 * Math.pow(vision.getDistanceFromTarget(), 2) + 24138 * vision.getDistanceFromTarget() -48192);
 
+
+        if (blueRPMSetpoint < -maxRPM) {
+
+            blueRPMSetpoint = -maxRPM;
+        }
+        else if (blueRPMSetpoint > maxRPM) {
+
+            blueRPMSetpoint = maxRPM;
+        }
+
+        if (blackRPMSetpoint > maxRPM) {
+
+            blackRPMSetpoint = maxRPM;
+        }
+        else if (blackRPMSetpoint < -maxRPM) {
+
+            blackRPMSetpoint = -maxRPM;
+        }
+
+       
         //Low goal, 1000 on black, -1500 on blue
 
         //flywheelBlack.setRPMVelocity();
@@ -225,6 +250,26 @@ public class Shooter {
     public Boolean getProx() {
 
         return !ballInTopPos.get();
+    }
+
+    public int getRPMChange() {
+
+        return rpmChange;
+    }
+
+    public void setRPMChange(int newRPMVal) {
+
+        rpmChange = newRPMVal;
+    }
+
+    public void addToRPM() {
+
+        rpmChange += 1;
+    }
+
+    public void subtractFromRPM() {
+
+        rpmChange -= 1;
     }
 
     public static Shooter getInstance() {
