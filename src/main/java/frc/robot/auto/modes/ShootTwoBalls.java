@@ -19,7 +19,7 @@ public class ShootTwoBalls extends Mode{
         sucker.suckOrBlow(0.75);
         pathfinder.translate(0, 4, 180, 0.2);
         sucker.retract();
-        actionRunner.run(new ShootBalls(2, true));
+        //actionRunner.run(new ShootBalls(2, true));
 
     }
 }

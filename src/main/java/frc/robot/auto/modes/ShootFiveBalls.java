@@ -15,13 +15,13 @@ public class ShootFiveBalls extends Mode {
 
     public void run() {
 
-        actionRunner.run(new ShootBalls(1, false));
+        //actionRunner.run(new ShootBalls(1, false));
         sucker.deploy();
         sucker.suckOrBlow(0.75);
         //pathOne.drivePath();
-        actionRunner.run(new ShootBalls(2, false));
+        //actionRunner.run(new ShootBalls(2, false));
         //pathTwo.drivePath();
-        actionRunner.run(new ShootBalls(2, true));
+        //actionRunner.run(new ShootBalls(2, true));
 
     }
 }

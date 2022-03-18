@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -84,6 +85,7 @@ public class Robot extends TimedRobot {
     dashboardTable = NetworkTableInstance.getDefault().getTable("dashboard");
     navXAngle = dashboardTable.getEntry("gyroAngle");
 
+    DataLogManager.start();
   }
 
  
@@ -109,6 +111,8 @@ public class Robot extends TimedRobot {
 
     actionRunner.start();
     modeRunner.start();
+
+    shoot.stop();
   }
 
   /** This function is called periodically during autonomous. */
@@ -132,7 +136,6 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
 
     vision.loop();
-    //shoot.loop();
 
     //Reset Yaw on NavX
     if(driverController.getResetYaw()) {
