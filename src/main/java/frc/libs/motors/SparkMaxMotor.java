@@ -53,12 +53,13 @@ public class SparkMaxMotor {
     }
 
 
-    public void configurePID(double p, double i, double d, double ff) {
+    public void configurePID(double p, double i, double d, double ff, double IZone) {
 
         pidController.setP(p);
         pidController.setI(i);
         pidController.setD(d);
         pidController.setFF(ff);
+        pidController.setIZone(IZone);
     }
 
     
