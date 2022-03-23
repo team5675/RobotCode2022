@@ -44,7 +44,7 @@ public class Vision {
 
         lightOn = true;
 
-        ledMode.setDouble(3);
+        ledMode.setDouble(0);
     }
 
 
