@@ -7,12 +7,10 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.I2C;
 
 import java.util.Queue;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.ColorSensorV3;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.ControlType;
@@ -47,7 +45,7 @@ public class Shooter {
     double blackRPMSetpoint;
     double blueRPMSetpoint;
 
-    int rpmChange;
+    int rpmChange = 0;
 
     Vision vision;
     Drive drive = Drive.getInstance();
@@ -133,7 +131,7 @@ public class Shooter {
 
     public void pewpew() {
 
-        blueRPMSetpoint = -1 * (26.186 * Math.pow(vision.getDistanceFromTarget(), 2) - 449.39 * vision.getDistanceFromTarget() + 3756.4 + (rpmChange * rpmChangeConst));
+        blueRPMSetpoint = -1 * (26.186 * Math.pow(vision.getDistanceFromTarget(), 2) - 449.39 * vision.getDistanceFromTarget() + 3756.4 );//+ (rpmChange * rpmChangeConst));
         //blackRPMSetpoint = 80.016 * vision.getDistanceFromTarget() + 1171.4 + (rpmChange * rpmChangeConst);
 
         blackRPMSetpoint = (0.3214 * Math.pow(vision.getDistanceFromTarget(), 5) - 18.482 * Math.pow(vision.getDistanceFromTarget(), 4) 
@@ -175,13 +173,7 @@ public class Shooter {
         if(blackEnc.getVelocity() >= blackRPMSetpoint && blueEnc.getVelocity() <= blueRPMSetpoint) {
 
             greenWheel.set(1);
-
-            try {
-                wait(500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+        } else greenWheel.set(0);
 
         
 
@@ -264,12 +256,12 @@ public class Shooter {
 
     public void addToRPM() {
 
-        rpmChange += 1;
+        rpmChange += 20;
     }
 
     public void subtractFromRPM() {
 
-        rpmChange -= 1;
+        rpmChange -= 20;
     }
 
     public static Shooter getInstance() {

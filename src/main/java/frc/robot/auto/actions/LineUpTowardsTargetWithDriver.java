@@ -40,10 +40,17 @@ public class LineUpTowardsTargetWithDriver implements Action {
     public boolean loop() {
         offset = vision.getHorizontalOffset();
 
+        //System.out.println("FL: " + drive.getFrontLeft().getAzimuth() + " FR: " + drive.getFrontRight().getAzimuth() + " BL: " + drive.getBackLeft().getAzimuth() + " BR: " + drive.getBackRight().getAzimuth());
+
         //if(offset < 2.5 && offset > -2.5) 
         //    offset = 0;
 
-        drive.move(0, 0, offset * Constants.AUTO_ROTATE_P, navX.getAngle(), false);
+        //drive.move(offset * Constants.AUTO_ROTATE_P, 0, 0.625, navX.getAngle(), false);
+
+        drive.getFrontLeft().drive(offset * Constants.AUTO_ROTATE_P, 2.384, false);
+        drive.getFrontRight().drive(offset * Constants.AUTO_ROTATE_P, 2.953, false);
+        drive.getBackLeft().drive(offset * Constants.AUTO_ROTATE_P, 3.008, false);
+        drive.getBackRight().drive(offset * Constants.AUTO_ROTATE_P, 0.628, false);
 
         return true; 
     }

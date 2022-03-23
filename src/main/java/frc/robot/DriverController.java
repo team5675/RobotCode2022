@@ -116,6 +116,11 @@ public class DriverController {
         return mainController.getRawButtonPressed(8);
     }
 
+    public boolean getLowShoot() {
+
+        return auxController.getAButton();
+    }
+
     public boolean getSubtractRevs() {
 
         boolean returnABool = false;
@@ -175,31 +180,6 @@ public class DriverController {
             returnYBool = false;
         }
         return returnYBool;
-    }
-
-    public boolean getRaiseMasterArm() {
-        
-        return auxController.getRawButtonPressed(8);
-    }
-
-    public boolean getCollapseMasterArm() {
-
-        return auxController.getRawButtonReleased(8);
-    }
-
-    public double getTroller() {
-
-        return auxController.getRawAxis(4);
-    }
-
-    public boolean getWinchSafety() {
-
-        return auxController.getRawButton(9);
-    }
-
-    public double getWinchSpeed() {
-
-        return auxController.getRawAxis(1);
     }
 
     public static DriverController getInstance() {

@@ -53,12 +53,12 @@ public void deploy(){
 
     if(leftLimitSwitch.get()) {
 
-        winch.set(-0.9);
+        winch.set(-1);
         solenoid1.set(Value.kForward);
     }
 
     if(!rightLimitSwitch.get() && leftLimitSwitch.get()) {
-        winch.set(-0.9);
+        winch.set(-1);
     }
 
     if(rightLimitSwitch.get()) {

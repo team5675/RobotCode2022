@@ -36,6 +36,9 @@ public class ShootBalls implements Action {
     DoubleLogEntry blueRPM;
     StringLogEntry proxValue;
 
+    boolean first;
+    double nowTime;
+
     public ShootBalls(int newAmount, double blackSetpoint, double blueSetpoint) {
 
         ballsShotEntry = NetworkTableInstance.getDefault().getTable("dashboard").getEntry("balls shot");
@@ -54,6 +57,8 @@ public class ShootBalls implements Action {
 
         this.blackSetpoint  = blackSetpoint;
         this.blueSetpoint = blueSetpoint;
+
+        first = true;
     }
 
 
@@ -67,9 +72,12 @@ public class ShootBalls implements Action {
     @Override
     public boolean loop() {
 
-        drive.move(0, 0, vision.getHorizontalOffset() * Constants.AUTO_ROTATE_P, 0, true);
+        drive.getFrontLeft().drive(vision.getHorizontalOffset() * Constants.AUTO_ROTATE_P, 2.384, false);
+        drive.getFrontRight().drive(vision.getHorizontalOffset() * Constants.AUTO_ROTATE_P, 2.953, false);
+        drive.getBackLeft().drive(vision.getHorizontalOffset() * Constants.AUTO_ROTATE_P, 3.008, false);
+        drive.getBackRight().drive(vision.getHorizontalOffset() * Constants.AUTO_ROTATE_P, 0.628, false);
         
-        shooter.pewpewAuto(blackSetpoint, blueSetpoint, (vision.getHorizontalOffset() < 1 && vision.getHorizontalOffset() > -1) );
+        shooter.pewpewAuto(blackSetpoint, blueSetpoint, (vision.getHorizontalOffset() < 2 && vision.getHorizontalOffset() > -2) );
 
         blackRPM.append(shooter.getBlackRPM(), System.currentTimeMillis());
         blueRPM.append(shooter.getBlueRPM(), System.currentTimeMillis());
@@ -106,9 +114,17 @@ public class ShootBalls implements Action {
 
         if(amount == ballsShot) {
 
-            shooter.stop();
-            ballsShot = 0;
-            return false;
+            if(first) {
+                first = false;
+                nowTime = System.currentTimeMillis();
+            }
+            
+            shooter.stop();            
+
+            if(System.currentTimeMillis() - nowTime > 500){
+                return false;
+            } else return true;
+
         } else return true;
     
     }
