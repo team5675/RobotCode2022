@@ -7,6 +7,8 @@ package frc.robot;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.VideoSource;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -83,6 +85,8 @@ public class Robot extends TimedRobot {
 
     dashboardTable = NetworkTableInstance.getDefault().getTable("dashboard");
     navXAngle = dashboardTable.getEntry("gyroAngle");
+
+    CameraServer.startAutomaticCapture().setConnectionStrategy(VideoSource.ConnectionStrategy.kKeepOpen);
 
   }
 
@@ -166,6 +170,16 @@ public class Robot extends TimedRobot {
       drive.move(forward, strafe, rotation, angle, isFieldOriented);
       shoot.idle();
     }
+
+    if(driverController.getBoostUp())
+      shoot.raiseBoost();
+    
+    if(driverController.getBoostDown())
+      shoot.lowerBoost();
+
+    if(driverController.getOverrideShoot())
+      shoot.badBall();
+    
 
 
     suck.suckOrBlow((driverController.getIntakeSuck() - driverController.getOuttake()) * .75);

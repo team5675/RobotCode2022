@@ -40,7 +40,7 @@ public class LineUpTowardsTargetWithDriver implements Action {
     public boolean loop() {
         offset = vision.getHorizontalOffset();
 
-        //if(offset < 2.5 && offset > -2.5) 
+        //if(offset < 1.5 && offset > -1.5) 
         //    offset = 0;
 
         drive.move(0, 0, offset * Constants.AUTO_ROTATE_P, navX.getAngle(), false);

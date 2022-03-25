@@ -59,6 +59,8 @@ public class Shooter {
     boolean first = true;
     double startTime;
 
+    int boostIncr = 0;
+
     public Shooter() {
         vision = Vision.getInstance();
 
@@ -124,11 +126,11 @@ public class Shooter {
 
     public void pewpew() {
 
-        blueRPMSetpoint = -1 * (26.186 * Math.pow(vision.getDistanceFromTarget(), 2) - 449.39 * vision.getDistanceFromTarget() + 3756.4);
-        blackRPMSetpoint = 80.016 * vision.getDistanceFromTarget() + 1171.4;
+        blueRPMSetpoint = -1 * (26.186 * Math.pow(vision.getDistanceFromTarget(), 2) - 449.39 * vision.getDistanceFromTarget() + 3816.4 + boostIncr);
+        //blackRPMSetpoint = 80.016 * vision.getDistanceFromTarget() + 1171.4;
 
-        //blackRPMSetpoint = 0.3214 * Math.pow(vision.getDistanceFromTarget(), 5) - 18.482 * Math.pow(vision.getDistanceFromTarget(), 4) 
-        //+ 415.11 * Math.pow(vision.getDistanceFromTarget(), 3) - 4537.3 * Math.pow(vision.getDistanceFromTarget(), 2) + 24138 * vision.getDistanceFromTarget() -48202;
+        blackRPMSetpoint = 0.3214 * Math.pow(vision.getDistanceFromTarget(), 5) - 18.482 * Math.pow(vision.getDistanceFromTarget(), 4)   
+        + 415.11 * Math.pow(vision.getDistanceFromTarget(), 3) - 4537.3 * Math.pow(vision.getDistanceFromTarget(), 2) + 24138 * vision.getDistanceFromTarget() -48162 - boostIncr;
 
         //Low goal, 1000 on black, -1500 on blue
 
@@ -157,12 +159,63 @@ public class Shooter {
         blueSetpoint.setDouble(blueRPMSetpoint);
     }
 
+    public void pewpewAuto(int blueRPM, int blackRPM, boolean isLinedUp) {
+
+        //Low goal, 1000 on black, -1500 on blue
+
+        //flywheelBlack.setRPMVelocity();
+        //flywheelBlue.setRPMVelocity(2500 * (int)vision.getDistanceFromTarget());
+
+        //blackPID.setReference(blackSetpoint.getDouble(0), ControlType.kVelocity);
+        //bluePID.setReference(blueSetpoint.getDouble(0), ControlType.kVelocity);
+        if(isLinedUp) {
+
+        blackPID.setReference(blackRPM, ControlType.kVelocity);
+        bluePID.setReference(blueRPM, ControlType.kVelocity);
+
+        
+
+        if(blackEnc.getVelocity() >= blackRPM + 10 && blueEnc.getVelocity() <= blueRPM + 10) {
+
+            greenWheel.set(1);
+        } else greenWheel.set(0);
+
+        } else greenWheel.set(0);
+
+        blackSetpoint.setDouble(blackRPMSetpoint);
+        blueSetpoint.setDouble(blueRPMSetpoint);
+    }
+
+
     public void idle() {
 
         blackPID.setReference(500, ControlType.kVelocity);
         bluePID.setReference(-500, ControlType.kVelocity);
 
         greenWheel.set(0);
+    }
+
+    public Boolean getProx() {
+
+        return !ballInTopPos.get();
+    }
+
+    public void badBall() {
+
+        blackPID.setReference(1000, ControlType.kVelocity);
+        bluePID.setReference(-500, ControlType.kVelocity);
+
+        greenWheel.set(1);
+    }
+
+    public void raiseBoost() {
+
+        boostIncr += 20;
+    }
+
+    public void lowerBoost() {
+
+        boostIncr -= 20;
     }
 
     public double getBlackRPM() {

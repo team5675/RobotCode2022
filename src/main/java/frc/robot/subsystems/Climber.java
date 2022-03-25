@@ -22,6 +22,8 @@ public class Climber{
 
     static Climber instance;
 
+    Sucker suck = Sucker.getInstance();
+
     Spark winch;
 
     public Climber() {
@@ -49,6 +51,7 @@ public class Climber{
 public void deploy(){
  
     solenoidErect.set(Value.kReverse);
+    suck.deploy();
     
 
     if(leftLimitSwitch.get()) {

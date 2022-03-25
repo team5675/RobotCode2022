@@ -68,9 +68,9 @@ public class DriverController {
         return mainController.getRawButton(1);
     }
 
-    public boolean getResetSwerveOffset() {
+    public boolean getOverrideShoot() {
 
-        return mainController.getBButton();
+        return auxController.getAButton();
     }
 
     public boolean getShoot() {
@@ -111,6 +111,16 @@ public class DriverController {
     public boolean getRunCompressor() {
 
         return mainController.getRawButtonPressed(8);
+    }
+
+    public boolean getBoostUp() {
+
+        return auxController.getRightBumper();
+    }
+
+    public boolean getBoostDown() {
+
+        return auxController.getRightBumper();
     }
 
     public boolean getUnlockClimb() {

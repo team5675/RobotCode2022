@@ -23,15 +23,23 @@ public class ShootBalls implements Action {
 
     NetworkTableEntry ballsShotEntry;
 
-    public ShootBalls(int newAmount, boolean useVision) {
+    int ballShotProx;
 
-        lineup = useVision;
+    int blueRPM;
+    int blackRPM;
+
+    public ShootBalls(int newAmount, int blueRPM, int blackRPM) {
 
         ballsShotEntry = NetworkTableInstance.getDefault().getTable("dashboard").getEntry("balls shot");
 
         ballsShotEntry.setDouble(0);
 
         amount = newAmount;
+
+        ballShotProx = 0;
+
+        this.blueRPM = blueRPM;
+        this.blackRPM = blackRPM;
     }
 
 
@@ -45,11 +53,14 @@ public class ShootBalls implements Action {
     @Override
     public boolean loop() {
 
-        drive.move(0, 0, vision.getHorizontalOffset() * Constants.AUTO_ROTATE_P, 0, true);
+        drive.getFrontLeft().drive(vision.getHorizontalOffset() * Constants.AUTO_ROTATE_P, 2.348, false);
+        drive.getFrontRight().drive(vision.getHorizontalOffset() * Constants.AUTO_ROTATE_P, 2.953, false);
+        drive.getBackLeft().drive(vision.getHorizontalOffset() * Constants.AUTO_ROTATE_P, 3.008, false);
+        drive.getBackRight().drive(vision.getHorizontalOffset() * Constants.AUTO_ROTATE_P, 0.628, false);
 
-        shooter.pewpew();
+        shooter.pewpewAuto(blueRPM, blackRPM, vision.getHorizontalOffset() < 2 && vision.getHorizontalOffset() > -2);
 
-        if(shooter.getBlackRPMSetpoint() > shooter.getBlackRPM() + 100 && debounce) {
+        /*if(shooter.getBlackRPMSetpoint() > shooter.getBlackRPM() + 120 && debounce) {
 
             ballsShot++;
 
@@ -60,6 +71,17 @@ public class ShootBalls implements Action {
 
         if(shooter.getBlackRPM() >= shooter.getBlackRPMSetpoint() && !debounce) {
             debounce =true;
+        }*/
+
+        if(shooter.getProx()) {
+
+            ballShotProx++;
+        }
+
+        if(!shooter.getProx() && ballShotProx > 0) {
+            ballsShot++;
+
+            ballShotProx = 0;
         }
 
         if(amount == ballsShot && lineup == false) {

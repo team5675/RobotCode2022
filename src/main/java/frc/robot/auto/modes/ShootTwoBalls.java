@@ -15,11 +15,13 @@ public class ShootTwoBalls extends Mode{
 
     public void run() {
 
+        System.out.println("Running two ball");
         sucker.deploy();
         sucker.suckOrBlow(0.75);
-        pathfinder.translate(0, 4, 180, 0.2);
+        pathfinder.translate(7, -6, -85, 0.21);
         sucker.retract();
-        actionRunner.run(new ShootBalls(2, true));
+        pathfinder.translate(-1, 2, -60, 0.21);
+        actionRunner.run(new ShootBalls(2, -2000, 2000));
 
     }
 }

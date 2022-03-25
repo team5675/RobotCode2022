@@ -12,16 +12,13 @@ public class ShootFiveBalls extends Mode {
 
     ActionRunner actionRunner = ActionRunner.getInstance();
     Sucker sucker = Sucker.getInstance();
+    Pathfinder pathfinder = Pathfinder.getInstance();
 
     public void run() {
 
-        actionRunner.run(new ShootBalls(1, false));
-        sucker.deploy();
-        sucker.suckOrBlow(0.75);
-        //pathOne.drivePath();
-        actionRunner.run(new ShootBalls(2, false));
-        //pathTwo.drivePath();
-        actionRunner.run(new ShootBalls(2, true));
-
+        System.out.println("Running One Ball");
+        
+        pathfinder.translate(4, 0, 270, 0.5);
+        //actionRunner.run(new ShootBalls(1, false));
     }
 }
