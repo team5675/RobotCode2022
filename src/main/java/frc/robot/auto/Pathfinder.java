@@ -3,7 +3,6 @@ package frc.robot.auto;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import frc.robot.Constants;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.NavX;
 
@@ -87,7 +86,7 @@ public class Pathfinder {
             double averageDistance = (distanceFrontLeft + distanceFrontRight + distanceBackLeft + distanceBackRight) / 4;
             distanceTraveled = averageDistance / 7.643; 
             
-            double rotationOffset = (8.9 * (rotationGoal % 360) / 360) / 4;
+            //double rotationOffset = (8.9 * (rotationGoal % 360) / 360) / 4;
             System.out.println(distanceTraveled + " " + (totalDistance + hypDistance) + " " + hypDistance);
             //distanceTraveled -= rotationOffset;
 

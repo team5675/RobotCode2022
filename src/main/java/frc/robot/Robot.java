@@ -4,11 +4,11 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.cscore.VideoSource;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -86,8 +86,9 @@ public class Robot extends TimedRobot {
     dashboardTable = NetworkTableInstance.getDefault().getTable("dashboard");
     navXAngle = dashboardTable.getEntry("gyroAngle");
 
-    CameraServer.startAutomaticCapture().setConnectionStrategy(VideoSource.ConnectionStrategy.kKeepOpen);
+    DataLogManager.start();
 
+    CameraServer.startAutomaticCapture();
   }
 
  
@@ -113,6 +114,8 @@ public class Robot extends TimedRobot {
 
     actionRunner.start();
     modeRunner.start();
+
+    shoot.stop();
   }
 
   /** This function is called periodically during autonomous. */
@@ -136,7 +139,6 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
 
     vision.loop();
-    //shoot.loop();
 
     //Reset Yaw on NavX
     if(driverController.getResetYaw()) {
@@ -151,7 +153,12 @@ public class Robot extends TimedRobot {
     double angle = navX.getAngle();
     boolean isFieldOriented = driverController.isFieldOriented();
 
+    if (driverController.getBoostUp())
+      shoot.raiseBoost();;
     
+    if (driverController.getBoostDown())
+      shoot.lowerBoost();
+  
     if (driverController.getShootPressed()) {
 
       lineUpTowardsTargetWithDriver.start();

@@ -7,18 +7,20 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.I2C;
 
 import java.util.Queue;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.ColorSensorV3;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType; 
 
 public class Shooter {
+
+    static final int rpmChangeConst = 20;
+
+    static final double maxRPM = 5676;
 
     static Shooter instance;
 
@@ -43,15 +45,17 @@ public class Shooter {
     double blackRPMSetpoint;
     double blueRPMSetpoint;
 
+    int rpmChange = 0;
 
     Vision vision;
     Drive drive = Drive.getInstance();
+    ColorSensor colorSensor = ColorSensor.getInstance();
 
 
     String allianceColor;
     Queue<Integer> ballQueue;
 
-    ColorSensorV3 colorSensor;
+    
     Color bColor;
     DigitalInput ballInTopPos;
     int ballsin = 0;
@@ -70,15 +74,18 @@ public class Shooter {
         greenWheel = new Spark(Constants.SHOOTER_GATE_ID);
 
         ballInTopPos = new DigitalInput(Constants.INDEX_PROX);
-        colorSensor = new ColorSensorV3(I2C.Port.kMXP);
+        
 
         blackPID = flywheelBlack.getPIDController();
         bluePID = flywheelBlue.getPIDController();
 
-        bluePID.setFF(0.0002);
-        bluePID.setP(0.0002);
+        bluePID.setFF(0.00021);
+        bluePID.setP(0.00006);
+        bluePID.setD(0.00071);
+
         blackPID.setFF(0.0002);
-        blackPID.setP(0.0002);
+        blackPID.setP(0.00025);
+        blackPID.setD(0.0006);
 
         blackEnc = flywheelBlack.getEncoder();
         blueEnc = flywheelBlue.getEncoder();
@@ -118,10 +125,10 @@ public class Shooter {
             greenWheel.set(0.5);
         }*/
 
-        if(!ballInTopPos.get()) {
+        if(getProx()) {
 
-            greenWheel.set(1);
-        } else greenWheel.set(0);
+            greenWheel.set(0);
+        } else greenWheel.set(.5);
     }
 
     public void pewpew() {
@@ -132,6 +139,10 @@ public class Shooter {
         blackRPMSetpoint = 0.3214 * Math.pow(vision.getDistanceFromTarget(), 5) - 18.482 * Math.pow(vision.getDistanceFromTarget(), 4)   
         + 415.11 * Math.pow(vision.getDistanceFromTarget(), 3) - 4537.3 * Math.pow(vision.getDistanceFromTarget(), 2) + 24138 * vision.getDistanceFromTarget() -48162 - boostIncr;
 
+            blackRPMSetpoint = -maxRPM;
+        
+
+       
         //Low goal, 1000 on black, -1500 on blue
 
         //flywheelBlack.setRPMVelocity();
@@ -145,9 +156,39 @@ public class Shooter {
 
         
 
-        if(blackEnc.getVelocity() >= blackRPMSetpoint + 10 && blueEnc.getVelocity() <= blueRPMSetpoint + 10) {
+        if(blackEnc.getVelocity() >= blackRPMSetpoint && blueEnc.getVelocity() <= blueRPMSetpoint) {
 
             greenWheel.set(1);
+        } else greenWheel.set(0);
+
+        
+
+        blackRPM.setDouble(blackEnc.getVelocity());
+        blueRPM.setDouble(blueEnc.getVelocity());
+
+        blackSetpoint.setDouble(blackRPMSetpoint);
+        blueSetpoint.setDouble(blueRPMSetpoint);
+    }
+
+    public void pewpewAuto(double blackAutoRPM, double blueAutoRPM, boolean isLinedUp) {
+
+        if(isLinedUp) {
+
+            blackPID.setReference(blackAutoRPM, ControlType.kVelocity);
+            bluePID.setReference(blueAutoRPM, ControlType.kVelocity);
+        
+        
+
+        if(blackEnc.getVelocity() >= blackRPMSetpoint + 50 && blueEnc.getVelocity() <= blueRPMSetpoint - 50) {
+
+            greenWheel.set(1);
+        } else {
+            greenWheel.set(0);
+        }
+
+        } else {
+
+            greenWheel.set(0);
         }
 
         
@@ -191,7 +232,9 @@ public class Shooter {
 
         blackPID.setReference(500, ControlType.kVelocity);
         bluePID.setReference(-500, ControlType.kVelocity);
+    }
 
+    public void stop() {
         greenWheel.set(0);
     }
 
@@ -223,9 +266,34 @@ public class Shooter {
         return blackEnc.getVelocity();
     }
 
+    public double getBlueRPM() {
+
+        return blueEnc.getVelocity();
+    }
+
     public double getBlackRPMSetpoint() {
 
         return blackRPMSetpoint;
+    }
+
+    public int getRPMChange() {
+
+        return rpmChange;
+    }
+
+    public void setRPMChange(int newRPMVal) {
+
+        rpmChange = newRPMVal;
+    }
+
+    public void addToRPM() {
+
+        rpmChange += 20;
+    }
+
+    public void subtractFromRPM() {
+
+        rpmChange -= 20;
     }
 
     public static Shooter getInstance() {

@@ -44,7 +44,7 @@ public class Vision {
 
         lightOn = true;
 
-        ledMode.setDouble(3);
+        ledMode.setDouble(0);
     }
 
 
@@ -88,10 +88,8 @@ public class Vision {
 
     public void loop() {
         
-        if (lightOn) {
             distance = ((Constants.VISION_TARGET_HEIGHT - Constants.VISION_CAMERA_HEIGHT) / Math.tan(Math.toRadians(Constants.VISION_CAMERA_ANGLE + getVerticalOffset()))) / 12;
             distanceFromTarget.setDouble(distance);
-        }
     }
 
     public double getDistanceFromTarget() {

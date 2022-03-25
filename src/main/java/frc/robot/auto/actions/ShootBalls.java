@@ -2,6 +2,10 @@ package frc.robot.auto.actions;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.util.datalog.DataLog;
+import edu.wpi.first.util.datalog.DoubleLogEntry;
+import edu.wpi.first.util.datalog.StringLogEntry;
+import edu.wpi.first.wpilibj.DataLogManager;
 import frc.robot.Constants;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.NavX;
@@ -18,17 +22,24 @@ public class ShootBalls implements Action {
     int amount;
     int ballsShot = 0;
     boolean debounce = false;
-    boolean lineup;
     double lastError = 0;
+
+    double blackSetpoint;
+    double blueSetpoint;
 
     NetworkTableEntry ballsShotEntry;
 
-    int ballShotProx;
+    int ballsShotProx;
 
-    int blueRPM;
-    int blackRPM;
+    DataLog log;
+    DoubleLogEntry blackRPM;
+    DoubleLogEntry blueRPM;
+    StringLogEntry proxValue;
 
-    public ShootBalls(int newAmount, int blueRPM, int blackRPM) {
+    boolean first;
+    double nowTime;
+
+    public ShootBalls(int newAmount, double blackSetpoint, double blueSetpoint) {
 
         ballsShotEntry = NetworkTableInstance.getDefault().getTable("dashboard").getEntry("balls shot");
 
@@ -36,10 +47,18 @@ public class ShootBalls implements Action {
 
         amount = newAmount;
 
-        ballShotProx = 0;
+        ballsShotProx = 0;
 
-        this.blueRPM = blueRPM;
-        this.blackRPM = blackRPM;
+        log = DataLogManager.getLog();
+
+        blackRPM = new DoubleLogEntry(log, "Black RPM");
+        blueRPM = new DoubleLogEntry(log, "Blue RPM");
+        proxValue = new StringLogEntry(log, "Prox Tripped");
+
+        this.blackSetpoint  = blackSetpoint;
+        this.blueSetpoint = blueSetpoint;
+
+        first = true;
     }
 
 
@@ -58,7 +77,7 @@ public class ShootBalls implements Action {
         drive.getBackLeft().drive(vision.getHorizontalOffset() * Constants.AUTO_ROTATE_P, 3.008, false);
         drive.getBackRight().drive(vision.getHorizontalOffset() * Constants.AUTO_ROTATE_P, 0.628, false);
 
-        shooter.pewpewAuto(blueRPM, blackRPM, vision.getHorizontalOffset() < 2 && vision.getHorizontalOffset() > -2);
+        shooter.pewpewAuto(blackSetpoint, blueSetpoint, vision.getHorizontalOffset() < 2 && vision.getHorizontalOffset() > -2);
 
         /*if(shooter.getBlackRPMSetpoint() > shooter.getBlackRPM() + 120 && debounce) {
 
@@ -75,22 +94,35 @@ public class ShootBalls implements Action {
 
         if(shooter.getProx()) {
 
-            ballShotProx++;
+            ballsShotProx++;
         }
 
-        if(!shooter.getProx() && ballShotProx > 0) {
+        if(!shooter.getProx() && ballsShotProx > 0) {
+
             ballsShot++;
 
-            ballShotProx = 0;
+            proxValue.append("Balls shot = " + ballsShot);
+
+            ballsShotProx = 0;
+
+            System.out.println("Balls shot = " + ballsShot);
         }
 
-        if(amount == ballsShot && lineup == false) {
-            return false;
-        } else {
-            return true;
-        }
+        if(amount == ballsShot) {
 
-        
+            if(first) {
+                first = false;
+                nowTime = System.currentTimeMillis();
+            }
+            
+            shooter.stop();            
+
+            if(System.currentTimeMillis() - nowTime > 500){
+                return false;
+            } else return true;
+
+        } else return true;
+    
     }
 
     @Override

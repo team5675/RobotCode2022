@@ -20,6 +20,9 @@ public class DriverController {
     XboxController mainController;
     XboxController auxController;
 
+    boolean aIsPressed;
+    boolean yIsPressed;
+
     public DriverController() {
         mainController = new XboxController(0);
         auxController = new XboxController(1);
@@ -60,7 +63,8 @@ public class DriverController {
 
     public boolean getIntakeDeploy() {
 
-        return (mainController.getRawAxis(3) > 0.6) || (auxController.getRawAxis(3) > 0.6);
+        return (mainController.getRawAxis(3) > 0.6) || (auxController.getRawAxis(3) > 0.6 ||
+                mainController.getRawAxis(2) > 0.6 || auxController.getRawAxis(2) > 0.6);
     }
 
     public boolean getStayStraight() {
@@ -128,34 +132,35 @@ public class DriverController {
         return auxController.getBButton();
     }
 
-    public boolean getRaiseMasterArm() {
-        
-        return auxController.getRawButtonPressed(8);
+    public boolean getResetRevs() {
+
+        return auxController.getXButton();
     }
+    public boolean getAddRevs() {
 
-    public boolean getCollapseMasterArm() {
-
-        return auxController.getRawButtonReleased(8);
+        boolean returnYBool = false;
+        if ((yIsPressed) && auxController.getYButton())
+        {
+            yIsPressed = true;
+            returnYBool = false;
+        }
+        if ((!yIsPressed) && auxController.getYButton())
+        {
+            yIsPressed = true;
+            returnYBool = true;
+        }
+        else if (yIsPressed && (!auxController.getYButton()))
+        {
+            yIsPressed = false;
+            returnYBool = false;
+        }
+        else if ((!yIsPressed) && (!auxController.getYButton()))
+        {
+            yIsPressed = false;
+            returnYBool = false;
+        }
+        return returnYBool;
     }
-
-
-    public double getTroller() {
-
-        return auxController.getRawAxis(4);
-    }
-
-
-    public boolean getWinchSafety() {
-
-        return auxController.getRawButton(9);
-    }
-
-
-    public double getWinchSpeed() {
-
-        return auxController.getRawAxis(1);
-    }
-
 
     public static DriverController getInstance() {
 

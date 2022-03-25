@@ -18,10 +18,11 @@ public class ShootTwoBalls extends Mode{
         System.out.println("Running two ball");
         sucker.deploy();
         sucker.suckOrBlow(0.75);
-        pathfinder.translate(7, -6, -85, 0.21);
+        pathfinder.translate(7, -5, -85, 0.2);
         sucker.retract();
         pathfinder.translate(-1, 2, -60, 0.21);
-        actionRunner.run(new ShootBalls(2, -2000, 2000));
+        sucker.suckOrBlow(0);
+        actionRunner.run(new ShootBalls(2, 2050, -2050));
 
     }
 }
