@@ -74,6 +74,8 @@ double velocityRPMConversion = 1517.6538819;
 		velocityPID.setD(0);
 		velocityPID.setFF(0.000156);
 		velocityPID.setOutputRange(-1, 1);
+
+		this.angleMotor.setSmartCurrentLimit(20);
 	}
 
 	public void drivePathfinder(double velocity, double angle) {
