@@ -139,18 +139,6 @@ public class Shooter {
         blackRPMSetpoint = 0.3214 * Math.pow(vision.getDistanceFromTarget(), 5) - 18.482 * Math.pow(vision.getDistanceFromTarget(), 4)   
         + 415.11 * Math.pow(vision.getDistanceFromTarget(), 3) - 4537.3 * Math.pow(vision.getDistanceFromTarget(), 2) + 24138 * vision.getDistanceFromTarget() -48162 - boostIncr;
 
-            blackRPMSetpoint = -maxRPM;
-        
-
-       
-        //Low goal, 1000 on black, -1500 on blue
-
-        //flywheelBlack.setRPMVelocity();
-        //flywheelBlue.setRPMVelocity(2500 * (int)vision.getDistanceFromTarget());
-
-        //blackPID.setReference(blackSetpoint.getDouble(0), ControlType.kVelocity);
-        //bluePID.setReference(blueSetpoint.getDouble(0), ControlType.kVelocity);
-
         blackPID.setReference(blackRPMSetpoint, ControlType.kVelocity);
         bluePID.setReference(blueRPMSetpoint, ControlType.kVelocity);
 
@@ -230,8 +218,17 @@ public class Shooter {
 
     public void idle() {
 
-        blackPID.setReference(500, ControlType.kVelocity);
-        bluePID.setReference(-500, ControlType.kVelocity);
+        //if valid target is found, idle up to 1800 on each
+
+        if(vision.isTargeted()) {
+
+            blackPID.setReference(1800, ControlType.kVelocity);
+            bluePID.setReference(-1800, ControlType.kVelocity);
+        } else {
+
+            blackPID.setReference(0, ControlType.kVelocity);
+            bluePID.setReference(0, ControlType.kVelocity);
+        }
     }
 
     public void stop() {

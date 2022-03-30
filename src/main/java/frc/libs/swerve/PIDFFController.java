@@ -129,8 +129,9 @@ public class PIDFFController {
             }
 
             //avoiding hystersis case, just picking clockwise rotation if the setpoint is approx 180 away
-            if (Math.abs(clUnitsAway - ccUnitsAway) < 0.3) error = clUnitsAway;
-            else error = Math.min(clUnitsAway, ccUnitsAway);
+            //if (Math.abs(clUnitsAway - ccUnitsAway) < 0.03) error = clUnitsAway;
+            //else 
+            error = Math.min(clUnitsAway, ccUnitsAway);
 
             //gotta make it spins the right way
             if (error == ccUnitsAway) {
