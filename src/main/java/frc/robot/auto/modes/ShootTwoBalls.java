@@ -15,6 +15,7 @@ public class ShootTwoBalls extends Mode{
 
     public void run() {
 
+        System.out.println("Running two ball");
         sucker.deploy();
         sucker.suckOrBlow(0.75);
         pathfinder.translate(7, -5, -85, 0.2);

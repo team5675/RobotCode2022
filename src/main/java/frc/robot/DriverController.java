@@ -72,9 +72,9 @@ public class DriverController {
         return mainController.getRawButton(1);
     }
 
-    public boolean getResetSwerveOffset() {
+    public boolean getOverrideShoot() {
 
-        return mainController.getBButton();
+        return auxController.getAButton();
     }
 
     public boolean getShoot() {
@@ -117,35 +117,14 @@ public class DriverController {
         return mainController.getRawButtonPressed(8);
     }
 
-    public boolean getLowShoot() {
+    public boolean getBoostUp() {
 
-        return auxController.getAButton();
+        return auxController.getRightBumper();
     }
 
-    public boolean getSubtractRevs() {
+    public boolean getBoostDown() {
 
-        boolean returnABool = false;
-        if ((aIsPressed) && auxController.getAButton())
-        {
-            aIsPressed = true;
-            returnABool = false;
-        }
-        if ((!aIsPressed) && auxController.getAButton())
-        {
-            aIsPressed = true;
-            returnABool = true;
-        }
-        else if (aIsPressed && (!auxController.getAButton()))
-        {
-            aIsPressed = false;
-            returnABool = false;
-        }
-        else if ((!aIsPressed) && (!auxController.getAButton()))
-        {
-            aIsPressed = false;
-            returnABool = false;
-        }
-        return returnABool;
+        return auxController.getRightBumper();
     }
 
     public boolean getUnlockClimb() {

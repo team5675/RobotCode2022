@@ -152,7 +152,13 @@ public class Robot extends TimedRobot {
     double rotation = driverController.getRotation();
     double angle = navX.getAngle();
     boolean isFieldOriented = driverController.isFieldOriented();
+
+    if (driverController.getBoostUp())
+      shoot.raiseBoost();
     
+    if (driverController.getBoostDown())
+      shoot.lowerBoost();
+  
     if (driverController.getShootPressed()) {
 
       lineUpTowardsTargetWithDriver.start();
@@ -171,6 +177,16 @@ public class Robot extends TimedRobot {
       drive.move(forward, strafe, rotation, angle, isFieldOriented);
       shoot.idle();
     }
+
+    if(driverController.getBoostUp())
+      shoot.raiseBoost();
+    
+    if(driverController.getBoostDown())
+      shoot.lowerBoost();
+
+    if(driverController.getOverrideShoot())
+      shoot.badBall();
+    
 
 
     suck.suckOrBlow((driverController.getIntakeSuck() - driverController.getOuttake()) * .75);

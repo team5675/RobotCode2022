@@ -20,6 +20,7 @@ public class ShootThreeBalls extends Mode {
         sucker.suckOrBlow(0.75);
         pathfinder.translate(0, 4.2, 180, 0.23);
         sucker.retract();
+        sucker.suckOrBlow(-0.2);
         pathfinder.translate(0, -2, 190, 0.2);
         sucker.suckOrBlow(0);
         actionrunner.run(new ShootBalls(2, 2000, -2000));
