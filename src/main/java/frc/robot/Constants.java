@@ -69,7 +69,7 @@ public class Constants {
     //Shooter threshold was 100 RPM
 
     //Intake subsystem constants
-    public static final int INTAKE_ID = 15;
+    public static final int INTAKE_ID = 13;
     public static final int DEPLOY_ID_1 = 8;
     public static final int DEPLOY_ID_2 = 9;
 

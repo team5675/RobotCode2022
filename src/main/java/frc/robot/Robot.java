@@ -152,22 +152,6 @@ public class Robot extends TimedRobot {
     double rotation = driverController.getRotation();
     double angle = navX.getAngle();
     boolean isFieldOriented = driverController.isFieldOriented();
-
-    if (driverController.getResetRevs())
-    {
-
-      shoot.setRPMChange(0);
-    }
-    else if (driverController.getSubtractRevs())
-    {
-
-      shoot.subtractFromRPM();
-    }
-    else if (driverController.getAddRevs())
-    {
-
-      shoot.addToRPM();
-    }
     
     if (driverController.getShootPressed()) {
 
