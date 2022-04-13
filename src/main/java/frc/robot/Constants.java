@@ -22,35 +22,35 @@ public class Constants {
     
     public static final int DRIVE_FRONT_LEFT_SPEED_ID = 2;//7;
     public static final int DRIVE_FRONT_LEFT_AZIMUTH_ID = 3;//8;
-    public static final double FL_P = 0.7;
+    public static final double FL_P = 0.75;
     public static final double FL_I = 0;
     public static final double FL_D = 0.003;
     public static final int FL_AZIMUTH_ENCODER_ID = 3;
-	public static double FL_ANGLE_OFFSET = 1.755;//1.54;
+	public static double FL_ANGLE_OFFSET = 4.99;//1.54;
 
     public static final int DRIVE_FRONT_RIGHT_SPEED_ID = 8;//6;
     public static final int DRIVE_FRONT_RIGHT_AZIMUTH_ID = 9;//5;
-    public static final double FR_P = 0.7;
+    public static final double FR_P = 0.75;
     public static final double FR_I = 0;
     public static final double FR_D = 0.003;
     public static final int FR_AZIMUTH_ENCODER_ID = 2;
-	public static double FR_ANGLE_OFFSET =  1.069;//2.89; //41;
+	public static double FR_ANGLE_OFFSET =  0.915;//2.89; //41;
 
     public static final int DRIVE_BACK_LEFT_SPEED_ID = 10;//1;
-    public static final int DRIVE_BACK_LEFT_AZIMUTH_ID = 1;//2;
-    public static final double BL_P = 0.7;
+    public static final int DRIVE_BACK_LEFT_AZIMUTH_ID = 11;//2;
+    public static final double BL_P = 0.85;
     public static final double BL_I = 0;
     public static final double BL_D = 0.003;
     public static final int BL_AZIMUTH_ENCODER_ID = 0;  
-	public static double BL_ANGLE_OFFSET = 3.621;//0.37;
+	public static double BL_ANGLE_OFFSET = 4.611;//0.37;
 
     public static final int DRIVE_BACK_RIGHT_SPEED_ID = 6;//4;
     public static final int DRIVE_BACK_RIGHT_AZIMUTH_ID = 7;//3;
-    public static final double BR_P = 0.7;
+    public static final double BR_P = 0.75;
     public static final double BR_I = 0;
     public static final double BR_D = 0.003;
     public static final int BR_AZIMUTH_ENCODER_ID = 1;
-    public static double BR_ANGLE_OFFSET = 2.499;//4.25;3.276
+    public static double BR_ANGLE_OFFSET = 0.857;//4.25;3.276
 
     public static final double PATHFINDER_KP = 0;
 	public static final double PATHFINDER_KV = 0.0909090909;
@@ -69,7 +69,7 @@ public class Constants {
     //Shooter threshold was 100 RPM
 
     //Intake subsystem constants
-    public static final int INTAKE_ID = 13;
+    public static final int INTAKE_ID = 20;
     public static final int DEPLOY_ID_1 = 8;
     public static final int DEPLOY_ID_2 = 9;
 

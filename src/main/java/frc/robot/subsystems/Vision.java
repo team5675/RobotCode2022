@@ -55,9 +55,9 @@ public class Vision {
         ledMode.setDouble(1);
     }
 
-    public boolean isTargeted() {
+    public int isTargeted() {
 
-        return isTarget.getBoolean(false);
+        return (int)isTarget.getDouble(0);
     }
 
 

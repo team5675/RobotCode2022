@@ -79,7 +79,7 @@ public class DriverController {
 
     public boolean getShoot() {
 
-        return auxController.getXButton();
+        return auxController.getXButton() || mainController.getXButton();
     }
 
     public boolean getShootPressed() {

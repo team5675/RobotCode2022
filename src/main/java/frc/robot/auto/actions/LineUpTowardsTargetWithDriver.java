@@ -47,10 +47,10 @@ public class LineUpTowardsTargetWithDriver implements Action {
 
         //drive.move(offset * Constants.AUTO_ROTATE_P, 0, 0.625, navX.getAngle(), false);
 
-        drive.getFrontLeft().drive(offset * Constants.AUTO_ROTATE_P, 2.384, false);
-        drive.getFrontRight().drive(offset * Constants.AUTO_ROTATE_P, 2.953, false);
-        drive.getBackLeft().drive(offset * Constants.AUTO_ROTATE_P, 3.008, false);
-        drive.getBackRight().drive(offset * Constants.AUTO_ROTATE_P, 0.628, false);
+        drive.getFrontLeft().drive(offset * Constants.AUTO_ROTATE_P, 0.631, false);
+        drive.getFrontRight().drive(offset * Constants.AUTO_ROTATE_P, 2.805, false);
+        drive.getBackLeft().drive(offset * Constants.AUTO_ROTATE_P, 2.775, false);
+        drive.getBackRight().drive(offset * Constants.AUTO_ROTATE_P, 3.967, false);
 
         return true; 
     }

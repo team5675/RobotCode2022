@@ -133,11 +133,25 @@ public class Shooter {
 
     public void pewpew() {
 
-        blueRPMSetpoint = -1 * (26.186 * Math.pow(vision.getDistanceFromTarget(), 2) - 449.39 * vision.getDistanceFromTarget() + 3816.4 + boostIncr);
+        double x = vision.getDistanceFromTarget();
+
+        if(x < 12.5) {
+
+            blueRPMSetpoint =  -17.078 * Math.pow(x,2) + 282.73 * x - 3007.7;
+
+            blackRPMSetpoint = 37.333*(x)+1535.6;
+        } else {
+
+            blueRPMSetpoint = -41.346 * Math.pow(x,2) + 890.32 * x -7625.9;
+
+            blackRPMSetpoint = 9.0978*Math.pow(x,3) - 445.94*Math.pow(x,2) + 7078.1*x -35123;
+        }
+
+        //blueRPMSetpoint = -1 * (26.186 * Math.pow(vision.getDistanceFromTarget(), 2) - 449.39 * vision.getDistanceFromTarget() + 3816.4 + boostIncr);
         //blackRPMSetpoint = 80.016 * vision.getDistanceFromTarget() + 1171.4;
 
-        blackRPMSetpoint = 0.3214 * Math.pow(vision.getDistanceFromTarget(), 5) - 18.482 * Math.pow(vision.getDistanceFromTarget(), 4)   
-        + 415.11 * Math.pow(vision.getDistanceFromTarget(), 3) - 4537.3 * Math.pow(vision.getDistanceFromTarget(), 2) + 24138 * vision.getDistanceFromTarget() -48162 - boostIncr;
+        //blackRPMSetpoint = 0.3214 * Math.pow(vision.getDistanceFromTarget(), 5) - 18.482 * Math.pow(vision.getDistanceFromTarget(), 4)   
+        //+ 415.11 * Math.pow(vision.getDistanceFromTarget(), 3) - 4537.3 * Math.pow(vision.getDistanceFromTarget(), 2) + 24138 * vision.getDistanceFromTarget() -48162 - boostIncr;
 
         blackPID.setReference(blackRPMSetpoint, ControlType.kVelocity);
         bluePID.setReference(blueRPMSetpoint, ControlType.kVelocity);
@@ -167,7 +181,7 @@ public class Shooter {
         
         
 
-        if(blackEnc.getVelocity() >= blackRPMSetpoint + 50 && blueEnc.getVelocity() <= blueRPMSetpoint - 50) {
+        if(blackEnc.getVelocity() >= blackRPMSetpoint + 10 && blueEnc.getVelocity() <= blueRPMSetpoint - 10) {
 
             greenWheel.set(1);
         } else {
@@ -188,47 +202,10 @@ public class Shooter {
         blueSetpoint.setDouble(blueRPMSetpoint);
     }
 
-    public void pewpewAuto(int blueRPM, int blackRPM, boolean isLinedUp) {
-
-        //Low goal, 1000 on black, -1500 on blue
-
-        //flywheelBlack.setRPMVelocity();
-        //flywheelBlue.setRPMVelocity(2500 * (int)vision.getDistanceFromTarget());
-
-        //blackPID.setReference(blackSetpoint.getDouble(0), ControlType.kVelocity);
-        //bluePID.setReference(blueSetpoint.getDouble(0), ControlType.kVelocity);
-        if(isLinedUp) {
-
-        blackPID.setReference(blackRPM, ControlType.kVelocity);
-        bluePID.setReference(blueRPM, ControlType.kVelocity);
-
-        
-
-        if(blackEnc.getVelocity() >= blackRPM + 10 && blueEnc.getVelocity() <= blueRPM + 10) {
-
-            greenWheel.set(1);
-        } else greenWheel.set(0);
-
-        } else greenWheel.set(0);
-
-        blackSetpoint.setDouble(blackRPMSetpoint);
-        blueSetpoint.setDouble(blueRPMSetpoint);
-    }
-
 
     public void idle() {
-
-        //if valid target is found, idle up to 1800 on each
-
-        if(vision.isTargeted()) {
-
             blackPID.setReference(1800, ControlType.kVelocity);
             bluePID.setReference(-1800, ControlType.kVelocity);
-        } else {
-
-            blackPID.setReference(0, ControlType.kVelocity);
-            bluePID.setReference(0, ControlType.kVelocity);
-        }
     }
 
     public void stop() {
@@ -291,6 +268,17 @@ public class Shooter {
     public void subtractFromRPM() {
 
         rpmChange -= 20;
+    }
+
+    public void test(boolean shoot) {
+
+       blackPID.setReference(blackSetpoint.getDouble(blackRPMSetpoint), ControlType.kVelocity);
+       bluePID.setReference(blueSetpoint.getDouble(blueRPMSetpoint), ControlType.kVelocity);
+
+       if(blackEnc.getVelocity() >= blackRPMSetpoint && blueEnc.getVelocity() <= blueRPMSetpoint && shoot) {
+
+            greenWheel.set(1);
+        } else greenWheel.set(0);
     }
 
     public static Shooter getInstance() {

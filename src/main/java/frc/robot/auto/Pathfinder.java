@@ -87,7 +87,7 @@ public class Pathfinder {
             distanceTraveled = averageDistance / 7.643; 
             
             //double rotationOffset = (8.9 * (rotationGoal % 360) / 360) / 4;
-            System.out.println(distanceTraveled + " " + (totalDistance + hypDistance) + " " + hypDistance);
+            //System.out.println(distanceTraveled + " " + (totalDistance + hypDistance) + " " + hypDistance);
             //distanceTraveled -= rotationOffset;
 
             xSpeed = xFeetGoal / hypDistance;
