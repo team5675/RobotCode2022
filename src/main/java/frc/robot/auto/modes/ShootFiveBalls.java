@@ -23,16 +23,16 @@ public class ShootFiveBalls extends Mode {
         pathfinder.translate(0, -2, 190, 0.2);
         sucker.deploy();
         sucker.suckOrBlow(1);
-        actionRunner.run(new ShootBalls(2, 2000, -2000));
-        pathfinder.translate(7.5, -.1, 270, 0.5);
-        pathfinder.translate(12, -0.4, 225, 0.5);
+        actionRunner.run(new ShootBalls(2, 1990, -2025));
+        pathfinder.translate(7.5, -.7, 270, 0.5);
+        pathfinder.translate(12.5, -0.8, 225, 0.5);
         pathfinder.translate(0.5, 1, 225, 0.2);
         sucker.retract();
         sucker.suckOrBlow(0);
-        pathfinder.translate(-17, -2, 225, 0.65);
+        pathfinder.translate(-14, -2, 225, 0.65);
         sucker.deploy();
         sucker.suckOrBlow(1);
-        actionRunner.run(new ShootBalls(2, 2000, -2000));
+        actionRunner.run(new ShootBalls(2, 1980, -2055));
 
     }
 }

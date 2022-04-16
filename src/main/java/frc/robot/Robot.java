@@ -157,7 +157,7 @@ public class Robot extends TimedRobot {
     if (driverController.getBoostDown())
       shoot.lowerBoost();
   
-    if (driverController.getShootPressed()) {
+    if (driverController.getShootPressed() || driverController.getSafeShot()) {
 
       lineUpTowardsTargetWithDriver.start();
     } else if (driverController.getShootReleased()) {
@@ -169,6 +169,10 @@ public class Robot extends TimedRobot {
 
       lineUpTowardsTargetWithDriver.loop();
       shoot.pewpew();
+    } else if (driverController.getSafeShot()) {
+
+      lineUpTowardsTargetWithDriver.loop();
+      shoot.safeShot();
     } else {
       drive.move(forward, strafe, rotation, angle, isFieldOriented);
       shoot.idle();
@@ -184,8 +188,6 @@ public class Robot extends TimedRobot {
     if(driverController.getOverrideShoot())
       shoot.badBall();
     
-
-
     suck.suckOrBlow((driverController.getIntakeSuck() - driverController.getOuttake()));
 
     if (driverController.getIntakeDeploy())
@@ -215,9 +217,9 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
-    vision.loop();
+    //vision.loop();
 
-    shoot.test(driverController.getShoot());
+    //shoot.test(driverController.getShoot());
   }
 
   static Robot instance;

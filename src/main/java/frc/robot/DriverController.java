@@ -77,6 +77,11 @@ public class DriverController {
         return auxController.getAButton();
     }
 
+    public boolean getSafeShot() {
+
+        return auxController.getYButton();
+    }
+
     public boolean getShoot() {
 
         return auxController.getXButton() || mainController.getXButton();
@@ -124,7 +129,7 @@ public class DriverController {
 
     public boolean getBoostDown() {
 
-        return auxController.getRightBumper();
+        return auxController.getLeftBumper();
     }
 
     public boolean getUnlockClimb() {
@@ -132,11 +137,7 @@ public class DriverController {
         return auxController.getBButton();
     }
 
-    public boolean getResetRevs() {
-
-        return auxController.getXButton();
-    }
-    public boolean getAddRevs() {
+    /*public boolean getAddRevs() {
 
         boolean returnYBool = false;
         if ((yIsPressed) && auxController.getYButton())
@@ -160,7 +161,7 @@ public class DriverController {
             returnYBool = false;
         }
         return returnYBool;
-    }
+    }*/
 
     public static DriverController getInstance() {
 
