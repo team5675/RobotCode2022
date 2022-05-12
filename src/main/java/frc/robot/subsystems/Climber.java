@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.motorcontrol.Spark;
 
 
 
+
 public class Climber{
     
     DigitalInput leftLimitSwitch;
@@ -38,7 +39,7 @@ public class Climber{
     public void startPos() {
 
         solenoidErect.set(Value.kForward);
-        solenoid1.set(Value.kReverse);
+        solenoid1.set(Value.kForward);
         solenoid2.set(Value.kReverse);
     }
 

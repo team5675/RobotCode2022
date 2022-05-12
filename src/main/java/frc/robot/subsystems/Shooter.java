@@ -133,13 +133,12 @@ public class Shooter {
 
     public void pewpew() {
 
-        blueRPMSetpoint = -1 * (26.186 * Math.pow(vision.getDistanceFromTarget(), 2) - 449.39 * vision.getDistanceFromTarget() + 3816.4 + boostIncr);
+        blueRPMSetpoint = 0; //= 5676; //= -1 * (26.186 * Math.pow(vision.getDistanceFromTarget(), 2) - 449.39 * vision.getDistanceFromTarget() + 3816.4 + boostIncr);
         //blackRPMSetpoint = 80.016 * vision.getDistanceFromTarget() + 1171.4;
 
-        blackRPMSetpoint = 0.3214 * Math.pow(vision.getDistanceFromTarget(), 5) - 18.482 * Math.pow(vision.getDistanceFromTarget(), 4)   
-        + 415.11 * Math.pow(vision.getDistanceFromTarget(), 3) - 4537.3 * Math.pow(vision.getDistanceFromTarget(), 2) + 24138 * vision.getDistanceFromTarget() -48162 - boostIncr;
+        blackRPMSetpoint = 0; //= 5676; // = 0.3214 * Math.pow(vision.getDistanceFromTarget(), 5) - 18.482 * Math.pow(vision.getDistanceFromTarget(), 4)   
+        //+ 415.11 * Math.pow(vision.getDistanceFromTarget(), 3) - 4537.3 * Math.pow(vision.getDistanceFromTarget(), 2) + 24138 * vision.getDistanceFromTarget() -48162 - boostIncr;
 
-            blackRPMSetpoint = -maxRPM;
         
 
        
@@ -156,7 +155,7 @@ public class Shooter {
 
         
 
-        if(blackEnc.getVelocity() >= blackRPMSetpoint && blueEnc.getVelocity() <= blueRPMSetpoint) {
+        if(blackEnc.getVelocity() >= blackRPMSetpoint + 10 && blueEnc.getVelocity() <= blueRPMSetpoint - 10) {
 
             greenWheel.set(1);
         } else greenWheel.set(0);
