@@ -40,7 +40,7 @@ public class AutoChooser {
 
         modeSelector.addOption("Do Nothing", Modes.DoNothing);
         modeSelector.addOption("Shoot Three Balls", Modes.ShootThreeBalls);
-        modeSelector.addOption("Shoot One Ball", Modes.ShootFiveBalls);
+        modeSelector.addOption("Shoot Four Balls", Modes.ShootFiveBalls);
         modeSelector.addOption("Shoot Two Balls", Modes.ShootTwoBalls);
         modeSelector.addOption("Drive Off Line", Modes.DriveOffLine);
 

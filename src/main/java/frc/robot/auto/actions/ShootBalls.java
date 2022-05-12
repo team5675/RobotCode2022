@@ -72,25 +72,13 @@ public class ShootBalls implements Action {
     @Override
     public boolean loop() {
 
-        drive.getFrontLeft().drive(vision.getHorizontalOffset() * Constants.AUTO_ROTATE_P, 2.348, false);
-        drive.getFrontRight().drive(vision.getHorizontalOffset() * Constants.AUTO_ROTATE_P, 2.953, false);
-        drive.getBackLeft().drive(vision.getHorizontalOffset() * Constants.AUTO_ROTATE_P, 3.008, false);
-        drive.getBackRight().drive(vision.getHorizontalOffset() * Constants.AUTO_ROTATE_P, 0.628, false);
+        drive.getFrontLeft().drive(vision.getHorizontalOffset() * Constants.AUTO_ROTATE_P, 0.631, false);
+        drive.getFrontRight().drive(vision.getHorizontalOffset() * Constants.AUTO_ROTATE_P, 2.805, false);
+        drive.getBackLeft().drive(vision.getHorizontalOffset() * Constants.AUTO_ROTATE_P, 2.775, false);
+        drive.getBackRight().drive(vision.getHorizontalOffset() * Constants.AUTO_ROTATE_P, 3.967, false);
 
         shooter.pewpewAuto(blackSetpoint, blueSetpoint, vision.getHorizontalOffset() < 2 && vision.getHorizontalOffset() > -2);
 
-        /*if(shooter.getBlackRPMSetpoint() > shooter.getBlackRPM() + 120 && debounce) {
-
-            ballsShot++;
-
-            ballsShotEntry.setDouble(ballsShot);
-
-            debounce = false;
-        }
-
-        if(shooter.getBlackRPM() >= shooter.getBlackRPMSetpoint() && !debounce) {
-            debounce =true;
-        }*/
 
         if(shooter.getProx()) {
 

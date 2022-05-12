@@ -110,8 +110,6 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
 
-    navX.resetYaw();
-
     modeRunner = new ModeRunner(autoChooser.getMode());
 
     actionRunner.start();
@@ -156,12 +154,12 @@ public class Robot extends TimedRobot {
     boolean isFieldOriented = driverController.isFieldOriented();
 
     if (driverController.getBoostUp())
-      shoot.raiseBoost();;
+      shoot.raiseBoost();
     
     if (driverController.getBoostDown())
       shoot.lowerBoost();
   
-    if (driverController.getShootPressed()) {
+    if (driverController.getShootPressed() || driverController.getSafeShot()) {
 
       lineUpTowardsTargetWithDriver.start();
     } else if (driverController.getShootReleased()) {
@@ -169,15 +167,18 @@ public class Robot extends TimedRobot {
       lineUpTowardsTargetWithDriver.stop();
     }
 
-    shoot.loop();
-
     if(driverController.getShoot()) {
 
       lineUpTowardsTargetWithDriver.loop();
       shoot.pewpew();
+    } else if (driverController.getSafeShot()) {
+
+      lineUpTowardsTargetWithDriver.loop();
+      shoot.safeShot();
     } else {
       drive.move(forward, strafe, rotation, angle, isFieldOriented);
       shoot.idle();
+      shoot.loop();
     }
 
     if(driverController.getBoostUp())
@@ -189,9 +190,7 @@ public class Robot extends TimedRobot {
     if(driverController.getOverrideShoot())
       shoot.badBall();
     
-
-
-    suck.suckOrBlow((driverController.getIntakeSuck() - driverController.getOuttake()) * .75);
+    suck.suckOrBlow((driverController.getIntakeSuck() - driverController.getOuttake()));
 
     if (driverController.getIntakeDeploy())
       suck.deploy();
@@ -219,7 +218,11 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during test mode. */
   @Override
-  public void testPeriodic() {}
+  public void testPeriodic() {
+    //vision.loop();
+
+    //shoot.test(driverController.getShoot());
+  }
 
   static Robot instance;
 

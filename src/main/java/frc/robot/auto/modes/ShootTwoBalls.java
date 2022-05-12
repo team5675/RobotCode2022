@@ -22,7 +22,7 @@ public class ShootTwoBalls extends Mode{
         sucker.retract();
         pathfinder.translate(-1, 3, -85, 0.21);
         sucker.suckOrBlow(0);
-        actionRunner.run(new ShootBalls(2, 2050, -2050));
+        actionRunner.run(new ShootBalls(2, 2000, -2000));
 
     }
 }

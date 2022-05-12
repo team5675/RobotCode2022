@@ -16,25 +16,23 @@ public class ShootFiveBalls extends Mode {
 
         System.out.println("Running four ball");
         sucker.deploy();
-        sucker.suckOrBlow(0.75);
-        pathfinder.translate(0, 4.2, 180, 0.23);
-        sucker.retract();
-        pathfinder.translate(0, -2, 180, 0.2);
-        sucker.suckOrBlow(0);
-        actionRunner.run(new ShootBalls(2, 2000, -2000));
         sucker.suckOrBlow(1);
-        sucker.deploy();
-        pathfinder.translate(7.5, -1, 270, 0.5);
-        //actionRunner.run(new Wait(1000));
+        pathfinder.translate(0, 4.3, 180, 0.22);
         sucker.retract();
-        actionRunner.run(new Wait(1000));
+        sucker.suckOrBlow(0.1);
+        pathfinder.translate(0, -2, 190, 0.2);
         sucker.deploy();
-        pathfinder.translate(6.15, 0.2, 225, 0.5);
+        sucker.suckOrBlow(1);
+        actionRunner.run(new ShootBalls(2, 1990, -2025));
+        pathfinder.translate(7.5, -.7, 270, 0.5);
+        pathfinder.translate(12.5, -0.8, 225, 0.5);
+        pathfinder.translate(0.5, 1, 225, 0.2);
         sucker.retract();
         sucker.suckOrBlow(0);
-        pathfinder.translate(-1, 0.5, 225, 0.5);
-        pathfinder.translate(-16, -1, 250, 0.65);
-        actionRunner.run(new ShootBalls(3, 2000, -2000));
+        pathfinder.translate(-14, -2, 225, 0.65);
+        sucker.deploy();
+        sucker.suckOrBlow(1);
+        actionRunner.run(new ShootBalls(2, 1980, -2055));
 
     }
 }
