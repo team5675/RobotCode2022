@@ -3,7 +3,6 @@ package frc.robot.auto.modes;
 import frc.robot.auto.ActionRunner;
 import frc.robot.auto.Pathfinder;
 import frc.robot.auto.actions.ShootBalls;
-import frc.robot.auto.actions.Wait;
 import frc.robot.subsystems.Sucker;
 
 public class ShootFiveBalls extends Mode {

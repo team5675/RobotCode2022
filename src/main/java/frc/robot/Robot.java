@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.subsystems;
+package frc.robot;
 
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -12,13 +12,17 @@ import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import frc.robot.AutoChooser;
-import frc.robot.Dashboard;
-import frc.robot.DriverController;
 import frc.robot.auto.ActionRunner;
 import frc.robot.auto.ModeRunner;
 import frc.robot.auto.Pathfinder;
 import frc.robot.auto.actions.LineUpTowardsTargetWithDriver;
+import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.NavX;
+import frc.robot.subsystems.Pneumatics;
+import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Sucker;
+import frc.robot.subsystems.Vision;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to

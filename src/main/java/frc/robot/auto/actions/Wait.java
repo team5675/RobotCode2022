@@ -12,7 +12,6 @@ public class Wait implements Action {
 
     @Override
     public void start() {
-        // TODO Auto-generated method stub
         
     }
 
@@ -28,7 +27,6 @@ public class Wait implements Action {
 
     @Override
     public void stop() {
-        // TODO Auto-generated method stub
         
     }
 }

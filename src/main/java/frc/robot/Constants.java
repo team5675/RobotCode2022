@@ -100,7 +100,6 @@ public class Constants {
     public static final int WINCH_MOTOR_ID = 5;
 
     //Color Sensor Constants
-    //TODO: Update Color Constants
     public static final double MIN_PROX_VALUE = 0;
     public static final double BLUE_MIN_COLOR = 0;
     public static final double BLUE_MAC_COLOR = 0;

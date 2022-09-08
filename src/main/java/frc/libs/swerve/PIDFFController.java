@@ -1,6 +1,6 @@
 package frc.libs.swerve;
 
-import frc.robot.subsystems.Robot;
+import frc.robot.Robot;
 
 public class PIDFFController {
     
@@ -25,6 +25,7 @@ public class PIDFFController {
     double optoAngle;
 
     boolean continuous;
+    boolean invertSpeed;
 
     int min;
     int max;
@@ -65,6 +66,7 @@ public class PIDFFController {
         setpoints[1] = 1;
 
         continuous = false;
+        invertSpeed = false;
 
         returnVal = 0;
     }
@@ -111,12 +113,24 @@ public class PIDFFController {
         return kS;
     }
 
+    public boolean speedInverted() {
+
+        return invertSpeed;
+    }
+
 
     public double calculate(double feedback, double setpoint) {
 
         if (continuous) { 
                 
             if (feedback > setpoint) {
+
+                if (Math.abs(feedback - setpoint) > 1.25) {
+
+                    setpoint = (setpoint >= 2.5) ? (setpoint -= 2.5) : (setpoint += 2.5);
+
+                    invertSpeed = true;
+                }  else invertSpeed = false;
 
                 clUnitsAway = (max - feedback) + setpoint; //Going right
                 ccUnitsAway = (feedback - min) - setpoint; //Going left
