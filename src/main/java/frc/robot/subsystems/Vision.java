@@ -3,13 +3,15 @@ package frc.robot.subsystems;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import frc.robot.Constants;
 
 /*
 Get Limelight data and send Limelight data/interact with it
 */
 
-public class Vision {
+public class Vision implements Sendable{
 
     static Vision instance;
 
@@ -26,7 +28,6 @@ public class Vision {
     double distance;
     boolean lightOn = false;
     NavX navX;
-
 
     public Vision() {
 
@@ -95,6 +96,16 @@ public class Vision {
     public double getDistanceFromTarget() {
 
         return distance;
+    }
+
+    @Override
+    public void initSendable(SendableBuilder builder) {
+
+        builder.setSmartDashboardType("VisionBase");
+
+        builder.addDoubleProperty("DistanceFromTarget", () -> distance, null);
+        builder.addDoubleProperty("LightState", () -> ledMode.getDouble(0), mode -> ledMode.setDouble(mode));
+        
     }
 
 

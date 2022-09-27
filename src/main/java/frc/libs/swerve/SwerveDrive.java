@@ -10,6 +10,13 @@ public class SwerveDrive {
 	double r;
 
 	public final double CONTROLLER_DEADBAND = .05;
+
+	public double[] getDimensions() {
+
+		double dimensions[] = {L, W};
+
+		return dimensions;
+	}
 	
 	/**
 	 * Use for human input
@@ -79,7 +86,7 @@ public class SwerveDrive {
 		frontLeftSpeed = Math.hypot(b, d);
 		
 
-		//Output is 0 to 360 degrees
+		//Output is 0 to 5 volts
 		double backRightAngle 	= (((Math.atan2(a, c) / Math.PI) * 2.5) + 2.5) + backRight.getOffset(); 
 		
 		double backLeftAngle 	= (((Math.atan2(a, d) / Math.PI) * 2.5) + 2.5) + backLeft.getOffset();

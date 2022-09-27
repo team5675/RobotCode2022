@@ -127,7 +127,7 @@ public class PIDFFController {
 
                 if (Math.abs(feedback - setpoint) > 1.25) {
 
-                    setpoint = (setpoint >= 2.5) ? (setpoint -= 2.5) : (setpoint += 2.5);
+                    setpoint = (setpoint >= 2.5) ? (setpoint += 2.5) : (setpoint -= 2.5);
 
                     invertSpeed = true;
                 }  else invertSpeed = false;

@@ -3,12 +3,17 @@ package frc.libs.swerve;
 
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
+
+import java.util.function.DoubleConsumer;
+import java.util.function.DoubleSupplier;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.AnalogInput;
+import frc.robot.Constants;
 
 //import frc.robot.SwerveDrive.Encoder;
  
@@ -47,14 +52,14 @@ double velocityRPMConversion = 1517.6538819;
 	 * @param D          Derivative error for the PID loop
 	 * @param ANGLE_OFFSET The module's encoder offset
 	 */
-	public WheelDrive(int angleMotor, int speedMotor, int analogIn, double P, double I, double D, double ANGLE_OFFSET) {
+	public WheelDrive(int angleMotor, int speedMotor, int analogIn) {
 
 		// create our "wheels"
 		this.angleMotor = new CANSparkMax(angleMotor, MotorType.kBrushless);
 		this.speedMotor = new CANSparkMax(speedMotor, MotorType.kBrushless);
 
 
-		anglePID = new PIDFFController(P, I, D);
+		anglePID = new PIDFFController(getConstants()[0].getAsDouble(), getConstants()[1].getAsDouble(), getConstants()[2].getAsDouble());
 
 		anglePID.isContinuous(0, 5);
 
@@ -62,11 +67,7 @@ double velocityRPMConversion = 1517.6538819;
 
 		this.driveEncoder = this.speedMotor.getEncoder();
 
-		this.P = P;
-		this.I = I;
-		this.D = D;
-
-		this.ANGLE_OFFSET = ANGLE_OFFSET;
+		ANGLE_OFFSET = getConstants()[3].getAsDouble();
 
 		velocityPID = this.speedMotor.getPIDController();
 		velocityPID.setP(5e-4);
@@ -130,8 +131,85 @@ double velocityRPMConversion = 1517.6538819;
 		return azimuthEncoder.getVoltage();
 	}
 
-	public double getSpeedPosition() {
-		return driveEncoder.getPosition();
+	public double getAzimuthDegrees() {
+
+		return (azimuthEncoder.getVoltage() + ANGLE_OFFSET) * 72;
+	}
+
+	public double getAzimuthRadians() {
+
+		return (azimuthEncoder.getVoltage() + ANGLE_OFFSET) * ((2 * Math.PI) / 5);
+	}
+
+	public double getSpeedPositionFeet() {
+		return driveEncoder.getPosition() / Constants.DRIVE_CORRECTION_FT;
+	}
+
+	public DoubleSupplier getSpeed() {
+
+		DoubleSupplier speed = () -> {
+
+			return driveEncoder.getVelocity();
+		};
+
+		return speed;
+	}
+
+	public DoubleSupplier getSendableAzimuthDegrees() {
+
+		DoubleSupplier angle = () -> {
+
+			return azimuthEncoder.getVoltage() * 72;
+		};
+
+		return angle;
+	}
+
+	public DoubleSupplier[] getConstants() {
+
+		DoubleSupplier pGain = () -> {
+
+			return P;
+		};
+
+		DoubleSupplier iGain = () -> {
+
+			return I;
+		};
+
+		DoubleSupplier dGain = () -> {
+
+			return D;
+		};
+
+		DoubleSupplier offset = () -> {
+
+			return ANGLE_OFFSET;
+		};
+
+		DoubleSupplier[] constants = {pGain, iGain, dGain, offset};
+
+		return constants;
+	}
+
+	public void setP(double gain) {
+
+		P = gain;
+	}
+
+	public void setI(double gain) {
+
+		I = gain;
+	}
+
+	public void setD(double gain) {
+
+		D = gain;
+	}
+
+	public void setOffset(double offset) {
+
+		ANGLE_OFFSET = offset;
 	}
 
 	public void resetSpeedDistance() {
@@ -140,7 +218,7 @@ double velocityRPMConversion = 1517.6538819;
 
 	public void setAzimuth(double setpoint) {
 
-		angleMotor.set(setpoint);
+		angleMotor.set(anglePID.calculate(azimuthEncoder.getVoltage(), setpoint * 72));
 	}
 
 	public void setDrive(double setpoint) {
@@ -151,11 +229,6 @@ double velocityRPMConversion = 1517.6538819;
 	public double getDrivePosition() {
 
 		return driveEncoder.getPosition();
-	}
-
-	public SwerveModuleState getState() {
-
-		return new SwerveModuleState(driveEncoder.getVelocity() / velocityRPMConversion, new Rotation2d(getAzimuth() * 72));
 	}
 
 	public void stop() {

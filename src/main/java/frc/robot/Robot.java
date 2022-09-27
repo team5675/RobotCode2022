@@ -12,6 +12,7 @@ import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import frc.robot.auto.ActionRunner;
 import frc.robot.auto.ModeRunner;
 import frc.robot.auto.Pathfinder;
@@ -48,20 +49,12 @@ public class Robot extends TimedRobot {
   ModeRunner modeRunner;
   AutoChooser autoChooser;
 
-  enum Paths {
-
-    StraightLineFor,
-    StraightLineBack,
-    Diag,
-    Curve
-
-  }
-
-  SendableChooser<Paths> modeSelector;
-    NetworkTable dashboardTable;
-    NetworkTableEntry waitTime;
-    NetworkTableEntry startOffset;
-    NetworkTableEntry navXAngle;
+  SendableBuilder builder;
+    
+  NetworkTable dashboardTable;
+  NetworkTableEntry waitTime;
+  NetworkTableEntry startOffset;
+  NetworkTableEntry navXAngle;
 
 
   /**
@@ -92,7 +85,9 @@ public class Robot extends TimedRobot {
     dashboardTable = NetworkTableInstance.getDefault().getTable("dashboard");
     navXAngle = dashboardTable.getEntry("gyroAngle");
 
-    DataLogManager.start();
+    drive.initSendable(builder);
+    navX.initSendable(builder);
+    vision.initSendable(builder);
 
     CameraServer.startAutomaticCapture();
   }

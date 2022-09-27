@@ -56,6 +56,8 @@ public class Constants {
 	public static final double PATHFINDER_KV = 0.0909090909;
 	public static final double PATHFINDER_KA = 0.011;
 
+    public static final double DRIVE_CORRECTION_FT = 7.643;
+
     //Shooter subsystem constants
     public static final double SHOOTER_HOOD_P = 0.01;
     public static final int SHOOTER_GATE_ID = 0;

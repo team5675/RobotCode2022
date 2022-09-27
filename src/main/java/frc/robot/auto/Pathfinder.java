@@ -51,10 +51,10 @@ public class Pathfinder {
         hypDistance = Math.hypot(xFeetGoal, yFeetGoal);
         speedMultiplier = newSpeedMultiplier;
 
-        double distanceFrontLeft = drive.getFrontLeft().getSpeedPosition();
-        double distanceFrontRight = drive.getFrontRight().getSpeedPosition();
-        double distanceBackLeft = drive.getBackLeft().getSpeedPosition();
-        double distanceBackRight = drive.getBackRight().getSpeedPosition();
+        double distanceFrontLeft = drive.getFrontLeft().getDrivePosition();
+        double distanceFrontRight = drive.getFrontRight().getDrivePosition();
+        double distanceBackLeft = drive.getBackLeft().getDrivePosition();
+        double distanceBackRight = drive.getBackRight().getDrivePosition();
         totalDistance = (distanceFrontLeft + distanceFrontRight + distanceBackLeft + distanceBackRight) / 4;
         totalDistance /= 7.643;
         
@@ -79,10 +79,10 @@ public class Pathfinder {
 
         if (run) {
 
-            double distanceFrontLeft = drive.getFrontLeft().getSpeedPosition();
-            double distanceFrontRight = drive.getFrontRight().getSpeedPosition();
-            double distanceBackLeft = drive.getBackLeft().getSpeedPosition();
-            double distanceBackRight = drive.getBackRight().getSpeedPosition();
+            double distanceFrontLeft = drive.getFrontLeft().getDrivePosition();
+            double distanceFrontRight = drive.getFrontRight().getDrivePosition();
+            double distanceBackLeft = drive.getBackLeft().getDrivePosition();
+            double distanceBackRight = drive.getBackRight().getDrivePosition();
             double averageDistance = (distanceFrontLeft + distanceFrontRight + distanceBackLeft + distanceBackRight) / 4;
             distanceTraveled = averageDistance / 7.643; 
             
