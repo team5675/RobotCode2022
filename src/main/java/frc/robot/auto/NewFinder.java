@@ -1,6 +1,5 @@
 package frc.robot.auto;
 
-import frc.robot.Constants;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.NavX;
 

@@ -1,21 +1,14 @@
 package frc.libs.swerve;
 
-
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 
-import java.util.function.DoubleConsumer;
 import java.util.function.DoubleSupplier;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.AnalogInput;
 import frc.robot.Constants;
-
-//import frc.robot.SwerveDrive.Encoder;
  
 public class WheelDrive {
 	
