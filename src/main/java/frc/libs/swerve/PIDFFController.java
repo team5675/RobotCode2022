@@ -113,48 +113,69 @@ public class PIDFFController {
         return kS;
     }
 
+    /**
+     * Lil helper function to get optimized angle wheel speed
+     * @return returns whether or not speed should be inverted
+     */
     public boolean speedInverted() {
 
         return invertSpeed;
     }
 
-
+    /**
+     * Calculates smallest distance for wheel to rotate towards
+     * @param feedback error in angle (units is volts)
+     * @param setpoint desired angle (units in volts)
+     * @return returns gain factor scaled against volts
+     */
     public double calculate(double feedback, double setpoint) {
 
         if (continuous) { 
-                
+            
+            //ex feedback says we're at 3.5v, setpoint is 1.5v
             if (feedback > setpoint) {
 
+                //if we're more than 180 degrees away (in this case we are, at 2v away)
                 if (Math.abs(feedback - setpoint) > 1.25) {
 
+                    //if the setpoint is greater than 180 degrees we take off 180, otherwise add on 180
+                    //so following above values our new setpoint is 4v
                     setpoint = (setpoint >= 2.5) ? (setpoint -= 2.5) : (setpoint += 2.5);
 
+                    //make sure we invert the speed
                     invertSpeed = true;
                 }  else invertSpeed = false;
 
+                //cl ex (5v - 3.5v) + 4v = 5.5v
                 clUnitsAway = (max - feedback) + setpoint; //Going right
+                //cc ex (3.5v - 0v) - 4v = -0.5v
                 ccUnitsAway = (feedback - min) - setpoint; //Going left
             }
 
+            //ex feeback at 1.5v, setpoint at 3.5v
             else if (feedback < setpoint) {
 
+                //if we're more than 180 degrees away
                 if (Math.abs(setpoint - feedback) > 1.25) {
 
+                    //if the setpoint is greater than 180 degrees we take off 180, otherwise add on 180
+                    //so following above values our new setpoint is 1v
                     setpoint = (setpoint >= 2.5) ? (setpoint -= 2.5) : (setpoint += 2.5);
 
+                    //make sure we invert the speed
                     invertSpeed = true;
                 }  else invertSpeed = false;
 
+                //cl ex (1v - 1.5v) = -0.5v
                 clUnitsAway = (setpoint - feedback);
+                //cc ex (1.5v - 0v) + (5v - 3.5v) = 3v
                 ccUnitsAway = (feedback - min) + (max - setpoint);
             }
 
-            //avoiding hystersis case, just picking clockwise rotation if the setpoint is approx 180 away
-            //if (Math.abs(clUnitsAway - ccUnitsAway) < 0.03) error = clUnitsAway;
-            //else 
+            //taking minimum distance as our best fit
             error = Math.min(clUnitsAway, ccUnitsAway);
 
-            //gotta make it spins the right way
+            //gotta make sure it spins the right way
             if (error == ccUnitsAway) {
 
                 error *= -1;
@@ -164,7 +185,7 @@ public class PIDFFController {
             error = setpoint - feedback;
         }
         
-
+        //create simple PID loop to get er where she needs to go
         PSet = error * kP;
         ISet += error;
         DSet = (error - prevError) / Robot.kDefaultPeriod;
@@ -173,6 +194,7 @@ public class PIDFFController {
 
         returnVal = PSet + (ISet * kI) + (DSet * kD);
 
+        //normalize so we don't freak out the motor controllers with a magnitude above 1
         if (returnVal > 1) {
 
             returnVal = 1;
@@ -183,10 +205,6 @@ public class PIDFFController {
             returnVal = -1;
         }
 
-        return returnVal; //+ 0.78 / 12);
-        
-        //if we're 0.0017V off, who cares
-        //if (error > 0.0017 || error < -0.0017) return setpoint;
-        //else return 0;
+        return returnVal;
     }
 }

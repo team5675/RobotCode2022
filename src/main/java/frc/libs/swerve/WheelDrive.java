@@ -113,6 +113,7 @@ double velocityRPMConversion = 1517.6538819;
 
 			setpoint = anglePID.calculate(azimuthEncoder.getVoltage(), angle);
 
+			//checks to see if speed needs to be reversed for optimized angle
 			speedMotor.set(anglePID.speedInverted() ? speed *= -1 : speed);
 			angleMotor.set(setpoint);
 		}
