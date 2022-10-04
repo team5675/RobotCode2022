@@ -83,9 +83,9 @@ public class Robot extends TimedRobot {
     dashboardTable = NetworkTableInstance.getDefault().getTable("dashboard");
     navXAngle = dashboardTable.getEntry("gyroAngle");
 
-    drive.initSendable(builder);
-    navX.initSendable(builder);
-    vision.initSendable(builder);
+    //drive.initSendable(builder);
+    //navX.initSendable(builder);
+    //vision.initSendable(builder);
 
     CameraServer.startAutomaticCapture();
   }

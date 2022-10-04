@@ -136,7 +136,7 @@ public class PIDFFController {
             if (feedback > setpoint) {
 
                 //if we're more than 180 degrees away (in this case we are, at 2v away)
-                if (Math.abs(feedback - setpoint) > 1.25) {
+               if (Math.abs(feedback - setpoint) > 1.25) {
 
                     //if the setpoint is greater than 180 degrees we take off 180, otherwise add on 180
                     //so following above values our new setpoint is 4v
@@ -145,11 +145,15 @@ public class PIDFFController {
                     //make sure we invert the speed
                     invertSpeed = true;
                 }  else invertSpeed = false;
+                
+                
 
                 //cl ex (5v - 3.5v) + 4v = 5.5v
                 clUnitsAway = (max - feedback) + setpoint; //Going right
                 //cc ex (3.5v - 0v) - 4v = -0.5v
                 ccUnitsAway = (feedback - min) - setpoint; //Going left
+
+                
             }
 
             //ex feeback at 1.5v, setpoint at 3.5v

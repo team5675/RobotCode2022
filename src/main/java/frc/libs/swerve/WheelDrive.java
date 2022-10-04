@@ -45,22 +45,22 @@ double velocityRPMConversion = 1517.6538819;
 	 * @param D          Derivative error for the PID loop
 	 * @param ANGLE_OFFSET The module's encoder offset
 	 */
-	public WheelDrive(int angleMotor, int speedMotor, int analogIn) {
+	public WheelDrive(int angleMotor, int speedMotor, int analogIn, double offset) {
 
 		// create our "wheels"
 		this.angleMotor = new CANSparkMax(angleMotor, MotorType.kBrushless);
 		this.speedMotor = new CANSparkMax(speedMotor, MotorType.kBrushless);
 
 
-		anglePID = new PIDFFController(getConstants()[0].getAsDouble(), getConstants()[1].getAsDouble(), getConstants()[2].getAsDouble());
-
+		//anglePID = new PIDFFController(getConstants()[0].getAsDouble(), getConstants()[1].getAsDouble(), getConstants()[2].getAsDouble());
+		anglePID = new PIDFFController(0.7412, 0, 0);
 		anglePID.isContinuous(0, 5);
 
 		this.azimuthEncoder = new AnalogInput(analogIn);
 
 		this.driveEncoder = this.speedMotor.getEncoder();
 
-		ANGLE_OFFSET = getConstants()[3].getAsDouble();
+		ANGLE_OFFSET = offset;//getConstants()[3].getAsDouble();
 
 		velocityPID = this.speedMotor.getPIDController();
 		velocityPID.setP(5e-4);
