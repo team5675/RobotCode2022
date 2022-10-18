@@ -1,22 +1,16 @@
 package frc.robot.subsystems;
 
-import java.util.function.DoubleConsumer;
-
 import com.kauailabs.navx.frc.AHRS;
 
-import edu.wpi.first.util.sendable.Sendable;
-import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.networktables.NetworkTable;
+import frc.robot.Robot;
 
-public class NavX  implements Sendable{
+public class NavX  implements Telemetry{
 
     static NavX instance;
     
     AHRS gyro;
-
-    SendableBuilder builder;
-
-    DoubleConsumer offsetConsumer;
 
     double offset;
 
@@ -55,15 +49,6 @@ public class NavX  implements Sendable{
         this.offset = offset;
     }
 
-    @Override
-    public void initSendable(SendableBuilder builder) {
-
-        builder.setSmartDashboardType("RobotBase");
-
-        builder.addDoubleProperty("gyroAngle", () -> getAngle(), null);
-        builder.addDoubleProperty("gyroOffset", () -> offset , offsetConsumer = offset -> setOffset(offset));
-    }
-
 
     public static NavX getInstance() {
         
@@ -73,5 +58,19 @@ public class NavX  implements Sendable{
         }
 
         return instance;
+    }
+
+    @Override
+    public void postData() {
+
+        Robot.getTableInstance().getEntry("navXAngle").setDouble(getAngle());
+
+        
+    }
+
+    @Override
+    public void getData() {
+        // TODO Auto-generated method stub
+        
     }
 }

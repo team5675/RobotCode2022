@@ -49,7 +49,8 @@ public class Robot extends TimedRobot {
 
   SendableBuilder builder;
     
-  NetworkTable dashboardTable;
+  static NetworkTable dashboardTable;
+
   NetworkTableEntry waitTime;
   NetworkTableEntry startOffset;
   NetworkTableEntry navXAngle;
@@ -79,15 +80,18 @@ public class Robot extends TimedRobot {
     shoot.setcolor(DriverStation.getAlliance().toString());
 
     vision.lightOff();
-
-    dashboardTable = NetworkTableInstance.getDefault().getTable("dashboard");
-    navXAngle = dashboardTable.getEntry("gyroAngle");
-
-    //drive.initSendable(builder);
-    //navX.initSendable(builder);
-    //vision.initSendable(builder);
+    
 
     CameraServer.startAutomaticCapture();
+  }
+
+  public static NetworkTable getTableInstance() {
+
+      if (dashboardTable == null) {
+          dashboardTable = NetworkTableInstance.getDefault().getTable("robotDash");
+      }
+
+      return dashboardTable;
   }
 
  
@@ -99,7 +103,8 @@ public class Robot extends TimedRobot {
     else
       pneumatics.stopCompressor();
 
-    navXAngle.setDouble(navX.getAngle());
+    navX.postData();
+
     
   }
 
@@ -211,7 +216,10 @@ public class Robot extends TimedRobot {
 
   /** This function is called once when test mode is enabled. */
   @Override
-  public void testInit() {}
+  public void testInit() {
+
+    
+  }
 
   /** This function is called periodically during test mode. */
   @Override
